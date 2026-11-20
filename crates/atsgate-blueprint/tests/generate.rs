@@ -183,7 +183,11 @@ fn a_vague_title_with_a_web_stack_infers_a_software_occupation() {
 
 #[test]
 fn a_backend_engineer_posting_names_software_developers() {
-    let b = run("Backend Engineer\nRequirements\n- Go and PostgreSQL\n", None).expect("generates");
+    let b = run(
+        "Backend Engineer\nRequirements\n- Go and PostgreSQL\n",
+        None,
+    )
+    .expect("generates");
     assert_eq!(b.occupational_category, "15-1252.00");
 }
 

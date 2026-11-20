@@ -270,6 +270,16 @@ dependencies = [
 [[package]]
 name = "atsgate-score"
 version = "0.0.1"
+dependencies = [
+ "atsgate-blueprint",
+ "atsgate-extract",
+ "atsgate-resume",
+ "atsgate-taxonomy",
+ "schemars",
+ "serde",
+ "serde_json",
+ "thiserror",
+]
 
 [[package]]
 name = "atsgate-taxonomy"

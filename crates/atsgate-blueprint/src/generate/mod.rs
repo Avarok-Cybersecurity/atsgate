@@ -21,9 +21,10 @@ mod skills;
 mod title;
 
 pub use occupation::{MIN_SHARED_SKILLS, breadth_weighted};
+pub use requirements::DEGREES;
 pub use sections::{HEADING_CUES, INLINE_PREFERRED, Section};
 pub use skills::{GENERIC_SOFTWARE, GENERIC_SOFTWARE_CATEGORIES, is_generic_software};
-pub use title::{SENIORITY_WORDS, TITLE_HEADS};
+pub use title::{SENIORITY_WORDS, TITLE_HEADS, seniority_of, strip_seniority};
 
 use crate::{
     Blueprint, BlueprintError, EducationLevel, EducationRequirement, ExperienceRequirement,

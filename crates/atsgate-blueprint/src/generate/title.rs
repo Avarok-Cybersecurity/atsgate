@@ -83,6 +83,7 @@ fn singular(word: &str) -> &str {
         .unwrap_or(word)
 }
 
+/// The first seniority word in a folded title.
 pub fn seniority_of(folded: &str) -> Option<Seniority> {
     let padded = format!(" {folded} ");
     SENIORITY_WORDS
@@ -91,7 +92,8 @@ pub fn seniority_of(folded: &str) -> Option<Seniority> {
         .map(|(_, s)| *s)
 }
 
-fn strip_seniority(folded: &str) -> String {
+/// `folded` without the seniority words up to Lead ("senior software engineer" -> "software engineer").
+pub fn strip_seniority(folded: &str) -> String {
     let mut out = format!(" {folded} ");
     for (w, _) in SENIORITY_WORDS
         .iter()
