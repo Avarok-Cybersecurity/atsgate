@@ -1,0 +1,158 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "model serving",
+    "latency",
+    "GPU kernels",
+    "quantization"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Computer Science",
+      "Electrical Engineering",
+      "Mathematics"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/35553663-deab-4d9a-bf22-15c1625d28e8",
+  "experience": {
+    "min_years": 4.0,
+    "relevant_titles": [
+      "Machine Learning Engineer",
+      "Software Engineer",
+      "Research Engineer"
+    ]
+  },
+  "id": "ml-inference-engineer",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "15-1221.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "TensorRT",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:tensorrt",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "ONNX",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:onnx",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "vLLM",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:vllm",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Hugging Face",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Hugging Face",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Kubernetes",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Kubernetes",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Rust",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Rust programming language",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "TensorFlow",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:TensorFlow",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "deep learning",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/ecc4552a-92c5-4222-b18d-faf5ac841080",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "Python",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Python",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "PyTorch",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:PyTorch",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "CUDA",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:cuda",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "C++",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:C++",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "machine learning",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/3a2d5b45-56e4-4f5a-a55a-4a4a65afdc43",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Docker",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Docker",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "senior",
+  "title": "Machine Learning Inference Engineer",
+  "title_aliases": [
+    "ML Inference Engineer",
+    "Machine Learning Engineer",
+    "ML Systems Engineer",
+    "AI Engineer"
+  ],
+  "version": "1.0.0"
+}

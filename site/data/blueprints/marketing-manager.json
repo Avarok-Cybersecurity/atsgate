@@ -1,0 +1,149 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "campaigns",
+    "lead generation",
+    "brand"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Marketing",
+      "Business Administration",
+      "Communications"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/6fcf4638-e7c7-4978-9302-9a7b63a3d57c",
+  "experience": {
+    "min_years": 5.0,
+    "relevant_titles": [
+      "Marketing Manager",
+      "Marketing Specialist",
+      "Brand Manager"
+    ]
+  },
+  "id": "marketing-manager",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "11-2021.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "Google Ads",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Google Ads",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "HubSpot",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:HubSpot software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Marketo",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Marketo Marketing Automation",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Salesforce",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Salesforce software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Semrush",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Semrush",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "social media marketing techniques",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/509909a2-4a8f-4ead-8ad0-968df63b77cc",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "manage budgets",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/21c5790c-0930-4d74-b3b0-84caf5af12ea",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Microsoft Excel",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Microsoft Excel",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "marketing management",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/5bbaa0e6-0fd7-4df2-9db7-34f78b40dc34",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "digital marketing techniques",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/43dfbe7f-9e10-4871-b171-e5076737b4cf",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Google Analytics",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Google Analytics",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "search engine optimisation",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/eda4d727-4374-49af-ace4-118c7c906835",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "content marketing strategy",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/b0560439-14eb-41d1-aa53-1938efc24123",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "manager",
+  "title": "Marketing Manager",
+  "title_aliases": [
+    "Digital Marketing Manager",
+    "Growth Marketing Manager",
+    "Product Marketing Manager"
+  ],
+  "version": "1.0.0"
+}

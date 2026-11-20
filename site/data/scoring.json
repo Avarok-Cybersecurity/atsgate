@@ -1,0 +1,219 @@
+{
+  "integrity_rules": [
+    "integrity.hidden.white",
+    "integrity.hidden.tiny",
+    "integrity.hidden.zero_width",
+    "integrity.hidden.off_page",
+    "integrity.hidden.vanished",
+    "integrity.metadata_only"
+  ],
+  "label": "simulated parse and keyword risk",
+  "match": {
+    "alias": 0.85,
+    "canonical": 1.0,
+    "in_scope": 1.0,
+    "list_only": 0.8,
+    "related": 0.5
+  },
+  "no_auto_scoring": "no documented auto-scoring",
+  "page_limit": 2,
+  "penalties": [
+    {
+      "points": 100.0,
+      "rule": "layout.image_only_page"
+    },
+    {
+      "points": 15.0,
+      "rule": "layout.multi_column"
+    },
+    {
+      "points": 15.0,
+      "rule": "layout.reading_order_disagreement"
+    },
+    {
+      "points": 15.0,
+      "rule": "glyphs.missing_tounicode"
+    },
+    {
+      "points": 12.0,
+      "rule": "layout.table"
+    },
+    {
+      "points": 12.0,
+      "rule": "layout.text_box"
+    },
+    {
+      "points": 10.0,
+      "rule": "layout.header_footer_content"
+    },
+    {
+      "points": 8.0,
+      "rule": "glyphs.unmapped"
+    },
+    {
+      "points": 8.0,
+      "rule": "glyphs.ligature"
+    },
+    {
+      "points": 5.0,
+      "rule": "parse.page_count"
+    }
+  ],
+  "per_item": 3.0,
+  "per_item_cap": 9.0,
+  "quantification_label": "heuristic, no outcome evidence",
+  "required_share": 0.75,
+  "title": {
+    "broad_group": 0.5,
+    "ladder_span": 9.0,
+    "occupation": 0.85,
+    "same": 1.0
+  },
+  "title_share": 0.5,
+  "vendors": [
+    {
+      "citation": "taleo-attach",
+      "floor": 75,
+      "key": "taleo",
+      "name": "Taleo",
+      "note": null,
+      "sigma": 0.85,
+      "source": {
+        "education_match": 0.1,
+        "experience_relevance": 0.15,
+        "formatting": 0.2,
+        "keyword_match": 0.35,
+        "quantification": 0.05,
+        "section_completeness": 0.15
+      },
+      "weights": {
+        "d": 0.10526315789473685,
+        "e": 0.07894736842105263,
+        "f": 0.3684210526315789,
+        "p": 0.09210526315789473,
+        "r": 0.2763157894736842,
+        "t": 0.07894736842105263
+      }
+    },
+    {
+      "citation": "wd-parse",
+      "floor": 70,
+      "key": "workday",
+      "name": "Workday",
+      "note": null,
+      "sigma": 0.9,
+      "source": {
+        "education_match": 0.1,
+        "experience_relevance": 0.15,
+        "formatting": 0.25,
+        "keyword_match": 0.3,
+        "quantification": 0.05,
+        "section_completeness": 0.15
+      },
+      "weights": {
+        "d": 0.10526315789473685,
+        "e": 0.07894736842105263,
+        "f": 0.4210526315789474,
+        "p": 0.07894736842105263,
+        "r": 0.23684210526315788,
+        "t": 0.07894736842105263
+      }
+    },
+    {
+      "citation": "sap-kba",
+      "floor": 65,
+      "key": "successfactors",
+      "name": "SuccessFactors",
+      "note": null,
+      "sigma": 0.85,
+      "source": {
+        "education_match": 0.1,
+        "experience_relevance": 0.15,
+        "formatting": 0.25,
+        "keyword_match": 0.25,
+        "quantification": 0.05,
+        "section_completeness": 0.2
+      },
+      "weights": {
+        "d": 0.10526315789473685,
+        "e": 0.07894736842105263,
+        "f": 0.4736842105263158,
+        "p": 0.06578947368421052,
+        "r": 0.19736842105263158,
+        "t": 0.07894736842105263
+      }
+    },
+    {
+      "citation": "icims-blog",
+      "floor": 60,
+      "key": "icims",
+      "name": "iCIMS",
+      "note": null,
+      "sigma": 0.6,
+      "source": {
+        "education_match": 0.1,
+        "experience_relevance": 0.2,
+        "formatting": 0.15,
+        "keyword_match": 0.3,
+        "quantification": 0.1,
+        "section_completeness": 0.15
+      },
+      "weights": {
+        "d": 0.11111111111111112,
+        "e": 0.11111111111111112,
+        "f": 0.3333333333333333,
+        "p": 0.08333333333333333,
+        "r": 0.24999999999999997,
+        "t": 0.11111111111111112
+      }
+    },
+    {
+      "citation": "gh-tm-faq",
+      "floor": 50,
+      "key": "greenhouse",
+      "name": "Greenhouse",
+      "note": "no documented auto-scoring",
+      "sigma": 0.4,
+      "source": {
+        "education_match": 0.1,
+        "experience_relevance": 0.25,
+        "formatting": 0.1,
+        "keyword_match": 0.25,
+        "quantification": 0.2,
+        "section_completeness": 0.1
+      },
+      "weights": {
+        "d": 0.125,
+        "e": 0.15625,
+        "f": 0.25,
+        "p": 0.078125,
+        "r": 0.234375,
+        "t": 0.15625
+      }
+    },
+    {
+      "citation": "ats-screener-research",
+      "floor": 50,
+      "key": "lever",
+      "name": "Lever",
+      "note": "no documented auto-scoring",
+      "sigma": 0.35,
+      "source": {
+        "education_match": 0.1,
+        "experience_relevance": 0.3,
+        "formatting": 0.08,
+        "keyword_match": 0.22,
+        "quantification": 0.2,
+        "section_completeness": 0.1
+      },
+      "weights": {
+        "d": 0.125,
+        "e": 0.18749999999999997,
+        "f": 0.22499999999999998,
+        "p": 0.06874999999999999,
+        "r": 0.20625,
+        "t": 0.18749999999999997
+      }
+    }
+  ]
+}

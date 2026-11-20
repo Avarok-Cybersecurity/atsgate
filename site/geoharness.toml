@@ -1,0 +1,84 @@
+# GeoHarness builds, audits, gates and deploys ats.express with this file
+# (see .github/workflows/deploy.yml and https://github.com/Avarok-Cybersecurity/geoharness/blob/main/docs/config.md).
+# Pages carry their own JSON-LD (Organization, WebSite, SoftwareApplication, page node), so GeoHarness
+# injects none; the identity below is still what robots, llms.txt and the audit read.
+
+[site]
+origin = "https://ats.express"
+name = "ATSGate"
+language = "en"
+
+# The publisher, with the same @id, profiles, logo and contact avarok.net declares for itself.
+[identity]
+kind = "organization"
+name = "Avarok"
+url = "https://avarok.net"
+sameAs = [
+  "https://github.com/Avarok-Cybersecurity",
+  "https://blog.avarok.net/",
+  "https://www.linkedin.com/company/avarok/",
+  "https://crates.io/crates/citadel_sdk",
+]
+logo = "https://avarok.net/icon-512.png"
+email = "contact@avarok.net"
+
+# Open-source documentation is meant to be found, quoted and learned (owner policy):
+# search, answers and training are all allowed.
+[contentSignal]
+search = true
+aiInput = true
+aiTrain = true
+
+[[bots]]
+group = "search"
+tokens = ["Googlebot", "Bingbot", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot"]
+allow = ["/"]
+
+[[bots]]
+group = "user"
+tokens = ["ChatGPT-User", "Claude-User", "Perplexity-User"]
+allow = ["/"]
+
+[[bots]]
+group = "training"
+tokens = ["GPTBot", "ClaudeBot", "Google-Extended", "Applebot-Extended", "CCBot"]
+allow = ["/"]
+
+[[bots]]
+group = "other"
+tokens = ["*"]
+allow = ["/"]
+
+[content]
+mainSelector = "main"
+# dist/ is built, so a page's date is the newest commit of its own page module and the generated
+# data it renders. The shared chrome (lib/, theme.css) is left out: it changes every page at once.
+[content.sources]
+"/" = ["pages/home.mjs", "data/scoring.json"]
+"/docs/" = ["pages/docs.mjs"]
+"/docs/scoring/" = ["pages/scoring.mjs", "data/scoring.json"]
+"/docs/vendors/" = ["pages/vendors.mjs", "data/scoring.json"]
+"/docs/fairness/" = ["pages/fairness.mjs", "data/scoring.json"]
+"/docs/action/" = ["pages/action.mjs", "data/action.json"]
+"/docs/blueprint-spec/" = ["pages/blueprint-spec.mjs", "data/blueprint-schema.json"]
+"/docs/career-and-tailoring/" = ["pages/career.mjs"]
+"/docs/evaluation/" = ["pages/docs.mjs", "data/evaluation.json"]
+"/docs/faq/" = ["pages/faq.mjs"]
+"/citations/" = ["pages/citations.mjs", "data/citations.json"]
+"/blueprints/" = ["pages/blueprints.mjs", "data/blueprints/*.json"]
+"/blueprints/*/" = ["pages/blueprints.mjs", "data/blueprints/*.json"]
+
+[llms]
+summary = "ATSGate (ATS Express) is a deterministic, evidence-carrying ATS gate for GitHub Actions: it renders a resume from one career file and fails CI on simulated parse and keyword risk."
+
+[[llms.sections]]
+title = "Docs"
+routes = ["/docs/**"]
+
+[[llms.sections]]
+title = "Blueprints"
+routes = ["/blueprints/**"]
+
+[[llms.sections]]
+title = "Project"
+routes = ["/", "/citations/"]

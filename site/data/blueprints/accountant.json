@@ -1,0 +1,130 @@
+{
+  "$schema": null,
+  "certifications": [
+    "CPA"
+  ],
+  "domain_keywords": [
+    "month-end close",
+    "reconciliation",
+    "general ledger"
+  ],
+  "education": {
+    "experience_in_place_of_education": false,
+    "fields": [
+      "Accounting",
+      "Finance"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/eda0d957-3c3c-4139-b89a-a18bc9e18897",
+  "experience": {
+    "min_years": 2.0,
+    "relevant_titles": [
+      "Accountant",
+      "Staff Accountant",
+      "Auditor"
+    ]
+  },
+  "id": "accountant",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "13-2011.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "QuickBooks",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Intuit QuickBooks",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "NetSuite",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Oracle NetSuite",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Xero",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "atsgate:xero",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "tax legislation",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/d669af41-756c-48d9-a286-1443253f54b1",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "internal auditing",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/8804d963-5a31-4609-b5df-f741b7199fb7",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "accounting",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/ecc18804-a466-40d9-98b4-fba5cd67dd4b",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "prepare financial statements",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/60f51172-37c0-4933-a27a-cbf55dcd7580",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "generally accepted accounting principles",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/d0c425c6-e3de-465e-923d-d4d30ec4be9b",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Microsoft Excel",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Microsoft Excel",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "financial analysis",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/99571e68-801f-49af-a897-5f75996642e1",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Accountant",
+  "title_aliases": [
+    "Staff Accountant",
+    "Senior Accountant",
+    "General Ledger Accountant",
+    "Accounting Officer"
+  ],
+  "version": "1.0.0"
+}

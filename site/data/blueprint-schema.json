@@ -1,0 +1,333 @@
+{
+  "$defs": {
+    "EducationLevel": {
+      "additionalProperties": false,
+      "properties": {
+        "framework": {
+          "$ref": "#/$defs/LevelFramework"
+        },
+        "level": {
+          "description": "ISCED 2011: 0-8; EQF: 1-8.",
+          "format": "uint8",
+          "maximum": 8,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "framework",
+        "level"
+      ],
+      "type": "object"
+    },
+    "EducationRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "experience_in_place_of_education": {
+          "description": "schema.org `experienceInPlaceOfEducation`.",
+          "type": "boolean"
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "min_level": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EducationLevel"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "min_level",
+        "fields",
+        "experience_in_place_of_education"
+      ],
+      "type": "object"
+    },
+    "EvidenceScope": {
+      "description": "Where a skill must appear to earn full credit.",
+      "enum": [
+        "anywhere",
+        "experience_or_projects"
+      ],
+      "type": "string"
+    },
+    "ExperienceRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "min_years": {
+          "format": "double",
+          "type": "number"
+        },
+        "relevant_titles": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "min_years",
+        "relevant_titles"
+      ],
+      "type": "object"
+    },
+    "Knockout": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/KnockoutType"
+        },
+        "unknown_policy": {
+          "$ref": "#/$defs/UnknownPolicy"
+        },
+        "value": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value",
+        "unknown_policy"
+      ],
+      "type": "object"
+    },
+    "KnockoutType": {
+      "enum": [
+        "degree",
+        "certification",
+        "min_years",
+        "clearance",
+        "authorization",
+        "language"
+      ],
+      "type": "string"
+    },
+    "LevelFramework": {
+      "enum": [
+        "isced",
+        "eqf"
+      ],
+      "type": "string"
+    },
+    "Provenance": {
+      "additionalProperties": false,
+      "properties": {
+        "generator_version": {
+          "description": "Set exactly when `source` is `generated`.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "reviewed": {
+          "type": "boolean"
+        },
+        "source": {
+          "$ref": "#/$defs/ProvenanceSource"
+        },
+        "taxonomy_versions": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Taxonomy name to version, e.g. `{\"onet\": \"31.0\", \"esco\": \"1.2.1\"}`.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "source",
+        "generator_version",
+        "taxonomy_versions",
+        "reviewed"
+      ],
+      "type": "object"
+    },
+    "ProvenanceSource": {
+      "enum": [
+        "builtin",
+        "file",
+        "url",
+        "generated"
+      ],
+      "type": "string"
+    },
+    "Seniority": {
+      "enum": [
+        "intern",
+        "junior",
+        "mid",
+        "senior",
+        "staff",
+        "principal",
+        "lead",
+        "manager",
+        "director",
+        "executive"
+      ],
+      "type": "string"
+    },
+    "Skill": {
+      "additionalProperties": false,
+      "properties": {
+        "aliases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "canonical": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "evidence_scope": {
+          "$ref": "#/$defs/EvidenceScope"
+        },
+        "taxonomy_ref": {
+          "description": "An ESCO skill URI or O*NET element id; `null` when the skill is not in a taxonomy.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "weight": {
+          "description": "Relative weight; must be finite and greater than zero.",
+          "format": "double",
+          "type": "number"
+        }
+      },
+      "required": [
+        "canonical",
+        "taxonomy_ref",
+        "aliases",
+        "weight",
+        "evidence_scope"
+      ],
+      "type": "object"
+    },
+    "UnknownPolicy": {
+      "description": "What a knockout resolves to when the resume neither meets nor misses it.",
+      "enum": [
+        "pass",
+        "fail",
+        "review"
+      ],
+      "type": "string"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "What a role requires, aligned with schema.org JobPosting.",
+  "properties": {
+    "$schema": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "certifications": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "domain_keywords": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "education": {
+      "$ref": "#/$defs/EducationRequirement"
+    },
+    "esco_occupation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "experience": {
+      "$ref": "#/$defs/ExperienceRequirement"
+    },
+    "id": {
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "type": "string"
+    },
+    "knockouts": {
+      "items": {
+        "$ref": "#/$defs/Knockout"
+      },
+      "type": "array"
+    },
+    "languages": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "occupationalCategory": {
+      "description": "schema.org `occupationalCategory`, as an O*NET-SOC code.",
+      "pattern": "^[0-9]{2}-[0-9]{4}\\.[0-9]{2}$",
+      "type": "string"
+    },
+    "preferred_skills": {
+      "items": {
+        "$ref": "#/$defs/Skill"
+      },
+      "type": "array"
+    },
+    "provenance": {
+      "$ref": "#/$defs/Provenance"
+    },
+    "required_skills": {
+      "items": {
+        "$ref": "#/$defs/Skill"
+      },
+      "type": "array"
+    },
+    "seniority": {
+      "$ref": "#/$defs/Seniority"
+    },
+    "title": {
+      "minLength": 1,
+      "type": "string"
+    },
+    "title_aliases": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "version": {
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "version",
+    "title",
+    "title_aliases",
+    "occupationalCategory",
+    "esco_occupation",
+    "seniority",
+    "required_skills",
+    "preferred_skills",
+    "knockouts",
+    "education",
+    "experience",
+    "certifications",
+    "domain_keywords",
+    "languages",
+    "provenance"
+  ],
+  "title": "ATSGate job blueprint",
+  "type": "object"
+}

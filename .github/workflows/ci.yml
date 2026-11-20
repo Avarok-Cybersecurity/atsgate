@@ -43,6 +43,8 @@ jobs:
         run: cargo run -p xtask --locked -- taxonomy --verify
       - name: committed example blueprints match the generator
         run: cargo run -p xtask --locked -- examples --check
+      - name: site data (scoring tables, blueprints, schema, action, citations) matches the code
+        run: cargo run -p xtask --locked -- site --check
 
   deny:
     runs-on: ubuntu-latest

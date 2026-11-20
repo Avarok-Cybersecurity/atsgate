@@ -1,0 +1,155 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "accessibility",
+    "web performance",
+    "design systems"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Computer Science"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d",
+  "experience": {
+    "min_years": 3.0,
+    "relevant_titles": [
+      "Frontend Engineer",
+      "Web Developer",
+      "Software Engineer"
+    ]
+  },
+  "id": "software-engineer-frontend",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "15-1254.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "Next.js",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:nextjs",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Redux",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:React Redux",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Jest",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Jest",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "webpack",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:webpack",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Node.js",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Node.js",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "GraphQL",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:GraphQL",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Vue.js",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Vue.js",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Figma",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Figma",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "JavaScript",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:JavaScript",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "TypeScript",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:TypeScript",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "React",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:React",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "HTML",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Hypertext markup language HTML",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "CSS",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Cascading style sheets CSS",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Git",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Git",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Frontend Software Engineer",
+  "title_aliases": [
+    "Frontend Engineer",
+    "Front End Developer",
+    "UI Engineer",
+    "Web Developer"
+  ],
+  "version": "1.0.0"
+}
