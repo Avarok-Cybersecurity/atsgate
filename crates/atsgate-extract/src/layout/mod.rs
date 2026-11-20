@@ -2,6 +2,7 @@
 
 pub mod frames;
 pub mod order;
+pub mod running;
 pub mod xycut;
 
 use crate::integrity::{SignalSet, span_evidence};

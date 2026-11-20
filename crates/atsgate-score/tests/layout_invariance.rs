@@ -46,6 +46,18 @@ fn cases() -> Vec<(Format, &'static str, &'static [u8], Vec<&'static str>)> {
             vec!["layout.header_footer_content"],
         ),
         (
+            Format::Pdf,
+            "page-top-heading",
+            fixture!("pdf", "page-top-heading"),
+            vec![],
+        ),
+        (
+            Format::Pdf,
+            "browser-print",
+            fixture!("pdf", "browser-print"),
+            vec![],
+        ),
+        (
             Format::Docx,
             "one-column",
             fixture!("docx", "one-column"),

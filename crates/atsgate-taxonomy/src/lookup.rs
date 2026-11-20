@@ -177,6 +177,28 @@ impl Taxonomy {
         self.best_where(Namespace::Title, text, |c| c.source() == source)
     }
 
+    /// Every occupation of `source` that `text` names as a title, best first: the first is
+    /// what [`Self::resolve_title_from`] returns.
+    pub fn title_candidates(&self, text: &str, source: SourceName) -> Vec<Resolution> {
+        self.entries(Namespace::Title, &fold(text))
+            .into_iter()
+            .filter(|e| self.concept(e.concept).source() == source)
+            .map(|e| {
+                let c = self.concept(e.concept);
+                Resolution {
+                    canonical: c.canonical().to_owned(),
+                    taxonomy_ref: c.taxonomy_ref().to_owned(),
+                    match_kind: if e.exact {
+                        MatchKind::Exact
+                    } else {
+                        MatchKind::Alias
+                    },
+                    concept: e.concept,
+                }
+            })
+            .collect()
+    }
+
     /// How `text` relates to the concept `target`: the same concept (exact or alias), or one
     /// link broader or narrower. Concepts from different sources with the same folded canonical
     /// name count as the same concept.

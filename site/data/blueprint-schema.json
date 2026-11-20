@@ -89,6 +89,7 @@
           "$ref": "#/$defs/UnknownPolicy"
         },
         "value": {
+          "description": "For `min_years` a number, for `degree` a degree name; for the phrase types the words a\nresume would use to show the requirement is met (see `type`).",
           "minLength": 1,
           "type": "string"
         }
@@ -101,15 +102,38 @@
       "type": "object"
     },
     "KnockoutType": {
-      "enum": [
-        "degree",
-        "certification",
-        "min_years",
-        "clearance",
-        "authorization",
-        "language"
-      ],
-      "type": "string"
+      "oneOf": [
+        {
+          "const": "degree",
+          "description": "Met or unmet against the highest degree level the resume names; unknown without one.",
+          "type": "string"
+        },
+        {
+          "const": "certification",
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.",
+          "type": "string"
+        },
+        {
+          "const": "min_years",
+          "description": "Met or unmet against relevant years; unknown when no role carries dates.",
+          "type": "string"
+        },
+        {
+          "const": "clearance",
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.",
+          "type": "string"
+        },
+        {
+          "const": "authorization",
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet. Write\n`value` as a resume would state it (\"authorized to work in the US\"): a posting's wording\n(\"No visa sponsorship\") is never in a resume, so it stays unknown and `unknown_policy`\ndecides.",
+          "type": "string"
+        },
+        {
+          "const": "language",
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.",
+          "type": "string"
+        }
+      ]
     },
     "LevelFramework": {
       "enum": [
@@ -160,19 +184,28 @@
       "type": "string"
     },
     "Seniority": {
-      "enum": [
-        "intern",
-        "junior",
-        "mid",
-        "senior",
-        "staff",
-        "principal",
-        "lead",
-        "manager",
-        "director",
-        "executive"
-      ],
-      "type": "string"
+      "oneOf": [
+        {
+          "enum": [
+            "intern",
+            "junior",
+            "mid",
+            "senior",
+            "staff",
+            "principal",
+            "lead",
+            "manager",
+            "director",
+            "executive"
+          ],
+          "type": "string"
+        },
+        {
+          "const": "unspecified",
+          "description": "The posting states no seniority: title scoring applies no seniority penalty. Written\nexplicitly; there is no default. Never read from a resume title.",
+          "type": "string"
+        }
+      ]
     },
     "Skill": {
       "additionalProperties": false,

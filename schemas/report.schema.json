@@ -213,7 +213,7 @@
           "format": "double"
         },
         "would_match": {
-          "description": "Spellings the scorer would have matched: the canonical name first, then aliases.",
+          "description": "Spellings the scorer would have matched: the canonical name first, then the blueprint's\naliases, then the taxonomy's, deduplicated ignoring case and capped at\n`gaps::WOULD_MATCH_CAP`.",
           "type": "array",
           "items": {
             "type": "string"
@@ -280,14 +280,37 @@
       ]
     },
     "KnockoutType": {
-      "type": "string",
-      "enum": [
-        "degree",
-        "certification",
-        "min_years",
-        "clearance",
-        "authorization",
-        "language"
+      "oneOf": [
+        {
+          "description": "Met or unmet against the highest degree level the resume names; unknown without one.",
+          "type": "string",
+          "const": "degree"
+        },
+        {
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.",
+          "type": "string",
+          "const": "certification"
+        },
+        {
+          "description": "Met or unmet against relevant years; unknown when no role carries dates.",
+          "type": "string",
+          "const": "min_years"
+        },
+        {
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.",
+          "type": "string",
+          "const": "clearance"
+        },
+        {
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet. Write\n`value` as a resume would state it (\"authorized to work in the US\"): a posting's wording\n(\"No visa sponsorship\") is never in a resume, so it stays unknown and `unknown_policy`\ndecides.",
+          "type": "string",
+          "const": "authorization"
+        },
+        {
+          "description": "Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.",
+          "type": "string",
+          "const": "language"
+        }
       ]
     },
     "Outcome": {

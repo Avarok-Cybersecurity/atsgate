@@ -10,6 +10,8 @@ pub struct Thresholds {
     pub header_band: f32,
     /// Fraction of the page height at the bottom that counts as the footer band.
     pub footer_band: f32,
+    /// A band line repeats on another page when the two sit within this many points vertically.
+    pub running_position_tolerance_pt: f32,
     /// Minimum empty horizontal gap, in points, between two text columns.
     pub column_gap_pt: f32,
     /// Two spans share a baseline when their baselines differ by at most this many points.
@@ -31,6 +33,8 @@ impl Thresholds {
     /// - 0.95 per channel: near-white that a reader cannot see on a white page.
     /// - 6% bands: about the top and bottom 47 pt of a US Letter page, inside the usual 0.5-1 in
     ///   margins where word processors place headers and footers.
+    /// - 2 pt running-header tolerance: a template repeats its header at the same height; 2 pt
+    ///   absorbs rounding and a changed glyph height ("Page 1" vs "Page 10"), far below a line.
     /// - 12 pt gutter: narrower than any multi-column resume gutter seen in practice, wider than a
     ///   word space at body sizes.
     /// - 0.5 pt baseline tolerance: text on one row shares a baseline exactly in generated PDFs.
@@ -43,6 +47,7 @@ impl Thresholds {
         white_min_channel: 0.95,
         header_band: 0.06,
         footer_band: 0.06,
+        running_position_tolerance_pt: 2.0,
         column_gap_pt: 12.0,
         baseline_tolerance_pt: 0.5,
         min_column_rows: 2,

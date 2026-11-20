@@ -7,22 +7,26 @@ mod docx_layouts;
 mod docx_package;
 mod docx_xml;
 mod pdf_layouts;
+mod pdf_pages;
 mod pdf_variants;
 mod pdf_writer;
 mod png;
 
 use docx_layouts as d;
 use pdf_layouts as p;
+use pdf_pages as pages;
 use pdf_variants as v;
 
 type Gen<T> = (&'static str, fn() -> T);
 
-const PDFS: [Gen<pdf_writer::PdfSpec>; 13] = [
+const PDFS: [Gen<pdf_writer::PdfSpec>; 15] = [
     ("one-column", p::one_column),
     ("two-column", p::two_column),
     ("table", p::table),
     ("text-box", p::text_box),
-    ("header-footer", p::header_footer),
+    ("header-footer", pages::header_footer),
+    ("page-top-heading", pages::page_top_heading),
+    ("browser-print", pages::browser_print),
     ("image-only", p::image_only),
     ("hidden-white", v::hidden_white),
     ("hidden-tiny", v::hidden_tiny),

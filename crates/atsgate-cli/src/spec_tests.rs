@@ -30,8 +30,8 @@ impl Io for Fake {
     }
 }
 
-fn gazetteer() -> Gazetteer<'static> {
-    Gazetteer::skills(atsgate_taxonomy::Taxonomy::builtin().expect("taxonomy"))
+fn taxonomy() -> &'static atsgate_taxonomy::Taxonomy {
+    atsgate_taxonomy::Taxonomy::builtin().expect("taxonomy")
 }
 
 const BACKEND: &str = include_str!("../../../blueprints/software-engineer-backend.yaml");
@@ -64,18 +64,18 @@ fn builtin_file_and_url_blueprints_resolve_and_validate() {
         .insert("b.yaml".into(), BACKEND.as_bytes().to_vec());
     io.urls
         .insert("https://x.test/b.yaml".into(), BACKEND.as_bytes().to_vec());
-    let gz = gazetteer();
+    let gz = taxonomy();
     for spec in [
         "builtin:software-engineer-backend",
         "b.yaml",
         "https://x.test/b.yaml",
     ] {
-        let r = resolve(spec, &io, &gz).unwrap_or_else(|e| panic!("{spec}: {e}"));
+        let r = resolve(spec, &io, gz).unwrap_or_else(|e| panic!("{spec}: {e}"));
         assert_eq!(r.blueprint.id, "software-engineer-backend", "{spec}");
         assert!(r.generated_yaml.is_none());
     }
     assert_eq!(*io.caps.borrow(), [MAX_BLUEPRINT_BYTES]);
-    assert!(resolve("builtin:nope", &io, &gz).is_err());
+    assert!(resolve("builtin:nope", &io, gz).is_err());
 }
 
 #[test]
@@ -93,18 +93,18 @@ fn a_url_blueprint_is_size_capped_and_schema_validated() {
         "https://x.test/extra.json".into(),
         br#"{"id": "x", "surprise": 1}"#.to_vec(),
     );
-    let gz = gazetteer();
-    let err = resolve("https://x.test/huge.yaml", &io, &gz).expect_err("too large");
+    let gz = taxonomy();
+    let err = resolve("https://x.test/huge.yaml", &io, gz).expect_err("too large");
     assert!(err.contains("exceeds"), "{err}");
     assert!(
-        resolve("https://x.test/bad.yaml", &io, &gz).is_err(),
+        resolve("https://x.test/bad.yaml", &io, gz).is_err(),
         "unknown enum value"
     );
     assert!(
-        resolve("https://x.test/extra.json", &io, &gz).is_err(),
+        resolve("https://x.test/extra.json", &io, gz).is_err(),
         "unknown field"
     );
-    assert!(resolve("https://x.test/missing.yaml", &io, &gz).is_err());
+    assert!(resolve("https://x.test/missing.yaml", &io, gz).is_err());
 }
 
 #[test]
@@ -115,8 +115,8 @@ fn generate_from_a_file_or_url_is_unreviewed_and_written_out() {
     let html = "<html><body><h1>Senior Backend Engineer</h1><h2>Requirements</h2><p>Go and PostgreSQL</p></body></html>";
     io.urls
         .insert("https://jobs.test/42".into(), html.as_bytes().to_vec());
-    let gz = gazetteer();
-    let from_file = resolve("generate:jobs/Acme Backend.txt", &io, &gz).expect("generates");
+    let gz = taxonomy();
+    let from_file = resolve("generate:jobs/Acme Backend.txt", &io, gz).expect("generates");
     assert_eq!(from_file.blueprint.id, "acme-backend");
     assert!(!from_file.blueprint.provenance.reviewed);
     let yaml = from_file.generated_yaml.expect("yaml");
@@ -124,7 +124,7 @@ fn generate_from_a_file_or_url_is_unreviewed_and_written_out() {
         atsgate_blueprint::Blueprint::from_yaml(&yaml).expect("round trip"),
         from_file.blueprint
     );
-    let from_url = resolve("generate:https://jobs.test/42", &io, &gz).expect("generates");
+    let from_url = resolve("generate:https://jobs.test/42", &io, gz).expect("generates");
     assert_eq!(from_url.blueprint.id, "42");
     assert_eq!(from_url.blueprint.occupational_category, "15-1252.00");
     assert_eq!(*io.caps.borrow(), [MAX_POSTING_BYTES]);

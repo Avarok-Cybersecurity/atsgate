@@ -1,8 +1,14 @@
 //! A deterministic gazetteer: finds skill names in free text by longest match over folded tokens.
+//!
+//! [`Scope::Resumes`] indexes every concrete skill name. [`Scope::Postings`] is what a generator
+//! may turn into a requirement, so ESCO, whose alternative labels include ordinary words
+//! ("email" for electronic communication, "curiosity" for demonstrate curiosity), is held to
+//! its multi-word preferred labels, minus transversal and attitude labels, plus curated aliases
+//! and the curated `gazetteer_esco_allow` list.
 
-use crate::data::ConceptKind;
+use crate::data::{ConceptKind, SourceName};
 use crate::fold::{fold, tokens};
-use crate::model::{ConceptId, Namespace, Taxonomy};
+use crate::model::{ConceptId, IndexEntry, Namespace, Taxonomy};
 use std::collections::HashMap;
 
 /// The longest phrase, in tokens, the gazetteer looks for.
@@ -39,9 +45,19 @@ struct Phrase {
     case: Option<CaseRule>,
 }
 
+/// What the gazetteer reads, which decides how much of ESCO it indexes (see the module docs).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Scope {
+    /// Job postings: every mention may become a blueprint requirement.
+    Postings,
+    /// Resumes: mentions only count against a skill the blueprint already names.
+    Resumes,
+}
+
 #[derive(Debug)]
 pub struct Gazetteer<'t> {
     taxonomy: &'t Taxonomy,
+    scope: Scope,
     phrases: HashMap<String, Phrase>,
 }
 
@@ -78,11 +94,25 @@ fn case_rule(spellings: Vec<String>, curated: Option<&String>) -> Option<CaseRul
     }
 }
 
+/// Whether a postings gazetteer may report `key` for the index entry `e`.
+fn posting_key(taxonomy: &Taxonomy, key: &str, e: &IndexEntry) -> bool {
+    let c = taxonomy.concept(e.concept);
+    if c.source() != SourceName::Esco || e.curated || taxonomy.esco_allow.contains(key) {
+        return true;
+    }
+    let transversal = taxonomy
+        .posting_excluded_prefixes
+        .iter()
+        .any(|p| key == p || key.starts_with(&format!("{p} ")));
+    e.exact && key.contains(' ') && !transversal
+}
+
 impl<'t> Gazetteer<'t> {
-    /// Indexes every concrete skill (not skill groups) by its canonical name and aliases. A key
-    /// shared by several concepts goes to the one [`Taxonomy::resolve_skill`] would choose.
-    /// Acronym names and the curated `case_sensitive` phrases must match their spelling.
-    pub fn skills(taxonomy: &'t Taxonomy) -> Self {
+    /// Indexes every concrete skill (not skill groups) by its canonical name and aliases, as far
+    /// as `scope` allows. A key shared by several concepts goes to the one
+    /// [`Taxonomy::resolve_skill`] would choose. Acronym names and the curated `case_sensitive`
+    /// phrases must match their spelling.
+    pub fn new(taxonomy: &'t Taxonomy, scope: Scope) -> Self {
         let curated_case: HashMap<String, &String> = taxonomy
             .case_sensitive
             .iter()
@@ -103,6 +133,9 @@ impl<'t> Gazetteer<'t> {
             else {
                 continue;
             };
+            if scope == Scope::Postings && !posting_key(taxonomy, key, &e) {
+                continue;
+            }
             let c = taxonomy.concept(e.concept);
             let spellings: Vec<String> = std::iter::once(c.canonical())
                 .chain(c.aliases())
@@ -115,7 +148,15 @@ impl<'t> Gazetteer<'t> {
             };
             phrases.insert(key.clone(), phrase);
         }
-        Gazetteer { taxonomy, phrases }
+        Gazetteer {
+            taxonomy,
+            scope,
+            phrases,
+        }
+    }
+
+    pub fn scope(&self) -> Scope {
+        self.scope
     }
 
     pub fn taxonomy(&self) -> &'t Taxonomy {

@@ -114,6 +114,8 @@ fn every_text_layout_parses_to_the_same_sections() {
         fixture!("pdf", "table"),
         fixture!("pdf", "text-box"),
         fixture!("pdf", "header-footer"),
+        fixture!("pdf", "page-top-heading"),
+        fixture!("pdf", "browser-print"),
     ];
     let docxs = [
         fixture!("docx", "one-column"),
@@ -143,7 +145,7 @@ fn header_and_footer_lines_stay_out_of_sections() {
     );
     assert_eq!(
         r.header_footer.last().map(String::as_str),
-        Some("Page 1 of 1")
+        Some("Page 2 of 2")
     );
     assert!(
         r.preamble.is_empty(),

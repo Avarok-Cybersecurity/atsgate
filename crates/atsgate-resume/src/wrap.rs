@@ -8,7 +8,9 @@
 //! - it starts no further left than the paragraph's first line (hanging indents start further
 //!   right, a new entry starts further left);
 //! - the line above runs so close to the right edge that this line's first word could not have
-//!   fitted after it.
+//!   fitted after it;
+//! - the line above is running text, with no gap wider than [`WRAP_MAX_INNER_GAP`] between its
+//!   runs (a title with its dates flush right reaches the edge without being wrapped).
 
 use crate::headings;
 use crate::normalize::{bullet_text, normalize};
@@ -23,6 +25,9 @@ pub const WRAP_MAX_ADVANCE: f32 = 1.3;
 pub const FIT_SLACK: f32 = 0.5;
 /// Glyph side bearings move a line's left edge by a fraction of a point.
 pub const LEFT_EDGE_TOLERANCE_PT: f32 = 1.0;
+/// The widest gap, in font sizes, between two runs of one wrapped line: justified text
+/// stretches a word space to well under one em, while flush-right dates leave several.
+pub const WRAP_MAX_INNER_GAP: f32 = 2.0;
 
 /// One logical line: the index of its first physical line, and its normalized text.
 pub type Logical = (usize, String);
@@ -47,6 +52,19 @@ fn first_word_width(line: &Line, text: &str) -> Option<f32> {
     (chars > 0).then(|| width * word as f32 / chars as f32)
 }
 
+/// The widest horizontal gap between consecutive runs of `line`.
+fn inner_gap(doc: &Document, line: &Line) -> f32 {
+    let boxes: Vec<_> = line
+        .spans
+        .iter()
+        .filter_map(|id| doc.span(*id).bbox)
+        .collect();
+    boxes
+        .windows(2)
+        .map(|w| w[1].x0 - w[0].x1)
+        .fold(0.0, f32::max)
+}
+
 fn continues(doc: &Document, first: &Line, prev: &Line, line: &Line, text: &str) -> bool {
     let (Some(p), Some(b), Some(f), Some(size)) =
         (prev.bbox, line.bbox, first.bbox, font_size(doc, line))
@@ -64,7 +82,8 @@ fn continues(doc: &Document, first: &Line, prev: &Line, line: &Line, text: &str)
     let aligned = b.x0 >= f.x0 - LEFT_EDGE_TOLERANCE_PT;
     let full = first_word_width(line, text)
         .is_some_and(|w| p.x1 + w >= right_edge(doc, line.page) - FIT_SLACK * size);
-    wrapped_spacing && aligned && full
+    let running_text = inner_gap(doc, prev) <= WRAP_MAX_INNER_GAP * size;
+    wrapped_spacing && aligned && full && running_text
 }
 
 /// The document's lines in reading order, with wrapped lines joined to the line they continue.

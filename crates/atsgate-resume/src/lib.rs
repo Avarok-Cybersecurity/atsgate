@@ -12,10 +12,12 @@ mod tokens;
 mod wrap;
 
 pub use dates::{DateEnd, DateRange, PartialDate};
-pub use entries::Entry;
+pub use entries::{Entry, HANGING_INDENT_MIN_PT};
 pub use headings::SectionKind;
 pub use normalize::{LineRef, normalize};
-pub use wrap::{FIT_SLACK, LEFT_EDGE_TOLERANCE_PT, WRAP_MAX_ADVANCE, logical_lines};
+pub use wrap::{
+    FIT_SLACK, LEFT_EDGE_TOLERANCE_PT, WRAP_MAX_ADVANCE, WRAP_MAX_INNER_GAP, logical_lines,
+};
 
 use atsgate_extract::{Document, Region};
 

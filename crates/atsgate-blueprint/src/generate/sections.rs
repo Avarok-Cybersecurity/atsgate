@@ -65,6 +65,10 @@ pub const HEADING_CUES: [(&str, Section); 47] = [
     ("equal opportunity", Section::Ignored),
 ];
 
+/// Heading cues whose inline content is a list of technologies ("Stack: [python, rust]"): each
+/// item names a skill whatever its case.
+pub const LIST_CUES: [&str; 4] = ["tech stack", "our stack", "stack", "technologies"];
+
 /// Phrases inside a line that mark that line alone as preferred.
 pub const INLINE_PREFERRED: [&str; 8] = [
     "nice to have",
@@ -86,6 +90,8 @@ pub struct Line<'a> {
     /// Byte offset of `text` in the input.
     pub offset: usize,
     pub section: Section,
+    /// The text after a [`LIST_CUES`] colon: comma-separated items, each one skill.
+    pub list: Option<&'a str>,
 }
 
 fn strip_marker(line: &str) -> &str {
@@ -94,8 +100,8 @@ fn strip_marker(line: &str) -> &str {
         .trim()
 }
 
-/// The cue a line opens with, and the text after the cue's colon (if any).
-fn heading(line: &str) -> Option<(Section, &str)> {
+/// The cue a line opens with, its section, and the text after the cue's colon (if any).
+fn heading(line: &str) -> Option<(&'static str, Section, &str)> {
     let stripped = strip_marker(line);
     let (head, rest) = match stripped.split_once(':') {
         Some((h, r)) => (h, r.trim()),
@@ -109,7 +115,7 @@ fn heading(line: &str) -> Option<(Section, &str)> {
             || (folded.starts_with(&format!("{cue} ")) && words <= cue_words + HEADING_SLACK_WORDS);
         let bare_heading = rest.is_empty() && stripped.len() == head.len();
         let colon_heading = stripped.len() > head.len();
-        (matches && (bare_heading || colon_heading)).then_some((*section, rest))
+        (matches && (bare_heading || colon_heading)).then_some((*cue, *section, rest))
     })
 }
 
@@ -151,15 +157,17 @@ pub fn label(text: &str) -> Vec<Line<'_>> {
         if line.trim().is_empty() {
             continue;
         }
-        if let Some((section, "")) = heading(line.trim()) {
+        if let Some((_, section, "")) = heading(line.trim()) {
             current = section;
         }
         for (s, e) in sentences(line) {
             let sentence = line[s..e].trim();
             let lead = line[s..e].len() - line[s..e].trim_start().len();
-            let section = match heading(sentence) {
-                Some((section, rest)) if !rest.is_empty() => section,
-                _ => current,
+            let (section, list) = match heading(sentence) {
+                Some((cue, section, rest)) if !rest.is_empty() => {
+                    (section, LIST_CUES.contains(&cue).then_some(rest))
+                }
+                _ => (current, None),
             };
             let section = if section != Section::Ignored && inline_preferred(sentence) {
                 Section::Preferred
@@ -170,8 +178,21 @@ pub fn label(text: &str) -> Vec<Line<'_>> {
                 text: sentence,
                 offset: line_offset + s + lead,
                 section,
+                list,
             });
         }
     }
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn every_list_cue_is_a_heading_cue() {
+        for cue in LIST_CUES {
+            assert!(HEADING_CUES.iter().any(|(c, _)| *c == cue), "{cue}");
+        }
+    }
 }

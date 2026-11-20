@@ -3,20 +3,18 @@
 use atsgate_blueprint::generate::{GenerateError, GenerateOptions, MIN_SHARED_SKILLS, generate};
 use atsgate_blueprint::{Blueprint, KnockoutType, ProvenanceSource, Seniority};
 use atsgate_extract::{Format, Thresholds, extract};
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 
 fn options(category: Option<&str>) -> GenerateOptions {
     GenerateOptions {
         id: "test".to_owned(),
         version: "0.1.0".to_owned(),
-        // Test choice: a value no posting below states, so a leak of the fallback is visible.
-        fallback_seniority: Seniority::Mid,
         occupational_category: category.map(str::to_owned),
     }
 }
 
 fn run(text: &str, category: Option<&str>) -> Result<Blueprint, GenerateError> {
-    let gazetteer = Gazetteer::skills(Taxonomy::builtin().expect("taxonomy"));
+    let gazetteer = Gazetteer::new(Taxonomy::builtin().expect("taxonomy"), Scope::Postings);
     generate(text, &options(category), &gazetteer)
 }
 
@@ -49,6 +47,15 @@ fn inline_cue_marks_a_line_preferred() {
     let b = run(text, None).expect("generates");
     assert!(names(&b.preferred_skills).contains(&"Tableau"));
     assert!(!names(&b.required_skills).contains(&"Tableau"));
+}
+
+#[test]
+fn a_posting_that_states_no_seniority_generates_unspecified() {
+    let text = "Software Engineer\nRequirements\n- Python and PostgreSQL\n";
+    assert_eq!(
+        run(text, None).expect("generates").seniority,
+        Seniority::Unspecified
+    );
 }
 
 #[test]
@@ -217,4 +224,24 @@ fn artcraft_domain_keywords_drop_generic_software() {
     for generic in ["RSS", "Microsoft Office", "SolidWorks"] {
         assert!(!b.domain_keywords.iter().any(|k| k == generic), "{generic}");
     }
+}
+
+#[test]
+fn an_ambiguous_title_is_read_in_the_context_its_skills_name() {
+    let staff = "Staff Engineer\nRequirements\n- Rust, TypeScript, React and PostgreSQL\n";
+    let b = run(staff, None).expect("generates");
+    assert_eq!(b.occupational_category, "15-1252.00");
+    assert!(
+        b.experience
+            .relevant_titles
+            .contains(&"Software Developers".to_owned()),
+        "{:?}",
+        b.experience.relevant_titles
+    );
+    let security = "Senior Security Engineer\nRequirements\n- Rust, Go and PostgreSQL\n";
+    let b = run(security, None).expect("generates");
+    assert_eq!(
+        b.occupational_category, "15-1299.05",
+        "not Security Management"
+    );
 }

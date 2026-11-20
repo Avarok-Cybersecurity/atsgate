@@ -1,6 +1,6 @@
 //! Every committed fixture raises exactly its expected signals, and the clean ones raise none.
 
-use atsgate_extract::{Document, Format, Thresholds, extract};
+use atsgate_extract::{Document, Format, Region, Thresholds, extract};
 
 macro_rules! fixture {
     ($kind:literal, $name:literal) => {
@@ -47,6 +47,8 @@ fn pdf_fixtures_raise_exactly_their_signals() {
                 fixture!("pdf", "header-footer"),
                 &["layout.header_footer_content"],
             ),
+            ("page-top-heading", fixture!("pdf", "page-top-heading"), &[]),
+            ("browser-print", fixture!("pdf", "browser-print"), &[]),
             (
                 "image-only",
                 fixture!("pdf", "image-only"),
@@ -208,4 +210,31 @@ fn thresholds_drive_detection() {
             "{name} must not be flagged above its threshold"
         );
     }
+}
+
+#[test]
+fn only_band_lines_repeated_across_pages_are_running_headers_and_footers() {
+    let region = |bytes: &[u8], text: &str| {
+        let doc = extract(bytes, Format::Pdf, &Thresholds::STANDARD).expect("parses");
+        let regions: Vec<Region> = doc
+            .lines
+            .iter()
+            .filter(|l| l.text == text)
+            .map(|l| l.region)
+            .collect();
+        assert!(!regions.is_empty(), "{text} is a line");
+        regions
+    };
+    let running = fixture!("pdf", "header-footer");
+    assert_eq!(region(running, "Page 1 of 2"), [Region::Footer]);
+    assert_eq!(region(running, "Page 2 of 2"), [Region::Footer]);
+    assert_eq!(
+        region(running, "Jordan Example"),
+        [Region::Header, Region::Header]
+    );
+    // The heading opening page 2 sits in the header band but appears once: page content.
+    assert_eq!(
+        region(fixture!("pdf", "page-top-heading"), "EDUCATION"),
+        [Region::Body]
+    );
 }

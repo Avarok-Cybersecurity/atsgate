@@ -36,7 +36,9 @@ pub struct Gap {
     pub canonical: String,
     pub requirement: Requirement,
     pub weight: f64,
-    /// Spellings the scorer would have matched: the canonical name first, then aliases.
+    /// Spellings the scorer would have matched: the canonical name first, then the blueprint's
+    /// aliases, then the taxonomy's, deduplicated ignoring case and capped at
+    /// `gaps::WOULD_MATCH_CAP`.
     pub would_match: Vec<String>,
 }
 

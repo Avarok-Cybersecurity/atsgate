@@ -157,3 +157,44 @@ fn backend_engineer_titles_resolve_to_software_developers() {
         );
     }
 }
+
+#[test]
+fn a_contextual_title_resolves_only_inside_its_group() {
+    let t = taxonomy();
+    let in_software = t
+        .contextual_title("Staff Engineer", "15-1252.00")
+        .map(|r| r.taxonomy_ref);
+    assert_eq!(
+        in_software, None,
+        "seniority words are the caller's to strip"
+    );
+    let engineer = t
+        .contextual_title("Engineer", "15-1252.00")
+        .expect("software");
+    assert_eq!(engineer.taxonomy_ref, "onet-soc:15-1252.00");
+    let security = t
+        .contextual_title("Security Engineer", "15-1299.07")
+        .expect("15-12");
+    assert_eq!(security.taxonomy_ref, "onet-soc:15-1299.05");
+    assert!(t.contextual_title("Engineer", "17-2051.00").is_none());
+}
+
+#[test]
+fn title_candidates_list_every_occupation_in_rank_order() {
+    let refs: Vec<String> = taxonomy()
+        .title_candidates("Systems Engineer", SourceName::Onet)
+        .into_iter()
+        .map(|r| r.taxonomy_ref)
+        .collect();
+    assert_eq!(
+        refs.first().map(String::as_str),
+        Some("onet-soc:13-1081.01")
+    );
+    assert!(refs.contains(&"onet-soc:15-1252.00".to_owned()));
+    assert_eq!(
+        taxonomy()
+            .resolve_title_from("Systems Engineer", SourceName::Onet)
+            .map(|r| r.taxonomy_ref),
+        refs.first().cloned()
+    );
+}

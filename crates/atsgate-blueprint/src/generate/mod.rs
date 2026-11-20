@@ -12,25 +12,28 @@
 //! | Body (before any cue) | `domain_keywords` if a required cue exists (never generic office or CAD software), else `required_skills` |
 //! | Benefits, compensation, about us | nothing |
 //!
-//! The output is always `provenance {source: generated, reviewed: false}`.
+//! The output is always `provenance {source: generated, reviewed: false}`. A posting whose title
+//! states no seniority gets `seniority: unspecified`, never a guessed level.
 
 mod occupation;
 mod requirements;
+mod resolve;
 mod sections;
 mod skills;
 mod title;
 
 pub use occupation::{MIN_SHARED_SKILLS, breadth_weighted};
 pub use requirements::DEGREES;
+pub use resolve::{MAX_QUALIFIER_WORDS, resolve_occupation, strip_qualifiers};
 pub use sections::{HEADING_CUES, INLINE_PREFERRED, Section};
 pub use skills::{GENERIC_SOFTWARE, GENERIC_SOFTWARE_CATEGORIES, is_generic_software};
-pub use title::{SENIORITY_WORDS, TITLE_HEADS, seniority_of, strip_seniority};
+pub use title::{GENERIC_TITLES, SENIORITY_WORDS, TITLE_HEADS, seniority_of, strip_seniority};
 
 use crate::{
     Blueprint, BlueprintError, EducationLevel, EducationRequirement, ExperienceRequirement,
     Knockout, KnockoutType, LevelFramework, Provenance, ProvenanceSource, Seniority, UnknownPolicy,
 };
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 
 /// Identifies this generator in `provenance.generator_version`.
 pub const GENERATOR_VERSION: &str = concat!("atsgate-blueprint/", env!("CARGO_PKG_VERSION"));
@@ -40,8 +43,6 @@ pub const GENERATOR_VERSION: &str = concat!("atsgate-blueprint/", env!("CARGO_PK
 pub struct GenerateOptions {
     pub id: String,
     pub version: String,
-    /// Used when no seniority word appears in the title.
-    pub fallback_seniority: Seniority,
     /// `Some` overrides the occupation; `None` infers it from the title, then from the skills,
     /// and fails when neither names one.
     pub occupational_category: Option<String>,
@@ -56,6 +57,8 @@ pub enum GenerateError {
          skills match one; pass occupational_category explicitly"
     )]
     UnknownOccupation,
+    #[error("generate needs a gazetteer built for postings (Scope::Postings)")]
+    ResumeGazetteer,
     #[error("the generated blueprint is invalid: {0}")]
     Invalid(#[from] BlueprintError),
 }
@@ -66,17 +69,26 @@ pub fn generate(
     options: &GenerateOptions,
     gazetteer: &Gazetteer<'_>,
 ) -> Result<Blueprint, GenerateError> {
+    if gazetteer.scope() != Scope::Postings {
+        return Err(GenerateError::ResumeGazetteer);
+    }
     let taxonomy: &Taxonomy = gazetteer.taxonomy();
     let lines = sections::label(text);
     let leading: Vec<&str> = lines.iter().map(|l| l.text).collect();
-    let guess = title::guess(&leading, taxonomy).ok_or(GenerateError::NoTitle)?;
     let found = skills::collect(&lines, gazetteer);
+    let inferred = occupation::infer(taxonomy, &found.required_ids, &found.preferred_ids);
+    let context = options
+        .occupational_category
+        .clone()
+        .or_else(|| inferred.as_ref().map(|(code, _)| code.clone()));
+    let guess =
+        title::guess(&leading, taxonomy, context.as_deref()).ok_or(GenerateError::NoTitle)?;
     let occupation = match &options.occupational_category {
         Some(code) => code.clone(),
         None => guess
             .onet
             .clone()
-            .or_else(|| occupation::infer(taxonomy, &found.required_ids, &found.preferred_ids))
+            .or(inferred)
             .map(|(code, _)| code)
             .ok_or(GenerateError::UnknownOccupation)?,
     };
@@ -132,7 +144,7 @@ pub fn generate(
         title_aliases: Vec::new(),
         occupational_category: occupation,
         esco_occupation: guess.esco.clone(),
-        seniority: guess.seniority.unwrap_or(options.fallback_seniority),
+        seniority: guess.seniority.unwrap_or(Seniority::Unspecified),
         required_skills: found.required,
         preferred_skills: found.preferred,
         knockouts,

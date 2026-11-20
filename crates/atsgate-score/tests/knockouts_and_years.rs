@@ -147,3 +147,34 @@ fn an_unknown_knockout_follows_its_policy() {
         );
     }
 }
+
+#[test]
+fn an_authorization_the_resume_never_evidences_is_unknown_never_unmet() {
+    // A posting-worded value names a requirement, not a phrase a resume would contain, so it
+    // can only be met by that phrase or left to the policy; it never fails the gate on its own.
+    for policy in [UnknownPolicy::Pass, UnknownPolicy::Review] {
+        let r = common::score_text(
+            RESUME,
+            &with_knockouts(vec![ko(
+                KnockoutType::Authorization,
+                "No visa sponsorship",
+                policy,
+            )]),
+        );
+        assert_eq!(r.knockouts[0].status, Status::Unknown);
+        assert_ne!(r.knockouts[0].outcome, Outcome::Fail);
+    }
+    let evidenced = "SUMMARY\nAuthorized to work in the US.\n".to_owned() + RESUME;
+    let r = common::score_text(
+        &evidenced,
+        &with_knockouts(vec![ko(
+            KnockoutType::Authorization,
+            "authorized to work in the US",
+            UnknownPolicy::Fail,
+        )]),
+    );
+    assert_eq!(
+        (r.knockouts[0].status, r.knockouts[0].outcome),
+        (Status::Met, Outcome::Pass)
+    );
+}

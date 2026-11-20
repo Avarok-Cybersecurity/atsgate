@@ -4,7 +4,7 @@
 
 use super::{SAMPLE_DIR, skillspan, talentclef, techwolf};
 use crate::root;
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 
 fn sample(name: &str) -> String {
     let path = root().join(SAMPLE_DIR).join(name);
@@ -23,7 +23,7 @@ fn taxonomy() -> &'static Taxonomy {
 #[test]
 fn skillspan_sample_meets_its_floor() {
     let sentences = skillspan::parse(&sample("skillspan-test-sample.jsonl")).expect("parses");
-    let all = skillspan::evaluate(&sentences, &Gazetteer::skills(taxonomy()))[2].1;
+    let all = skillspan::evaluate(&sentences, &Gazetteer::new(taxonomy(), Scope::Postings))[2].1;
     let precision = ratio(all.predicted_overlapping, all.predicted);
     let recall = ratio(all.gold_overlapped, all.gold);
     println!("skillspan sample: overlap precision {precision:.3}, recall {recall:.3}");
@@ -37,7 +37,7 @@ fn skillspan_sample_meets_its_floor() {
 #[test]
 fn techwolf_sample_meets_its_floor() {
     let rows = techwolf::parse(sample("techwolf-sample.csv").as_bytes()).expect("parses");
-    let c = techwolf::evaluate(&rows, &Gazetteer::skills(taxonomy()));
+    let c = techwolf::evaluate(&rows, &Gazetteer::new(taxonomy(), Scope::Postings));
     let recall = ratio(c.found_related, c.resolvable);
     let precision = ratio(c.predicted_target, c.predicted);
     println!("techwolf sample: related recall {recall:.3}, precision {precision:.3}");
@@ -63,8 +63,14 @@ fn talentclef_validation_beats_the_string_baseline() {
     assert!(s.map > s.string_baseline_map);
 }
 
-const SKILLSPAN_OVERLAP_PRECISION_FLOOR: f64 = 0.45; // measured 0.475
-const SKILLSPAN_OVERLAP_RECALL_FLOOR: f64 = 0.23; // measured 0.251
-const TECHWOLF_RELATED_RECALL_FLOOR: f64 = 0.30; // measured 0.318
-const TECHWOLF_PRECISION_FLOOR: f64 = 0.40; // measured 0.427
+// The recall floors were lowered (from 0.23 and 0.30) and the precision floors raised (from 0.45
+// and 0.40) when the postings gazetteer stopped reporting ESCO alternative labels, one-word labels
+// and transversal skills: the generator is scored against these sets, and what they lost was
+// mostly the noise ("email", "curiosity", "radar") that real postings turned into requirements.
+// Both SkillSpan subsets and TechWolf's ESCO targets annotate soft skills, so their recall
+// counts that trade as a loss; docs/evaluation.md records the before and after.
+const SKILLSPAN_OVERLAP_PRECISION_FLOOR: f64 = 0.59; // measured 0.619
+const SKILLSPAN_OVERLAP_RECALL_FLOOR: f64 = 0.12; // measured 0.139
+const TECHWOLF_RELATED_RECALL_FLOOR: f64 = 0.17; // measured 0.190
+const TECHWOLF_PRECISION_FLOOR: f64 = 0.65; // measured 0.688
 const TALENTCLEF_MAP_FLOOR: f64 = 0.035; // measured 0.040

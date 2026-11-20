@@ -6,17 +6,20 @@
 //! `cargo run -p xtask -- taxonomy --write`), and every function is a computation over it.
 //! Attribution for the data is in DATA-LICENSES.md and in each data file's header.
 
+mod context;
 mod curated;
 pub mod data;
 mod fold;
 mod gazetteer;
+mod index;
 mod lookup;
 mod model;
 
-pub use curated::{CURATED_PREFIX, Curated, CuratedEntry, DeniedAlias};
+pub use context::ONET_SOC_PREFIX;
+pub use curated::{CURATED_PREFIX, ContextualTitle, Curated, CuratedEntry, DeniedAlias};
 pub use data::{ConceptKind, SourceName};
 pub use fold::{Token, fold, tokens};
-pub use gazetteer::{Gazetteer, MAX_PHRASE_TOKENS, Mention};
+pub use gazetteer::{Gazetteer, MAX_PHRASE_TOKENS, Mention, Scope};
 pub use lookup::{ConceptView, MatchKind, Resolution};
 pub use model::{ConceptId, Namespace, Taxonomy, TaxonomyError};
 

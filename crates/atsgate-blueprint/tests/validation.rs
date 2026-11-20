@@ -83,6 +83,21 @@ fn an_unknown_field_fails_both() {
 }
 
 #[test]
+fn seniority_may_be_explicitly_unspecified() {
+    let doc = edit(|d| d["seniority"] = json!("unspecified"));
+    assert!(schema_accepts(&doc), "schema rejected {doc}");
+    let b = rust(&doc).expect("parses");
+    assert_eq!(b.seniority, atsgate_blueprint::Seniority::Unspecified);
+    let missing = edit(|d| {
+        d.as_object_mut().expect("object").remove("seniority");
+    });
+    assert!(
+        !schema_accepts(&missing) && rust(&missing).is_err(),
+        "still required"
+    );
+}
+
+#[test]
 fn invalid_values_fail() {
     let both = [
         edit(|d| d["occupationalCategory"] = json!("15-1252")),

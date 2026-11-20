@@ -280,6 +280,7 @@ dependencies = [
  "atsgate-extract",
  "atsgate-resume",
  "atsgate-taxonomy",
+ "lopdf",
  "schemars",
  "serde",
  "serde_json",

@@ -10,7 +10,7 @@ mod tests;
 
 use crate::fetch;
 use crate::{Mode, root, sync_file};
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 
 pub const SKILLSPAN_URL: &str = "https://raw.githubusercontent.com/kris927b/SkillSpan/\
 2ccf3de5b5af7a5409b8dd814fb1315dd6e0ae1b/data/json/test.json";
@@ -120,7 +120,7 @@ fn task_a_files(zip_bytes: &[u8]) -> Result<Vec<(String, String)>, String> {
 
 pub fn run(mode: Mode) -> Result<(), String> {
     let taxonomy = Taxonomy::builtin().map_err(|e| e.to_string())?;
-    let gazetteer = Gazetteer::skills(taxonomy);
+    let gazetteer = Gazetteer::new(taxonomy, Scope::Postings);
     let cache = |name: &str| fetch::cache_dir(&["eval", name]);
     let ss = fetch::pinned(
         SKILLSPAN_URL,

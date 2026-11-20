@@ -2,22 +2,19 @@
 //! from the job descriptions under `tests/fixtures/jd/` so the committed copies cannot drift
 //! from the generator.
 
-use atsgate_blueprint::Seniority;
 use atsgate_blueprint::generate::{GenerateOptions, generate};
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 
 pub struct Example {
     pub fixture: &'static str,
     pub output: &'static str,
     pub id: &'static str,
-    pub fallback_seniority: Seniority,
 }
 
 pub const EXAMPLES: [Example; 1] = [Example {
     fixture: "tests/fixtures/jd/artcraft-hn-2026-11-02.txt",
     output: "blueprints/examples/artcraft-senior-engineer.yaml",
     id: "artcraft-senior-engineer",
-    fallback_seniority: Seniority::Mid,
 }];
 
 /// The description below a fixture's `---` source header.
@@ -29,7 +26,7 @@ pub fn fixture_body(text: &str) -> Result<&str, String> {
 
 pub fn all() -> Result<Vec<(String, Vec<u8>)>, String> {
     let taxonomy = Taxonomy::builtin().map_err(|e| e.to_string())?;
-    let gazetteer = Gazetteer::skills(taxonomy);
+    let gazetteer = Gazetteer::new(taxonomy, Scope::Postings);
     EXAMPLES
         .iter()
         .map(|e| {
@@ -38,7 +35,6 @@ pub fn all() -> Result<Vec<(String, Vec<u8>)>, String> {
             let options = GenerateOptions {
                 id: e.id.to_owned(),
                 version: "0.1.0".to_owned(),
-                fallback_seniority: e.fallback_seniority,
                 occupational_category: None,
             };
             let blueprint = generate(fixture_body(&text)?, &options, &gazetteer)

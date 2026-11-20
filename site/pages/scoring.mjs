@@ -12,7 +12,7 @@ const WHY = {
   'glyphs.missing_tounicode': 'Glyphs extract as nothing or as garbage',
   'layout.table': 'Cells are skipped or flattened',
   'layout.text_box': 'Out-of-flow boxes are skipped or misplaced',
-  'layout.header_footer_content': 'Many parsers never read the margins',
+  'layout.header_footer_content': 'Many parsers never read the margins. Raised only for text that repeats in the same top or bottom band on another page',
   'glyphs.unmapped': 'Replacement characters break words',
   'glyphs.ligature': 'A ligature such as “ﬁ” breaks keyword matching',
   'parse.page_count': `More than ${scoring.page_limit} pages may be truncated`,
@@ -48,12 +48,12 @@ export default function scoringPage() {
 <h2 id="dimensions">Which dimensions does ATSGate score?</h2>
 ${table('Scoring dimensions', ['Dimension', 'Formula'], [
   ['R, P: required and preferred skills', `Σ w·m·c / Σ w, each skill counted once at its best occurrence. m = ${num(m.canonical)} for the canonical name, ${num(m.alias)} for a taxonomy alias, ${num(m.related)} for a broader or narrower concept. c = ${num(m.in_scope)} where the blueprint's <code>evidence_scope</code> asks for it, ${num(m.list_only)} for a skill an <code>experience_or_projects</code> blueprint finds only in the skills list or summary`],
-  ['T: title', `The best title match (${num(t.same)} the same words, ${num(t.occupation)} a title of the blueprint's O*NET occupation, ${num(t.broad_group)} one in the same SOC broad group) × (1 − |seniority steps apart| / ${num(t.ladder_span)})`],
-  ['E: years', 'min(1, relevant years / the blueprint minimum). Years are the union of relevant dated roles: overlaps count once and <strong>gaps never subtract</strong>'],
+  ['T: title', `The best title match (${num(t.same)} the same words, ${num(t.occupation)} a title of the blueprint's O*NET occupation, ${num(t.broad_group)} one in the same SOC broad group) × (1 − k · |seniority steps apart| / ${num(t.ladder_span)}), with k = 1 for a resume below the blueprint's seniority and ${num(t.over_seniority_factor)} above it, since a recruiter reads over-seniority as a weaker mismatch than under-seniority. A blueprint with seniority <code>unspecified</code> applies no seniority factor. Technology qualifiers (“Rust Software Engineer”) are dropped before matching, and an ambiguous title (“Engineer”, “Founding Engineer”) is read in the blueprint's occupation`],
+  ['E: years', 'min(1, relevant years / the blueprint minimum). A dated role is relevant when its title matches or it evidences any required or preferred skill. Years are the union of relevant dated roles: overlaps count once and <strong>gaps never subtract</strong>'],
   ['D: education', 'Degree level and field from each education entry title. Institutions and dates are never read'],
   ['F: parse integrity', 'max(0, 100 − Σ penalty · σ), with σ the vendor parser strictness and the penalties below'],
   ['Q: quantification', `Share of bullets with a number, labelled “${scoring.quantification_label}”. Reported, never scored`],
-  ['Knockouts', 'Met, unmet or unknown, never points. Unmet fails the gate unless the blueprint says <code>review</code>'],
+  ['Knockouts', 'Met, unmet or unknown, never points. Unmet fails the gate unless the blueprint says <code>review</code>. A work-authorization knockout the resume says nothing about is unknown, never unmet, and resolves by its <code>unknown_policy</code>'],
 ])}
 <p>Text a reader cannot see (white, tiny, off-page, zero-width or hidden runs) is removed before the resume is parsed, so it earns nothing. It is reported as an <a href="/docs/fairness/#integrity">integrity flag</a> instead.</p>
 

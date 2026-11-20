@@ -67,6 +67,7 @@
     "broad_group": 0.5,
     "ladder_span": 9.0,
     "occupation": 0.85,
+    "over_seniority_factor": 0.5,
     "same": 1.0
   },
   "title_share": 0.5,

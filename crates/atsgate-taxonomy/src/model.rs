@@ -66,6 +66,12 @@ pub struct Taxonomy {
     pub(crate) credits: Vec<String>,
     pub(crate) case_sensitive: Vec<String>,
     pub(crate) stoplist: HashSet<String>,
+    /// (folded title, SOC code prefix, occupation): see [`Taxonomy::contextual_title`].
+    pub(crate) contextual: Vec<(String, String, ConceptId)>,
+    /// Folded ESCO keys a postings gazetteer reports although they are one word or an alias.
+    pub(crate) esco_allow: HashSet<String>,
+    /// Folded opening words of ESCO labels a postings gazetteer never reports.
+    pub(crate) posting_excluded_prefixes: Vec<String>,
 }
 
 fn source_key(s: SourceName) -> &'static str {
@@ -87,6 +93,17 @@ impl Taxonomy {
             credits: Vec::new(),
             case_sensitive: curated.case_sensitive.clone(),
             stoplist: curated.gazetteer_stoplist.iter().map(|s| fold(s)).collect(),
+            contextual: Vec::new(),
+            esco_allow: curated
+                .gazetteer_esco_allow
+                .iter()
+                .map(|s| fold(s))
+                .collect(),
+            posting_excluded_prefixes: curated
+                .gazetteer_posting_excluded_prefixes
+                .iter()
+                .map(|s| fold(s))
+                .collect(),
         };
         for bytes in datasets {
             let (header, records) = data::decode(bytes)?;
@@ -141,6 +158,7 @@ impl Taxonomy {
         }
         t.link_narrower();
         t.build_index();
+        t.link_contextual(&curated.contextual_titles)?;
         Ok(t)
     }
 
@@ -156,7 +174,7 @@ impl Taxonomy {
         Ok(())
     }
 
-    fn require(&self, reference: &str) -> Result<ConceptId, TaxonomyError> {
+    pub(crate) fn require(&self, reference: &str) -> Result<ConceptId, TaxonomyError> {
         self.by_ref.get(reference).copied().ok_or_else(|| {
             TaxonomyError::Curated(format!("{reference} is not in the taxonomy data"))
         })
@@ -196,50 +214,5 @@ impl Taxonomy {
         c.curated_aliases.extend(e.aliases.iter().cloned());
         c.broader.extend(broader);
         Ok(())
-    }
-
-    fn link_narrower(&mut self) {
-        let links: Vec<(ConceptId, ConceptId)> = self
-            .concepts
-            .iter()
-            .enumerate()
-            .flat_map(|(i, c)| c.broader.iter().map(move |b| (*b, ConceptId(i as u32))))
-            .collect();
-        for (broader, narrower) in links {
-            self.concepts[broader.0 as usize].narrower.push(narrower);
-        }
-    }
-
-    fn build_index(&mut self) {
-        for (i, c) in self.concepts.iter().enumerate() {
-            let ns = Namespace::of(c.kind);
-            let concept = ConceptId(i as u32);
-            let mut add = |text: &str, exact: bool, curated: bool| {
-                let key = fold(text);
-                if key.is_empty() {
-                    return;
-                }
-                let entries = self.index.entry((ns, key)).or_default();
-                match entries.iter_mut().find(|e| e.concept == concept) {
-                    Some(e) => {
-                        e.exact |= exact;
-                        e.curated |= curated;
-                    }
-                    None => entries.push(IndexEntry {
-                        concept,
-                        exact,
-                        curated,
-                    }),
-                }
-            };
-            let curated_concept = c.source == SourceName::Curated || c.label.is_some();
-            add(&c.canonical, true, curated_concept);
-            for a in &c.curated_aliases {
-                add(a, false, true);
-            }
-            for a in c.label.iter().chain(&c.aliases) {
-                add(a, false, false);
-            }
-        }
     }
 }
