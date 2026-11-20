@@ -68,6 +68,9 @@ mainSelector = "main"
 "/blueprints/" = ["pages/blueprints.mjs", "data/blueprints/*.json"]
 "/blueprints/*/" = ["pages/blueprints.mjs", "data/blueprints/*.json"]
 
+[analytics]
+cloudflareWebAnalytics = true
+
 [llms]
 summary = "ATSGate (ATS Express) is a deterministic, evidence-carrying ATS gate for GitHub Actions: it renders a resume from one career file and fails CI on simulated parse and keyword risk."
 
