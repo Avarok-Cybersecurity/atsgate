@@ -9,3 +9,7 @@ publish = false
 
 [lints]
 workspace = true
+
+[dependencies]
+lopdf = { version = "0.47.0", default-features = false }
+zip = { version = "=9.4.0", default-features = false }

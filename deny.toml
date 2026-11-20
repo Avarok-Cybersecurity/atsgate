@@ -7,6 +7,11 @@ all-features = false
 [advisories]
 version = 2
 yanked = "deny"
+# Unmaintained (not vulnerable) transitive dependencies of pdf_oxide. Revisit on each pdf_oxide bump.
+ignore = [
+    { id = "RUSTSEC-2026-0543", reason = "chrono is unmaintained; reached only through pdf_oxide" },
+    { id = "RUSTSEC-2026-0192", reason = "ttf-parser is unmaintained; reached only through pdf_oxide" },
+]
 
 [licenses]
 version = 2
@@ -25,6 +30,15 @@ allow = [
     "Unicode-DFS-2016",
     "Zlib",
     "CDLA-Permissive-2.0",
+]
+
+# MPL-2.0 is file-level copyleft, not GPL-family: using these crates unmodified leaves ATSGate
+# MIT OR Apache-2.0. They arrive only through `scraper` (HTML parsing). No other MPL crate is allowed.
+exceptions = [
+    { allow = ["MPL-2.0"], crate = "cssparser" },
+    { allow = ["MPL-2.0"], crate = "cssparser-macros" },
+    { allow = ["MPL-2.0"], crate = "dtoa-short" },
+    { allow = ["MPL-2.0"], crate = "selectors" },
 ]
 
 [bans]

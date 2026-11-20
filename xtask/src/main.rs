@@ -1,6 +1,7 @@
 //! Repository maintenance tasks. This binary is the I/O boundary; the generators it calls are pure.
 
 mod citations;
+mod fixtures;
 
 use std::path::Path;
 use std::process::ExitCode;
@@ -26,21 +27,33 @@ fn root() -> &'static Path {
         .expect("xtask lives one level below the repository root")
 }
 
-/// Writes `expected` to `path`, or in check mode fails when the committed file differs.
-fn sync_file(path: &Path, expected: &str, mode: Mode) -> Result<(), String> {
-    let current = std::fs::read_to_string(path).map_err(|e| format!("{}: {e}", path.display()))?;
-    if current == expected {
+/// Writes `expected` to `path`, or in check mode fails when the committed file differs or is missing.
+fn sync_file(path: &Path, expected: &[u8], mode: Mode) -> Result<(), String> {
+    let current = match std::fs::read(path) {
+        Ok(bytes) => Some(bytes),
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
+        Err(e) => return Err(format!("{}: {e}", path.display())),
+    };
+    if current.as_deref() == Some(expected) {
         return Ok(());
     }
     match mode {
         Mode::Check => Err(format!(
-            "{} is stale; run `cargo run -p xtask -- <task> --write`",
+            "{} is stale or missing; run `cargo run -p xtask -- <task> --write`",
             path.display()
         )),
         Mode::Write => {
+            let parent = path.parent().ok_or("generated path has no parent")?;
+            std::fs::create_dir_all(parent).map_err(|e| format!("{}: {e}", parent.display()))?;
             std::fs::write(path, expected).map_err(|e| format!("{}: {e}", path.display()))
         }
     }
+}
+
+fn run_fixtures(mode: Mode) -> Result<(), String> {
+    fixtures::all()?
+        .iter()
+        .try_for_each(|(rel, bytes)| sync_file(&root().join(rel), bytes, mode))
 }
 
 fn run_citations(mode: Mode) -> Result<(), String> {
@@ -49,7 +62,7 @@ fn run_citations(mode: Mode) -> Result<(), String> {
     let readme_path = root().join("README.md");
     let readme = std::fs::read_to_string(&readme_path).map_err(|e| e.to_string())?;
     let updated = citations::splice_readme(&readme, &citations::render(&entries))?;
-    sync_file(&readme_path, &updated, mode)
+    sync_file(&readme_path, updated.as_bytes(), mode)
 }
 
 fn main() -> ExitCode {
@@ -57,7 +70,10 @@ fn main() -> ExitCode {
     let task = args.first().map(String::as_str);
     let result = parse_mode(args.get(1).map(String::as_str)).and_then(|mode| match task {
         Some("citations") => run_citations(mode),
-        other => Err(format!("unknown task {other:?}; tasks: citations")),
+        Some("fixtures") => run_fixtures(mode),
+        other => Err(format!(
+            "unknown task {other:?}; tasks: citations, fixtures"
+        )),
     });
     match result {
         Ok(()) => ExitCode::SUCCESS,
