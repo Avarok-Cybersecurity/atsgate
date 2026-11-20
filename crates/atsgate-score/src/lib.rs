@@ -15,6 +15,8 @@ pub mod experience;
 pub mod floors;
 pub mod gate;
 pub mod knockouts;
+pub mod markdown;
+pub mod output;
 pub mod parse;
 pub mod report;
 pub mod skills;
@@ -27,6 +29,7 @@ pub use evidence::Evidence;
 pub use experience::YearMonth;
 pub use floors::{Floors, FloorsError};
 pub use gate::{Verdict, gate, meets_floor};
+pub use output::{ResumeInfo, ScoreOutput};
 pub use report::Report;
 pub use vendor::{PROFILES, SIMULATED_LABEL, Vendor};
 

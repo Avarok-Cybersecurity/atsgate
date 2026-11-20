@@ -23,5 +23,9 @@ pub fn all() -> Result<Vec<(String, Vec<u8>)>, String> {
             "schemas/contact.schema.json".to_owned(),
             render(schemars::schema_for!(atsgate_career::PrivateContact))?,
         ),
+        (
+            "schemas/report.schema.json".to_owned(),
+            render(schemars::schema_for!(atsgate_score::ScoreOutput))?,
+        ),
     ])
 }
