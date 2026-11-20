@@ -143,3 +143,17 @@ fn no_lightcast_data_is_loaded() {
             .all(|c| !c.taxonomy_ref().to_lowercase().contains("lightcast"))
     );
 }
+
+#[test]
+fn backend_engineer_titles_resolve_to_software_developers() {
+    for title in ["Backend Engineer", "Back-end Engineer", "back end engineer"] {
+        let r = taxonomy()
+            .resolve_title_from(title, SourceName::Onet)
+            .unwrap_or_else(|| panic!("{title:?} resolves"));
+        assert_eq!(
+            (r.canonical.as_str(), r.taxonomy_ref.as_str()),
+            ("Software Developers", "onet-soc:15-1252.00"),
+            "{title}"
+        );
+    }
+}

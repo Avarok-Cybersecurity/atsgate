@@ -81,6 +81,8 @@ skills:
 titles:
   # O*NET labels are plural and its reported titles omit the singular.
   - { canonical: Data Scientists, ref: "onet-soc:15-2051.00", aliases: [Data Scientist], broader: [] }
+  # O*NET lists neither spelling; "backend" is a specialization of software development.
+  - { canonical: Software Developers, ref: "onet-soc:15-1252.00", aliases: [Backend Engineer, Back-end Engineer], broader: [] }
 denied_aliases:
   # "open source" in a posting is not the Source game engine.
   - { ref: "http://data.europa.eu/esco/skill/c8d53d69-d900-4092-af80-c5d0422bcdb3", alias: Source }

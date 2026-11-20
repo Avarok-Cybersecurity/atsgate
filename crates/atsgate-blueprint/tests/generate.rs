@@ -166,3 +166,51 @@ fn artcraft_required_stack_regression() {
     assert_eq!(b.seniority, Seniority::Senior);
     assert_eq!(b.occupational_category, "15-1252.00");
 }
+
+#[test]
+fn a_vague_title_with_a_web_stack_infers_a_software_occupation() {
+    // Raw overlap counts once picked Blockchain Engineers (15-1299.07), whose long technology
+    // list happens to contain all four; overlap normalized by list size must not.
+    let text = "Senior Engineer\nStack: Rust, TypeScript, React, PostgreSQL.\n";
+    let b = run(text, None).expect("generates");
+    assert_ne!(b.occupational_category, "15-1299.07");
+    assert!(
+        ["15-1252.00", "15-1254.00"].contains(&b.occupational_category.as_str()),
+        "inferred {}",
+        b.occupational_category
+    );
+}
+
+#[test]
+fn a_backend_engineer_posting_names_software_developers() {
+    let b = run("Backend Engineer\nRequirements\n- Go and PostgreSQL\n", None).expect("generates");
+    assert_eq!(b.occupational_category, "15-1252.00");
+}
+
+#[test]
+fn generic_office_and_cad_software_is_not_a_domain_keyword() {
+    let text = "Senior Accountant\n\
+        We replace Microsoft Office, SolidWorks and RSS readers with Kubernetes tooling.\n\
+        Requirements\n\
+        - Microsoft Excel and QuickBooks\n";
+    let b = run(text, None).expect("generates");
+    for generic in ["Microsoft Office", "SolidWorks", "RSS"] {
+        assert!(
+            !b.domain_keywords.iter().any(|k| k == generic),
+            "{generic} in {:?}",
+            b.domain_keywords
+        );
+    }
+    assert_eq!(b.domain_keywords, ["Kubernetes"]);
+    assert!(names(&b.required_skills).contains(&"Microsoft Excel"));
+}
+
+#[test]
+fn artcraft_domain_keywords_drop_generic_software() {
+    let text = include_str!("../../../tests/fixtures/jd/artcraft-hn-2026-11-02.txt");
+    let body = text.split_once("\n---\n").expect("fixture header").1;
+    let b = run(body, None).expect("generates");
+    for generic in ["RSS", "Microsoft Office", "SolidWorks"] {
+        assert!(!b.domain_keywords.iter().any(|k| k == generic), "{generic}");
+    }
+}
