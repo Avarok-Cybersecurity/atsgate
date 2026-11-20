@@ -21,7 +21,7 @@ dbg_macro = "warn"
 todo = "warn"
 
 [workspace.dependencies]
-atsgate-extract = { path = "crates/atsgate-extract" }
-atsgate-resume = { path = "crates/atsgate-resume" }
-atsgate-blueprint = { path = "crates/atsgate-blueprint" }
-atsgate-career = { path = "crates/atsgate-career" }
+atsgate-extract = { path = "crates/atsgate-extract", version = "0.0.1" }
+atsgate-resume = { path = "crates/atsgate-resume", version = "0.0.1" }
+atsgate-blueprint = { path = "crates/atsgate-blueprint", version = "0.0.1" }
+atsgate-career = { path = "crates/atsgate-career", version = "0.0.1" }

@@ -11,3 +11,12 @@ authors.workspace = true
 
 [lints]
 workspace = true
+
+[dependencies]
+lopdf = { version = "0.47.0", default-features = false }
+pdf_oxide = { version = "=0.3.78", default-features = false }
+pulldown-cmark = { version = "0.13.6", default-features = false }
+quick-xml = "0.42.0"
+scraper = "0.29.0"
+thiserror = "2.0.21"
+zip = { version = "=9.4.0", default-features = false, features = ["deflate-flate2-zlib-rs"] }
