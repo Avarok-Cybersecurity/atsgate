@@ -2,6 +2,7 @@
 
 mod citations;
 mod fixtures;
+mod schemas;
 
 use std::path::Path;
 use std::process::ExitCode;
@@ -50,8 +51,8 @@ fn sync_file(path: &Path, expected: &[u8], mode: Mode) -> Result<(), String> {
     }
 }
 
-fn run_fixtures(mode: Mode) -> Result<(), String> {
-    fixtures::all()?
+fn sync_all(files: Vec<(String, Vec<u8>)>, mode: Mode) -> Result<(), String> {
+    files
         .iter()
         .try_for_each(|(rel, bytes)| sync_file(&root().join(rel), bytes, mode))
 }
@@ -70,9 +71,10 @@ fn main() -> ExitCode {
     let task = args.first().map(String::as_str);
     let result = parse_mode(args.get(1).map(String::as_str)).and_then(|mode| match task {
         Some("citations") => run_citations(mode),
-        Some("fixtures") => run_fixtures(mode),
+        Some("fixtures") => fixtures::all().and_then(|f| sync_all(f, mode)),
+        Some("schemas") => schemas::all().and_then(|f| sync_all(f, mode)),
         other => Err(format!(
-            "unknown task {other:?}; tasks: citations, fixtures"
+            "unknown task {other:?}; tasks: citations, fixtures, schemas"
         )),
     });
     match result {

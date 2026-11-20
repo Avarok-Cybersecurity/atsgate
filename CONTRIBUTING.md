@@ -16,6 +16,8 @@ cargo clippy --workspace --all-targets -- -D warnings
 cargo test --workspace
 cargo deny check
 cargo run -p xtask -- citations --check
+cargo run -p xtask -- fixtures --check
+cargo run -p xtask -- schemas --check
 ```
 
 ## Rules
@@ -28,6 +30,8 @@ cargo run -p xtask -- citations --check
 - **Fail fast.** Return an error rather than guessing; never swallow one.
 - **Tests use the real code.** Fixtures are real documents committed under `fixtures/`; a fake needs
   a comment saying why.
+- **Generated files are never edited by hand.** Change the generator, then run the task with
+  `--write`: `fixtures` for `fixtures/`, `schemas` for `schemas/`.
 - **No test-only branches in production code.**
 - **Files stay at or under 250 lines**; split by responsibility.
 - **Dependencies** must pass `deny.toml` (no GPL or AGPL; permissive licenses only).

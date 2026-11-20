@@ -35,6 +35,10 @@ jobs:
         run: cargo test --workspace --locked
       - name: README citations match CITATIONS.md
         run: cargo run -p xtask --locked -- citations --check
+      - name: committed fixtures match the generator
+        run: cargo run -p xtask --locked -- fixtures --check
+      - name: committed JSON Schemas match the Rust types
+        run: cargo run -p xtask --locked -- schemas --check
 
   deny:
     runs-on: ubuntu-latest
