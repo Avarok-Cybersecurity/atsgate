@@ -41,10 +41,11 @@ function occupation(b) {
 export function blueprintPage(b) {
   const knockouts = b.knockouts.length
     ? table('Knockouts', ['Type', 'Value', 'If unknown'], b.knockouts.map((k) => [code(k.type), esc(k.value), code(k.unknown_policy)]))
-    : '<p>None: this blueprint has no hard requirements, so nothing fails the gate except the floors and, if you ask, integrity flags.</p>';
+    : '<p>None. This blueprint has no hard requirements, so only the vendor floors can fail the gate. Integrity flags fail it too when you set <code>fail-on-integrity-flags: true</code>.</p>';
   const body = `
 <h2 id="use">How do I score a resume against it?</h2>
 ${pre(`blueprint: builtin:${b.id}`)}
+<p>Put this line in the action's inputs, or pass <code>--blueprint builtin:${esc(b.id)}</code> to the command line. ATSGate then scores R from the required skills below and P from the preferred ones, each with the evidence it found.</p>
 <p>Version ${esc(b.version)}, ${b.provenance.reviewed ? 'reviewed by a person' : 'not yet reviewed'}. O*NET-SOC <a href="${onet(b.occupationalCategory)}">${esc(b.occupationalCategory)}</a>${b.esco_occupation ? `, <a href="${esc(b.esco_occupation.replace('http://', 'https://'))}">ESCO occupation</a>` : ''}. Seniority: ${code(b.seniority)}. Source: <a href="${SRC}/${b.id}.yaml">${b.id}.yaml</a>.</p>
 
 <h2 id="required">Which skills are required?</h2>
