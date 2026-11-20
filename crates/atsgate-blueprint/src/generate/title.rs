@@ -105,24 +105,53 @@ pub fn strip_seniority(folded: &str) -> String {
     out.split_whitespace().collect::<Vec<_>>().join(" ")
 }
 
+/// Characters that end a title inside a line: "Title | Company", "Title (Team)", "Title [stack]".
+const SEGMENT_BREAKS: [char; 8] = ['|', '\u{2014}', '\u{2013}', '(', ')', '[', ']', ','];
+
+/// Lowercase words a title may contain ("Head of Engineering", "Research & Development").
+const TITLE_CONNECTORS: [&str; 7] = ["of", "and", "&", "for", "to", "the", "in"];
+
 fn segments(line: &str) -> impl Iterator<Item = &str> {
-    line.split(['|', '\u{2014}', '\u{2013}', '(', ')', ','])
+    line.split(SEGMENT_BREAKS)
         .flat_map(|s| s.split(" - "))
         .map(str::trim)
         .filter(|s| !s.is_empty())
 }
 
-/// The first segment of the leading lines that names a title; its O*NET occupation is read in
-/// `context` (an O*NET-SOC code, see [`resolve_occupation`]).
+/// Title-cased (every word but a connector capitalized), at most six words, with a title head.
+/// "Looking for engineers" is prose, not a title.
+fn names_title(segment: &str) -> bool {
+    let raw: Vec<&str> = segment.split_whitespace().collect();
+    let cased = raw.iter().all(|w| {
+        TITLE_CONNECTORS.contains(w) || !w.chars().next().is_some_and(char::is_lowercase)
+    });
+    let words: Vec<String> = raw.iter().map(|w| fold(singular(w))).collect();
+    cased && words.len() <= 6 && words.iter().any(|w| TITLE_HEADS.contains(&w.as_str()))
+}
+
+/// The title a line opens with when it is an item of a role list: "Senior Engineer (Platform)
+/// — Build ...", "- Backend Engineer [rust, python] - ...".
+fn role_item(line: &str) -> Option<&str> {
+    let item = line
+        .trim_start_matches(['-', '*', '\u{2022}', ' '])
+        .split(SEGMENT_BREAKS)
+        .next()?
+        .split(" - ")
+        .next()?
+        .trim();
+    names_title(item).then_some(item)
+}
+
+/// The first segment of the leading lines that names a title, else the first role-list item of
+/// a posting that lists several roles (Hacker News "Who's Hiring"). Its O*NET occupation is
+/// read in `context` (an O*NET-SOC code, see [`resolve_occupation`]).
 pub fn guess(lines: &[&str], taxonomy: &Taxonomy, context: Option<&str>) -> Option<TitleGuess> {
     let segment = lines
         .iter()
         .take(TITLE_LINES)
         .flat_map(|l| segments(l))
-        .find(|s| {
-            let words: Vec<String> = s.split_whitespace().map(|w| fold(singular(w))).collect();
-            words.len() <= 6 && words.iter().any(|w| TITLE_HEADS.contains(&w.as_str()))
-        })?;
+        .find(|s| names_title(s))
+        .or_else(|| lines.iter().find_map(|l| role_item(l)))?;
     let title = segment
         .split_whitespace()
         .map(singular)

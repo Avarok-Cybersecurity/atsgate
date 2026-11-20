@@ -3,7 +3,7 @@
 use super::requirements::{self, LANGUAGES};
 use super::sections::{Line, Section};
 use crate::{EvidenceScope, Skill};
-use atsgate_taxonomy::{ConceptId, ConceptView, Gazetteer, fold};
+use atsgate_taxonomy::{ConceptId, ConceptKind, ConceptView, Gazetteer, fold};
 use std::collections::BTreeMap;
 
 /// Every generated skill carries the same weight; a reviewer adjusts it.
@@ -77,6 +77,18 @@ fn skill(c: &ConceptView<'_>) -> Skill {
     }
 }
 
+/// Characters that separate the items of a stack list.
+const LIST_SEPARATORS: [char; 6] = [',', ';', '/', '[', ']', '|'];
+
+/// The items of a stack list with their byte offsets in `list`.
+fn list_items(list: &str) -> impl Iterator<Item = (usize, &str)> {
+    list.split(LIST_SEPARATORS).filter_map(move |raw| {
+        let item = raw.trim_matches(|c: char| c.is_whitespace() || c == '.' || c == '\u{2026}');
+        let start = item.as_ptr() as usize - list.as_ptr() as usize;
+        (!item.is_empty()).then_some((start, item))
+    })
+}
+
 pub fn collect(lines: &[Line<'_>], gazetteer: &Gazetteer<'_>) -> Found {
     let taxonomy = gazetteer.taxonomy();
     let has_required_cue = lines.iter().any(|l| l.section == Section::Required);
@@ -91,16 +103,27 @@ pub fn collect(lines: &[Line<'_>], gazetteer: &Gazetteer<'_>) -> Found {
         let degree_fields: Vec<String> = requirements::degree(line.text)
             .map(|(_, fields)| fields.iter().map(|f| fold(f)).collect())
             .unwrap_or_default();
-        for m in gazetteer.find(line.text) {
-            let c = taxonomy.concept(m.concept);
+        let listed = line.list.into_iter().flat_map(|list| {
+            let at = list.as_ptr() as usize - line.text.as_ptr() as usize;
+            list_items(list).filter_map(move |(start, item)| {
+                let r = taxonomy.resolve_skill(item)?;
+                Some((at + start, r.concept))
+            })
+        });
+        let mentions = gazetteer.find(line.text).into_iter().map(|m| (m.start, m.concept));
+        for (start, concept) in mentions.chain(listed) {
+            let c = taxonomy.concept(concept);
+            if c.kind() != ConceptKind::Skill {
+                continue;
+            }
             let key = fold(c.canonical());
             if languages.contains(&key) || degree_fields.contains(&key) {
                 continue;
             }
-            let pos = line.offset + m.start;
-            let entry = best.entry(key).or_insert((b, pos, m.concept));
+            let pos = line.offset + start;
+            let entry = best.entry(key).or_insert((b, pos, concept));
             if b < entry.0 {
-                *entry = (b, entry.1, m.concept);
+                *entry = (b, entry.1, concept);
             }
         }
     }
