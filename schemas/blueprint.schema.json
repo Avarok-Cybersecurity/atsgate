@@ -268,18 +268,27 @@
       ]
     },
     "Seniority": {
-      "type": "string",
-      "enum": [
-        "intern",
-        "junior",
-        "mid",
-        "senior",
-        "staff",
-        "principal",
-        "lead",
-        "manager",
-        "director",
-        "executive"
+      "oneOf": [
+        {
+          "type": "string",
+          "enum": [
+            "intern",
+            "junior",
+            "mid",
+            "senior",
+            "staff",
+            "principal",
+            "lead",
+            "manager",
+            "director",
+            "executive"
+          ]
+        },
+        {
+          "description": "The posting states no seniority: title scoring applies no seniority penalty. Written\nexplicitly; there is no default. Never read from a resume title.",
+          "type": "string",
+          "const": "unspecified"
+        }
       ]
     },
     "Skill": {

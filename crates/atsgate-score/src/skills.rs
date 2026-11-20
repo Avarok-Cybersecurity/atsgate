@@ -9,9 +9,10 @@ use crate::evidence::{Evidence, found};
 use crate::units::{Context, EntryId, Unit};
 use atsgate_blueprint::{EvidenceScope, Skill};
 use atsgate_extract::Document;
-use atsgate_taxonomy::{ConceptId, Gazetteer, MatchKind, fold, tokens};
+use atsgate_taxonomy::{ConceptId, Gazetteer, MatchKind, tokens};
 use schemars::JsonSchema;
 use serde::Serialize;
+use std::collections::BTreeSet;
 
 pub const M_CANONICAL: f64 = 1.0;
 pub const M_ALIAS: f64 = 0.85;
@@ -75,8 +76,6 @@ pub struct SkillResult {
     /// m·c: the share of the weight this skill earns.
     pub credit: f64,
     pub evidence: Option<Evidence>,
-    #[serde(skip)]
-    pub entry: Option<EntryId>,
 }
 
 /// One occurrence: (m·c, match, context, surface text, unit index).
@@ -136,19 +135,26 @@ fn concept_matches(
         .collect()
 }
 
-fn best_hit(
-    skill: &Skill,
-    target: Option<ConceptId>,
-    gz: &Gazetteer<'_>,
-    units: &[Unit],
-) -> Option<Hit> {
+/// Every occurrence of `skill` in `unit`: (match kind, surface text).
+pub fn unit_matches(skill: &Skill, gz: &Gazetteer<'_>, unit: &Unit) -> Vec<(SkillMatch, String)> {
+    match target_of(skill, gz) {
+        Some(id) => concept_matches(gz, id, unit),
+        None => phrase_matches(skill, &unit.text),
+    }
+}
+
+fn target_of(skill: &Skill, gz: &Gazetteer<'_>) -> Option<ConceptId> {
+    skill
+        .taxonomy_ref
+        .as_deref()
+        .and_then(|r| gz.taxonomy().by_ref(r))
+        .map(|c| c.id())
+}
+
+fn best_hit(skill: &Skill, gz: &Gazetteer<'_>, units: &[Unit]) -> Option<Hit> {
     let mut best: Option<Hit> = None;
     for (i, unit) in units.iter().enumerate() {
-        let matches = match target {
-            Some(id) => concept_matches(gz, id, unit),
-            None => phrase_matches(skill, &unit.text),
-        };
-        for (kind, surface) in matches {
+        for (kind, surface) in unit_matches(skill, gz, unit) {
             let credit = kind.m() * c_factor(skill.evidence_scope, unit.context);
             if best.as_ref().is_none_or(|b| credit > b.0) {
                 best = Some((credit, kind, unit.context, surface, i));
@@ -166,16 +172,10 @@ pub fn score_skills(
     doc: &Document,
     units: &[Unit],
 ) -> Vec<SkillResult> {
-    let taxonomy = gazetteer.taxonomy();
     skills
         .iter()
         .map(|skill| {
-            let target = skill
-                .taxonomy_ref
-                .as_deref()
-                .and_then(|r| taxonomy.by_ref(r))
-                .map(|c| c.id());
-            let hit = best_hit(skill, target, gazetteer, units);
+            let hit = best_hit(skill, gazetteer, units);
             let (m, c) = hit.as_ref().map_or((0.0, 0.0), |h| {
                 (h.1.m(), c_factor(skill.evidence_scope, h.2))
             });
@@ -192,37 +192,34 @@ pub fn score_skills(
                     let u = &units[h.4];
                     found(requirement.rule(), doc, &u.lines, &h.3, &h.3)
                 }),
-                entry: hit.as_ref().and_then(|h| units[h.4].entry),
             }
         })
         .collect()
+}
+
+/// The entries whose title or text names any of `skills` (at any match kind): every such role
+/// is relevant experience, not only the one holding a skill's best occurrence.
+pub fn evidencing_entries<'s>(
+    skills: impl IntoIterator<Item = &'s Skill>,
+    gazetteer: &Gazetteer<'_>,
+    units: &[Unit],
+) -> BTreeSet<EntryId> {
+    let mut out = BTreeSet::new();
+    for skill in skills {
+        for unit in units {
+            if let Some(entry) = unit.entry
+                && !out.contains(&entry)
+                && !unit_matches(skill, gazetteer, unit).is_empty()
+            {
+                out.insert(entry);
+            }
+        }
+    }
+    out
 }
 
 /// Σ w·m·c / Σ w over `results`; `None` when the blueprint lists no such skills.
 pub fn dimension(results: &[SkillResult]) -> Option<f64> {
     let total: f64 = results.iter().map(|r| r.weight).sum();
     (total > 0.0).then(|| results.iter().map(|r| r.weight * r.credit).sum::<f64>() / total)
-}
-
-/// The spellings that would have matched a skill: canonical name, blueprint aliases, and the
-/// taxonomy concept's curated aliases.
-pub fn would_match(skill: &Skill, gazetteer: &Gazetteer<'_>) -> Vec<String> {
-    let taxonomy = gazetteer.taxonomy();
-    let mut out = vec![skill.canonical.clone()];
-    out.extend(skill.aliases.iter().cloned());
-    if let Some(c) = skill
-        .taxonomy_ref
-        .as_deref()
-        .and_then(|r| taxonomy.by_ref(r))
-    {
-        out.extend(c.curated_aliases().iter().cloned());
-    }
-    let mut seen = Vec::new();
-    out.retain(|n| {
-        let key = fold(n);
-        let fresh = !seen.contains(&key);
-        seen.push(key);
-        fresh
-    });
-    out
 }

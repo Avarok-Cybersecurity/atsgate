@@ -3,31 +3,40 @@
 //! A role title matches a blueprint title (its `title`, `title_aliases` and
 //! `experience.relevant_titles`), with seniority words removed from both:
 //! - 1.0 the same words;
-//! - 0.85 the role title resolves to the blueprint's O*NET occupation (a taxonomy alias);
+//! - 0.85 the role title resolves to the blueprint's O*NET occupation (a taxonomy alias), with
+//!   seniority words and technology qualifiers removed and ambiguous titles read in the
+//!   blueprint's context ("Senior Rust Systems Engineer" is a Software Developer);
 //! - 0.5 it resolves to an occupation in the same SOC broad group (`15-125x`: the parent of the
 //!   detailed occupation, as "Software and Web Developers, Programmers, and Testers" is of
 //!   Software Developers);
 //! - 0 otherwise.
 //!
 //! L is the span of the seniority ladder (intern to executive). A role whose title states no
-//! seniority is not penalized for it; the evidence says so.
+//! seniority is not penalized for it, and neither is any role when the blueprint's seniority is
+//! `unspecified`; the evidence says which.
+//!
+//! Under-seniority costs the full |Δlevel| / L. Over-seniority costs [`OVER_SENIORITY_FACTOR`]
+//! (one half) of it: a role above the posting's level has shown every responsibility that
+//! level implies, so the remaining question (will they take the level, at its pay) is a
+//! recruiter's judgement rather than a parse or keyword risk, while a role below it has not
+//! shown the level at all. It still costs something, because screeners do filter on level.
 
 use crate::evidence::Evidence;
 use crate::units::EntryId;
 use atsgate_blueprint::Blueprint;
 use atsgate_blueprint::Seniority;
-use atsgate_blueprint::generate::{seniority_of, strip_seniority};
+use atsgate_blueprint::generate::{resolve_occupation, seniority_of, strip_seniority};
 use atsgate_extract::Document;
 use atsgate_resume::{Resume, SectionKind};
-use atsgate_taxonomy::{SourceName, Taxonomy, fold};
+use atsgate_taxonomy::{ONET_SOC_PREFIX, Taxonomy, fold};
 
 pub const T_SAME: f64 = 1.0;
 pub const T_OCCUPATION: f64 = 0.85;
 pub const T_BROAD_GROUP: f64 = 0.5;
 
-/// The rung of a seniority on the ladder, intern (0) to executive (9).
-fn rung(s: Seniority) -> usize {
-    match s {
+/// The rung of a seniority on the ladder, intern (0) to executive (9); `None` for unspecified.
+fn rung(s: Seniority) -> Option<usize> {
+    Some(match s {
         Seniority::Intern => 0,
         Seniority::Junior => 1,
         Seniority::Mid => 2,
@@ -38,11 +47,25 @@ fn rung(s: Seniority) -> usize {
         Seniority::Manager => 7,
         Seniority::Director => 8,
         Seniority::Executive => 9,
-    }
+        Seniority::Unspecified => return None,
+    })
 }
 
 /// L: the largest possible |Δlevel| (executive minus intern).
 pub const LADDER_SPAN: f64 = 9.0;
+
+/// The share of the |Δlevel| / L penalty charged when the role is above the wanted level.
+pub const OVER_SENIORITY_FACTOR: f64 = 0.5;
+
+/// The seniority factor of a role at `have` for a blueprint wanting `want`.
+pub fn seniority_factor(want: usize, have: usize) -> f64 {
+    let steps = want.abs_diff(have) as f64 / LADDER_SPAN;
+    if have > want {
+        1.0 - OVER_SENIORITY_FACTOR * steps
+    } else {
+        1.0 - steps
+    }
+}
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct TitleScore {
@@ -53,9 +76,13 @@ pub struct TitleScore {
     pub matched_entries: Vec<EntryId>,
 }
 
-fn onet_code(taxonomy: &Taxonomy, title: &str) -> Option<String> {
-    let r = taxonomy.resolve_title_from(title, SourceName::Onet)?;
-    r.taxonomy_ref.strip_prefix("onet-soc:").map(str::to_owned)
+/// The O*NET-SOC code of `title`, read in the context of the blueprint's occupation (see
+/// [`resolve_occupation`]).
+fn onet_code(taxonomy: &Taxonomy, title: &str, blueprint: &Blueprint) -> Option<String> {
+    let r = resolve_occupation(title, taxonomy, Some(&blueprint.occupational_category))?;
+    r.taxonomy_ref
+        .strip_prefix(ONET_SOC_PREFIX)
+        .map(str::to_owned)
 }
 
 /// How well one role title matches the blueprint, before seniority.
@@ -70,7 +97,7 @@ fn title_match(role: &str, blueprint: &Blueprint, taxonomy: &Taxonomy) -> (f64, 
     if wanted.clone().any(|t| strip_seniority(&fold(t)) == core) {
         return (T_SAME, "title.same");
     }
-    let code = onet_code(taxonomy, role).or_else(|| onet_code(taxonomy, &core));
+    let code = onet_code(taxonomy, role, blueprint);
     match code {
         Some(c) if c == blueprint.occupational_category => (T_OCCUPATION, "title.occupation"),
         Some(c) if c.get(..6) == blueprint.occupational_category.get(..6) => {
@@ -102,13 +129,27 @@ pub fn score(
                 matched_entries.push((si, ei));
             }
             let level = seniority_of(&fold(&entry.title));
-            let factor = level.map_or(1.0, |l| 1.0 - want.abs_diff(rung(l)) as f64 / LADDER_SPAN);
-            let note = match level {
-                Some(l) => format!(
-                    "{} (seniority {l:?}, wanted {:?})",
-                    entry.title, blueprint.seniority
+            let (factor, note) = match (want, level.and_then(rung)) {
+                (None, _) => (
+                    1.0,
+                    format!(
+                        "{} (the blueprint states no seniority; not penalized)",
+                        entry.title
+                    ),
                 ),
-                None => format!("{} (no seniority stated; not penalized)", entry.title),
+                (Some(w), Some(have)) => (
+                    seniority_factor(w, have),
+                    format!(
+                        "{} (seniority {:?}, wanted {:?})",
+                        entry.title,
+                        level.expect("rung came from a level"),
+                        blueprint.seniority
+                    ),
+                ),
+                (Some(_), None) => (
+                    1.0,
+                    format!("{} (no seniority stated; not penalized)", entry.title),
+                ),
             };
             let evidence = match entry.evidence.first() {
                 Some(at) => Evidence::at_line(rule, doc, at, note),

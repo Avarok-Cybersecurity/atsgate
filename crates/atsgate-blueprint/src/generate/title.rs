@@ -1,7 +1,8 @@
 //! The job title and seniority, read from the first lines of a job description.
 
+use super::resolve::resolve_occupation;
 use crate::Seniority;
-use atsgate_taxonomy::{SourceName, Taxonomy, fold};
+use atsgate_taxonomy::{ONET_SOC_PREFIX, SourceName, Taxonomy, fold};
 
 /// Seniority words (folded) in the order they are checked; the first hit wins.
 pub const SENIORITY_WORDS: [(&str, Seniority); 20] = [
@@ -54,7 +55,7 @@ pub const TITLE_HEADS: [&str; 22] = [
 ];
 
 /// A title with nothing left but one of these says nothing about the occupation.
-const GENERIC_TITLES: [&str; 6] = [
+pub const GENERIC_TITLES: [&str; 6] = [
     "engineer",
     "developer",
     "manager",
@@ -97,7 +98,7 @@ pub fn strip_seniority(folded: &str) -> String {
     let mut out = format!(" {folded} ");
     for (w, _) in SENIORITY_WORDS
         .iter()
-        .filter(|(_, s)| *s <= Seniority::Lead)
+        .filter(|(_, s)| *s <= Seniority::Lead && *s != Seniority::Unspecified)
     {
         out = out.replace(&format!(" {w} "), " ");
     }
@@ -111,8 +112,9 @@ fn segments(line: &str) -> impl Iterator<Item = &str> {
         .filter(|s| !s.is_empty())
 }
 
-/// The first segment of the leading lines that names a title.
-pub fn guess(lines: &[&str], taxonomy: &Taxonomy) -> Option<TitleGuess> {
+/// The first segment of the leading lines that names a title; its O*NET occupation is read in
+/// `context` (an O*NET-SOC code, see [`resolve_occupation`]).
+pub fn guess(lines: &[&str], taxonomy: &Taxonomy, context: Option<&str>) -> Option<TitleGuess> {
     let segment = lines
         .iter()
         .take(TITLE_LINES)
@@ -129,22 +131,20 @@ pub fn guess(lines: &[&str], taxonomy: &Taxonomy) -> Option<TitleGuess> {
     let folded = fold(&title);
     let core = strip_seniority(&folded);
     let specific = !core.is_empty() && !GENERIC_TITLES.contains(&core.as_str());
-    let resolve = |source| {
-        specific
-            .then(|| {
-                taxonomy
-                    .resolve_title_from(&folded, source)
-                    .or_else(|| taxonomy.resolve_title_from(&core, source))
-            })
-            .flatten()
-    };
+    let esco = specific
+        .then(|| {
+            taxonomy
+                .resolve_title_from(&folded, SourceName::Esco)
+                .or_else(|| taxonomy.resolve_title_from(&core, SourceName::Esco))
+        })
+        .flatten();
     Some(TitleGuess {
         seniority: seniority_of(&folded),
-        onet: resolve(SourceName::Onet).and_then(|r| {
-            let code = r.taxonomy_ref.strip_prefix("onet-soc:")?.to_owned();
+        onet: resolve_occupation(&title, taxonomy, context).and_then(|r| {
+            let code = r.taxonomy_ref.strip_prefix(ONET_SOC_PREFIX)?.to_owned();
             Some((code, r.canonical))
         }),
-        esco: resolve(SourceName::Esco).map(|r| r.taxonomy_ref),
+        esco: esco.map(|r| r.taxonomy_ref),
         title,
     })
 }

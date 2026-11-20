@@ -1,4 +1,11 @@
 //! Groups the lines of a dated section (experience, education, projects) into entries.
+//!
+//! Two layouts need geometry rather than markers, and both are what a browser prints from an
+//! HTML resume:
+//! - the title alone with its dates on one line and the organization on the next: a line after
+//!   a dated title that names no organization is the organization, not a new entry;
+//! - list items whose marker is drawn as a shape: a line indented at least
+//!   [`HANGING_INDENT_MIN_PT`] right of its entry's first line is a bullet.
 
 use crate::dates::{self, DateRange};
 use crate::normalize::{LineRef, bullet_text};
@@ -17,11 +24,18 @@ pub struct Entry {
 struct Draft {
     header: Vec<String>,
     dates: Option<DateRange>,
+    /// The dates were on the same line as the first header line.
+    dates_inline: bool,
     bullets: Vec<String>,
     evidence: Vec<LineRef>,
 }
 
 const ORG_SEPARATORS: [&str; 5] = [" | ", " - ", ", ", " at ", " @ "];
+
+/// The least indentation, in points, that makes an unmarked line a bullet: wider than glyph
+/// side bearings and a word space, narrower than any list indent (browsers use 14-40 pt, word
+/// processors 18 pt or more).
+pub const HANGING_INDENT_MIN_PT: f32 = 6.0;
 
 fn split_title(header: &str) -> (String, Option<String>) {
     for sep in ORG_SEPARATORS {
@@ -38,7 +52,31 @@ impl Draft {
         !empty
             && (!self.bullets.is_empty()
                 || (has_dates && self.dates.is_some())
-                || (has_text && self.dates.is_some() && !self.header.is_empty()))
+                || (has_text
+                    && self.dates.is_some()
+                    && !self.header.is_empty()
+                    && !(!has_dates && self.awaits_organization())))
+    }
+
+    /// A dated title line with no organization of its own: the next line may name it.
+    fn awaits_organization(&self) -> bool {
+        self.dates_inline
+            && self.header.len() == 1
+            && self.bullets.is_empty()
+            && split_title(&self.header[0]).1.is_none()
+    }
+
+    /// The left edge of the entry's first line, when the format has geometry.
+    fn left(&self) -> Option<f32> {
+        self.evidence.first().and_then(|at| at.bbox).map(|b| b.x0)
+    }
+
+    fn indented(&self, at: &LineRef) -> bool {
+        let started = !self.header.is_empty() || self.dates.is_some();
+        match (self.left(), at.bbox) {
+            (Some(left), Some(b)) => started && b.x0 >= left + HANGING_INDENT_MIN_PT,
+            _ => false,
+        }
     }
 
     fn finish(self) -> Option<Entry> {
@@ -62,7 +100,10 @@ pub fn group(lines: &[(String, LineRef)]) -> (Vec<Entry>, Vec<String>) {
     let (mut entries, mut notes) = (Vec::new(), Vec::new());
     let mut draft = Draft::default();
     for (text, at) in lines {
-        if let Some(bullet) = bullet_text(text) {
+        let found = dates::find_range(text).or_else(|| dates::find_single(text));
+        let marked = bullet_text(text)
+            .or_else(|| (found.is_none() && draft.indented(at)).then_some(text.as_str()));
+        if let Some(bullet) = marked {
             if draft.header.is_empty() && draft.dates.is_none() {
                 notes.push(bullet.to_owned());
             } else {
@@ -71,7 +112,7 @@ pub fn group(lines: &[(String, LineRef)]) -> (Vec<Entry>, Vec<String>) {
             }
             continue;
         }
-        let (range, rest) = match dates::find_range(text).or_else(|| dates::find_single(text)) {
+        let (range, rest) = match found {
             Some((range, rest)) => (
                 Some(range),
                 rest.trim_matches([' ', ',', '|', '-']).to_owned(),
@@ -80,6 +121,9 @@ pub fn group(lines: &[(String, LineRef)]) -> (Vec<Entry>, Vec<String>) {
         };
         if draft.starts_new(!rest.is_empty(), range.is_some()) {
             entries.extend(std::mem::take(&mut draft).finish());
+        }
+        if range.is_some() && draft.dates.is_none() {
+            draft.dates_inline = draft.header.is_empty() && !rest.is_empty();
         }
         if !rest.is_empty() {
             draft.header.push(rest);

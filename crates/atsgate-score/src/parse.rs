@@ -23,9 +23,11 @@
 //! Each signal kind is charged once, however many pages or spans carry it.
 
 use crate::evidence::Evidence;
-use crate::units;
+use crate::{metadata, units};
+use atsgate_blueprint::Blueprint;
 use atsgate_extract::{Document, SignalKind};
 use atsgate_resume::{Resume, SectionKind};
+use atsgate_taxonomy::Gazetteer;
 use schemars::JsonSchema;
 use serde::Serialize;
 
@@ -133,10 +135,20 @@ pub fn parse_score(penalties: &[Penalty], sigma: f64) -> f64 {
     (100.0 - penalties.iter().map(|p| p.points * sigma).sum::<f64>()).max(0.0)
 }
 
-/// Text a reader cannot see but a parser reads. Reported, never scored up.
-pub fn integrity_flags(doc: &Document) -> Vec<IntegrityFlag> {
+/// Text a reader cannot see but a parser reads. Reported, never scored up. Metadata-only text
+/// counts only when it carries content (see [`crate::metadata`]).
+pub fn integrity_flags(
+    doc: &Document,
+    blueprint: &Blueprint,
+    gz: &Gazetteer<'_>,
+) -> Vec<IntegrityFlag> {
     let mut out: Vec<IntegrityFlag> = Vec::new();
     for s in doc.signals.iter().filter(|s| s.kind.is_integrity()) {
+        if matches!(s.kind, SignalKind::MetadataOnlyText { .. })
+            && !metadata::carries_content(doc, s, blueprint, gz)
+        {
+            continue;
+        }
         let code = s.kind.code();
         match out.iter_mut().find(|f| f.rule == code) {
             Some(f) => f.evidence.extend(signal_evidence(code, s)),

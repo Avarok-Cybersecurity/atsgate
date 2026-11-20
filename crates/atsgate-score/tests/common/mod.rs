@@ -5,7 +5,7 @@
 use atsgate_blueprint::{Blueprint, builtin};
 use atsgate_extract::{Format, Thresholds, extract};
 use atsgate_score::{Input, Report, YearMonth, score};
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 
 /// Test choice: a fixed month, so "Present" roles count the same on every run.
 pub const AS_OF: YearMonth = YearMonth {
@@ -15,7 +15,7 @@ pub const AS_OF: YearMonth = YearMonth {
 
 pub fn gazetteer() -> &'static Gazetteer<'static> {
     static GZ: std::sync::OnceLock<Gazetteer<'static>> = std::sync::OnceLock::new();
-    GZ.get_or_init(|| Gazetteer::skills(Taxonomy::builtin().expect("taxonomy")))
+    GZ.get_or_init(|| Gazetteer::new(Taxonomy::builtin().expect("taxonomy"), Scope::Resumes))
 }
 
 pub fn blueprint(id: &str) -> Blueprint {

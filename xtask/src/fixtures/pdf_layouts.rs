@@ -9,21 +9,21 @@ pub const BODY: f32 = 10.0;
 const HEAD: f32 = 11.0;
 
 /// A top-down text cursor in one column.
-struct Col {
-    x: f32,
-    y: f32,
-    ops: Vec<Op>,
+pub(super) struct Col {
+    pub(super) x: f32,
+    pub(super) y: f32,
+    pub(super) ops: Vec<Op>,
 }
 
 impl Col {
-    fn new(x: f32, y: f32) -> Self {
+    pub(super) fn new(x: f32, y: f32) -> Self {
         Self {
             x,
             y,
             ops: Vec::new(),
         }
     }
-    fn at(&mut self, dx: f32, size: f32, font: Font, text: &str) {
+    pub(super) fn at(&mut self, dx: f32, size: f32, font: Font, text: &str) {
         let (x, y) = (self.x + dx, self.y);
         self.ops.push(Op::Text {
             x,
@@ -34,41 +34,41 @@ impl Col {
             text: text.to_owned(),
         });
     }
-    fn line(&mut self, size: f32, font: Font, text: &str) {
+    pub(super) fn line(&mut self, size: f32, font: Font, text: &str) {
         self.at(0.0, size, font, text);
         self.y -= size * 1.45;
     }
-    fn gap(&mut self, pts: f32) {
+    pub(super) fn gap(&mut self, pts: f32) {
         self.y -= pts;
     }
-    fn heading(&mut self, text: &str) {
+    pub(super) fn heading(&mut self, text: &str) {
         self.gap(6.0);
         self.line(HEAD, Font::Bold, text);
     }
-    fn lines(&mut self, lines: &[&str]) {
+    pub(super) fn lines(&mut self, lines: &[&str]) {
         lines.iter().for_each(|l| self.line(BODY, Font::Regular, l));
     }
-    fn bullets(&mut self, bullets: &[&str]) {
+    pub(super) fn bullets(&mut self, bullets: &[&str]) {
         for b in bullets {
             self.at(10.0, BODY, Font::Regular, &format!("{}{b}", c::BULLET));
             self.y -= BODY * 1.45;
         }
     }
     /// An entry with its dates right-aligned on the title's baseline.
-    fn entry_inline(&mut self, e: &Entry, dates_x: f32) {
+    pub(super) fn entry_inline(&mut self, e: &Entry, dates_x: f32) {
         self.at(0.0, BODY, Font::Regular, e.title);
         self.at(dates_x - self.x, BODY, Font::Regular, e.dates);
         self.y -= BODY * 1.45;
         self.bullets(e.bullets);
     }
     /// An entry with its dates on the line below the title.
-    fn entry_stacked(&mut self, e: &Entry) {
+    pub(super) fn entry_stacked(&mut self, e: &Entry) {
         self.lines(&[e.title, e.dates]);
         self.bullets(e.bullets);
     }
 }
 
-fn spec(pages: Vec<Vec<Op>>) -> PdfSpec {
+pub(super) fn spec(pages: Vec<Vec<Op>>) -> PdfSpec {
     PdfSpec {
         title: c::NAME.to_owned(),
         keywords: None,
@@ -76,7 +76,7 @@ fn spec(pages: Vec<Vec<Op>>) -> PdfSpec {
     }
 }
 
-fn identity(col: &mut Col, contact_line: bool) {
+pub(super) fn identity(col: &mut Col, contact_line: bool) {
     col.line(16.0, Font::Bold, c::NAME);
     if contact_line {
         col.line(BODY, Font::Regular, &c::CONTACT.join(" | "));
@@ -87,10 +87,20 @@ fn identity(col: &mut Col, contact_line: bool) {
 
 /// Summary, Experience, Education and Skills in one column below `col`'s cursor.
 fn body(col: &mut Col) {
+    body_first(col);
+    body_rest(col);
+}
+
+/// Summary and Experience: what a two-page variant puts on its first page.
+pub(super) fn body_first(col: &mut Col) {
     col.heading(c::SUMMARY_HEADING);
     col.lines(&c::SUMMARY);
     col.heading(c::EXPERIENCE_HEADING);
     c::ROLES.iter().for_each(|e| col.entry_inline(e, 450.0));
+}
+
+/// Education and Skills: what a two-page variant puts on its second page.
+pub(super) fn body_rest(col: &mut Col) {
     col.heading(c::EDUCATION_HEADING);
     c::EDUCATION.iter().for_each(|e| col.entry_inline(e, 450.0));
     col.heading(c::SKILLS_HEADING);
@@ -188,26 +198,6 @@ pub fn text_box() -> PdfSpec {
         y: box_top - 66.0,
         w: 400.0,
         h: 60.0,
-    });
-    spec(vec![ops])
-}
-
-/// Name and contact details in the page header band, a page number in the footer band.
-pub fn header_footer() -> PdfSpec {
-    let mut head = Col::new(60.0, PAGE_H - 24.0);
-    head.line(14.0, Font::Bold, c::NAME);
-    head.line(9.0, Font::Regular, &c::CONTACT.join(" | "));
-    let mut col = Col::new(60.0, 700.0);
-    body(&mut col);
-    let mut ops = head.ops;
-    ops.extend(col.ops);
-    ops.push(Op::Text {
-        x: 290.0,
-        y: 24.0,
-        size: 9.0,
-        font: Font::Regular,
-        rgb: BLACK,
-        text: "Page 1 of 1".into(),
     });
     spec(vec![ops])
 }

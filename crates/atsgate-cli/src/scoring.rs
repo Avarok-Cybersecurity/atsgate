@@ -8,7 +8,7 @@ use crate::score_args::{AsOf, ScoreArgs};
 use crate::spec;
 use atsgate_extract::{Format, Thresholds, extract};
 use atsgate_score::{Floors, Input, ResumeInfo, ScoreOutput, YearMonth, gate, markdown, score};
-use atsgate_taxonomy::{Gazetteer, Taxonomy};
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 use std::io::Write as _;
 use std::path::{Path, PathBuf};
 
@@ -65,8 +65,8 @@ pub fn run(
     let floors = Floors::parse(&args.floors).map_err(|e| format!("--floors: {e}"))?;
     let format = resume_format(path)?;
     let taxonomy = Taxonomy::builtin().map_err(|e| e.to_string())?;
-    let gazetteer = Gazetteer::skills(taxonomy);
-    let resolved = spec::resolve(&args.blueprint, io, &gazetteer)?;
+    let gazetteer = Gazetteer::new(taxonomy, Scope::Resumes);
+    let resolved = spec::resolve(&args.blueprint, io, taxonomy)?;
     let document = extract(bytes, format, &Thresholds::STANDARD)
         .map_err(|e| format!("{}: {e}", path.display()))?;
     let as_of = match args.as_of {

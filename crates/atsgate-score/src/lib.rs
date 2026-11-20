@@ -13,9 +13,11 @@ pub mod education;
 pub mod evidence;
 pub mod experience;
 pub mod floors;
+pub mod gaps;
 pub mod gate;
 pub mod knockouts;
 pub mod markdown;
+pub mod metadata;
 pub mod output;
 pub mod parse;
 pub mod report;
@@ -36,9 +38,8 @@ pub use vendor::{PROFILES, SIMULATED_LABEL, Vendor};
 use atsgate_blueprint::Blueprint;
 use atsgate_extract::Document;
 use atsgate_taxonomy::Gazetteer;
-use report::{BlueprintInfo, Citation, Dimension, Dimensions, Gap, VendorResult};
+use report::{BlueprintInfo, Citation, Dimension, Dimensions, VendorResult};
 use skills::{Requirement, SkillResult};
-use std::collections::BTreeSet;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Input<'a> {
@@ -51,29 +52,6 @@ pub struct Input<'a> {
 
 fn round1(x: f64) -> f64 {
     (x * 10.0).round() / 10.0
-}
-
-fn gaps(results: &[SkillResult], blueprint: &Blueprint, gz: &Gazetteer<'_>) -> Vec<Gap> {
-    let all = blueprint
-        .required_skills
-        .iter()
-        .chain(&blueprint.preferred_skills);
-    let mut out: Vec<Gap> = results
-        .iter()
-        .zip(all)
-        .filter(|(r, _)| r.matched.is_none())
-        .map(|(r, s)| Gap {
-            canonical: r.canonical.clone(),
-            requirement: r.requirement,
-            weight: r.weight,
-            would_match: skills::would_match(s, gz),
-        })
-        .collect();
-    out.sort_by(|a, b| {
-        let req = |g: &Gap| g.requirement == Requirement::Preferred;
-        req(a).cmp(&req(b)).then(b.weight.total_cmp(&a.weight))
-    });
-    out
 }
 
 fn vendor_results(dims: &Dimensions, penalties: &[parse::Penalty]) -> Vec<VendorResult> {
@@ -143,12 +121,15 @@ pub fn score(input: &Input<'_>) -> Report {
         &units,
     );
     let title = title::score(doc, resume, blueprint, gz.taxonomy());
-    let relevant: BTreeSet<units::EntryId> = required
-        .iter()
-        .chain(&preferred)
-        .filter_map(|r| r.entry)
-        .chain(title.matched_entries.iter().copied())
-        .collect();
+    let mut relevant = skills::evidencing_entries(
+        blueprint
+            .required_skills
+            .iter()
+            .chain(&blueprint.preferred_skills),
+        gz,
+        &units,
+    );
+    relevant.extend(title.matched_entries.iter().copied());
     let min_years = blueprint.experience.min_years;
     let exp = experience::score(doc, resume, &relevant, min_years, as_of);
     let experience_met = exp.relevant_years > 0.0 && exp.relevant_years >= min_years;
@@ -197,11 +178,11 @@ pub fn score(input: &Input<'_>) -> Report {
         vendors: vendor_results(&dimensions, &parse_penalties),
         dimensions,
         relevant_years: exp.relevant_years,
-        gaps: gaps(&all_skills, blueprint, gz),
+        gaps: gaps::gaps(&all_skills, blueprint, gz),
         skills: all_skills,
         knockouts: knockouts::evaluate_all(&blueprint.knockouts, facts, doc, &units),
         parse_penalties,
-        integrity_flags: parse::integrity_flags(original),
+        integrity_flags: parse::integrity_flags(original, blueprint, gz),
         quantification: parse::quantification(resume),
     }
 }

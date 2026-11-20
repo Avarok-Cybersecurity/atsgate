@@ -99,6 +99,7 @@ pub fn extract(bytes: &[u8], t: &Thresholds) -> Result<Document, ExtractError> {
             span_count,
         });
     }
+    layout::running::confirm(&mut lines, &mut spans, t);
     signals.extend(integrity::span_signals(&spans, t));
     let metadata = metadata(&lo);
     signals.extend(integrity::metadata_signals(&metadata, &spans));

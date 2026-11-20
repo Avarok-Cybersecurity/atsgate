@@ -2,10 +2,15 @@
 #
 # - skills / titles: `ref` names an imported concept (renamed to `canonical`, `aliases` added) or a
 #   new `atsgate:` concept the imported taxonomies lack, linked into them through `broader`.
+# - contextual_titles: titles that name an occupation only inside an O*NET-SOC group.
 # - denied_aliases: imported aliases that are wrong for their concept.
 # - case_sensitive: phrases that are also ordinary words; in free text they match only with this
 #   exact capitalization and never as the first word of a sentence.
 # - gazetteer_stoplist: phrases too generic to report as a requirement on their own.
+# - gazetteer_esco_allow: ESCO names a postings gazetteer reports although they are one word or
+#   an alternative label (it otherwise keeps only multi-word ESCO preferred labels).
+# - gazetteer_posting_excluded_prefixes: opening words of ESCO transversal and attitude labels,
+#   which a postings gazetteer never reports (the ESCO data embedded here has no skill type).
 # Every `ref` must exist; loading fails otherwise.
 version: "2026-11-20"
 skills:
@@ -64,6 +69,11 @@ skills:
   - { canonical: PACER, ref: "onet-tech:Public Access to Court Electronic Records (PACER)", aliases: [], broader: [] }
   - { canonical: Unreal Engine, ref: "onet-tech:Unreal Technology Unreal Engine", aliases: [Unreal, UE5], broader: [] }
   - { canonical: SolidWorks, ref: "onet-tech:Dassault Systemes SolidWorks", aliases: [Solidworks], broader: [] }
+  - { canonical: Software as a service SaaS, ref: "onet-tech:Software as a service SaaS", aliases: [SaaS, Software as a service], broader: [] }
+  # ESCO concepts under the phrasing engineers use
+  - { canonical: distributed computing, ref: "http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83", aliases: [distributed systems], broader: [] }
+  - { canonical: use concurrent programming, ref: "http://data.europa.eu/esco/skill/25b291b5-8245-4d9d-b391-86a8a31d7109", aliases: [concurrency, concurrent programming, multithreading, multi-threading, async, asynchronous programming], broader: [] }
+  - { canonical: cyber security, ref: "http://data.europa.eu/esco/skill/8088750d-8388-4170-a76f-48354c469c44", aliases: [ICT security], broader: [] }
   # Not in O*NET 31.0 or ESCO v1.2.1: curated concepts linked to the O*NET software category
   - { canonical: CUDA, ref: "atsgate:cuda", aliases: [NVIDIA CUDA], broader: ["onet:2.E.7.b"] }
   - { canonical: Tauri, ref: "atsgate:tauri", aliases: [], broader: ["onet:2.E.7.d"] }
@@ -78,15 +88,53 @@ skills:
   - { canonical: vLLM, ref: "atsgate:vllm", aliases: [], broader: ["onet:2.E.9.d"] }
   - { canonical: Xero, ref: "atsgate:xero", aliases: [], broader: ["onet:2.E.2.a"] }
   - { canonical: Clio, ref: "atsgate:clio", aliases: [], broader: ["onet:2.E.9.n"] }
+  - { canonical: Svelte, ref: "atsgate:svelte", aliases: [SvelteKit], broader: ["onet:2.E.7.h"] }
+  - { canonical: Axum, ref: "atsgate:axum", aliases: [], broader: ["onet:2.E.7.h"] }
+  - { canonical: WebSocket, ref: "atsgate:websocket", aliases: [WebSockets, WebSocket API], broader: ["onet:2.E.10"] }
+  - { canonical: Protocol Buffers, ref: "atsgate:protobuf", aliases: [protobuf, protobufs], broader: ["onet:2.E.15.a"] }
+  - { canonical: Tailwind CSS, ref: "atsgate:tailwind-css", aliases: [Tailwind, TailwindCSS], broader: ["onet-tech:Cascading style sheets CSS"] }
+  - { canonical: Model Context Protocol, ref: "atsgate:mcp", aliases: [MCP], broader: ["onet:2.E.7.c"] }
+  - { canonical: Transport Layer Security, ref: "atsgate:tls", aliases: [TLS], broader: ["http://data.europa.eu/esco/skill/d32db06e-bd06-4415-a7ab-1b0ee68caa9a"] }
+  - { canonical: change data capture, ref: "atsgate:change-data-capture", aliases: [CDC], broader: ["onet:2.E.6.d"] }
+  - { canonical: stream processing, ref: "atsgate:stream-processing", aliases: [event stream processing, stream-processing], broader: ["http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83"] }
+  - { canonical: infrastructure as code, ref: "atsgate:infrastructure-as-code", aliases: [IaC], broader: ["onet:2.E.7.a"] }
+  - { canonical: local-first software, ref: "atsgate:local-first-software", aliases: [local-first, local first software], broader: [] }
+  - { canonical: microservices, ref: "atsgate:microservices", aliases: [microservice, microservice architecture, microservices architecture], broader: ["http://data.europa.eu/esco/skill/83218cac-3599-417e-93d2-26013cdccd98"] }
+  - { canonical: fault tolerance, ref: "atsgate:fault-tolerance", aliases: [fault-tolerant systems], broader: ["http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83"] }
 titles:
   # O*NET labels are plural and its reported titles omit the singular.
   - { canonical: Data Scientists, ref: "onet-soc:15-2051.00", aliases: [Data Scientist], broader: [] }
   # O*NET lists neither spelling; "backend" is a specialization of software development.
   - { canonical: Software Developers, ref: "onet-soc:15-1252.00", aliases: [Backend Engineer, Back-end Engineer], broader: [] }
+# Titles that name an occupation only in context. A bare "Engineer" (after seniority words are
+# removed: "Staff Engineer", "Principal Engineer") or "Systems Engineer" is a software title when
+# the occupation it is read against (the blueprint's, or the one a posting's skills point to)
+# is a computer occupation (O*NET-SOC 15-12xx); elsewhere O*NET's own reading stands.
+contextual_titles:
+  - { title: Engineer, group: "15-12", ref: "onet-soc:15-1252.00" }
+  - { title: Developer, group: "15-12", ref: "onet-soc:15-1252.00" }
+  - { title: Founding Engineer, group: "15-12", ref: "onet-soc:15-1252.00" }
+  - { title: Systems Engineer, group: "15-12", ref: "onet-soc:15-1252.00" }
+  - { title: Security Engineer, group: "15-12", ref: "onet-soc:15-1299.05" }
 denied_aliases:
   # "open source" in a posting is not the Source game engine.
   - { ref: "http://data.europa.eu/esco/skill/c8d53d69-d900-4092-af80-c5d0422bcdb3", alias: Source }
   # Mocha is a JavaScript test framework, not JavaScript.
   - { ref: "http://data.europa.eu/esco/skill/3cd569a2-4f88-4c1e-9995-8dce8c5e51a7", alias: Mocha }
-case_sensitive: [Go, Rust, React, Swift, Spark, Excel, Unity, Ruby, R, C, Slack, Clio, Vue, Angular, Jenkins, Looker, Confluence, Grafana, Unreal, Redux, Stata, Java]
-gazetteer_stoplist: [Writing, Speaking, Monitoring, Coordination, Installation, Instructing, Science, Mechanical, Administrative, Design, Repairing, Learning Strategies, Active Learning]
+  # Collisions: the phrase names another concept (curated above), or nothing this specific.
+  - { ref: "http://data.europa.eu/esco/skill/83218cac-3599-417e-93d2-26013cdccd98", alias: SaaS }
+  - { ref: "http://data.europa.eu/esco/skill/83218cac-3599-417e-93d2-26013cdccd98", alias: Software as a service }
+  - { ref: "http://data.europa.eu/esco/skill/d32db06e-bd06-4415-a7ab-1b0ee68caa9a", alias: TLS }
+  - { ref: "http://data.europa.eu/esco/skill/d32db06e-bd06-4415-a7ab-1b0ee68caa9a", alias: transport layer security }
+  - { ref: "http://data.europa.eu/esco/skill/7ee4c2ea-b349-4bd2-81a3-ec31475d4833", alias: data collection }
+  - { ref: "http://data.europa.eu/esco/skill/7ee4c2ea-b349-4bd2-81a3-ec31475d4833", alias: big data }
+  - { ref: "http://data.europa.eu/esco/skill/426ceaba-6867-481c-bb6b-aee3933da7d2", alias: ICT security }
+case_sensitive: [Go, Rust, React, Swift, Spark, Excel, Unity, Ruby, R, C, Slack, Clio, Vue, Angular, Jenkins, Looker, Confluence, Grafana, Unreal, Redux, Stata, Java, Svelte, Tailwind]
+gazetteer_stoplist: [Writing, Speaking, Monitoring, Coordination, Installation, Instructing, Science, Mechanical, Administrative, Design, Repairing, Learning Strategies, Active Learning, Analyze]
+gazetteer_esco_allow: [DevOps, GDPR, iOS, ML, Android, NoSQL, cryptography, blockchain, Linux, JavaScript, TypeScript,
+  Haskell, Erlang, Lisp, Sass, Drupal, Angular, Nessus, DB2, XQuery, Perl, PHP, Xcode, C#, MySQL, Groovy, Vyper, ASP.NET,
+  SQL, SPARQL, Solidity, Vagrant, WordPress, Ansible, Wireshark, CoffeeScript, Objective-C, LDAP, PostgreSQL, AJAX, C++,
+  MATLAB, LINQ, Joomla, Hadoop, CSS, Scala, COBOL, ABAP, Metasploit, Moodle, KDevelop, Maltego, CryEngine, firmware,
+  algorithms, mathematics, robotics, microelectronics, electronics, semiconductors, mechatronics,
+  supercomputing, biometrics, cryptocurrency, nanotechnology, optoelectronics, photonics, cybernetics, thermodynamics]
+gazetteer_posting_excluded_prefixes: [show, demonstrate, think, cope with, adapt to, act, take, accept, approach, persist, be, lead others, work in teams, work independently, work efficiently, motivate, meet commitments, solve problems, make decisions, assist, cooperate, respect, manage time, manage frustration, perform cleaning, comply with, attend to, maintain a positive, keep a positive, use communication]

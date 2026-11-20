@@ -44,6 +44,9 @@ pub enum Seniority {
     Manager,
     Director,
     Executive,
+    /// The posting states no seniority: title scoring applies no seniority penalty. Written
+    /// explicitly; there is no default. Never read from a resume title.
+    Unspecified,
 }
 
 /// Where a skill must appear to earn full credit.
@@ -72,11 +75,20 @@ pub struct Skill {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum KnockoutType {
+    /// Met or unmet against the highest degree level the resume names; unknown without one.
     Degree,
+    /// Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.
     Certification,
+    /// Met or unmet against relevant years; unknown when no role carries dates.
     MinYears,
+    /// Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.
     Clearance,
+    /// Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet. Write
+    /// `value` as a resume would state it ("authorized to work in the US"): a posting's wording
+    /// ("No visa sponsorship") is never in a resume, so it stays unknown and `unknown_policy`
+    /// decides.
     Authorization,
+    /// Met when `value` appears as a phrase in the resume; otherwise unknown, never unmet.
     Language,
 }
 
@@ -94,6 +106,8 @@ pub enum UnknownPolicy {
 pub struct Knockout {
     #[serde(rename = "type")]
     pub kind: KnockoutType,
+    /// For `min_years` a number, for `degree` a degree name; for the phrase types the words a
+    /// resume would use to show the requirement is met (see `type`).
     #[schemars(length(min = 1))]
     pub value: String,
     pub unknown_policy: UnknownPolicy,

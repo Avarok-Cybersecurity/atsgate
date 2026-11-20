@@ -4,9 +4,9 @@
 
 use crate::io::Io;
 use atsgate_blueprint::generate::{GenerateOptions, generate};
-use atsgate_blueprint::{Blueprint, Seniority, builtin};
+use atsgate_blueprint::{Blueprint, builtin};
 use atsgate_extract::{Format, Thresholds, extract};
-use atsgate_taxonomy::Gazetteer;
+use atsgate_taxonomy::{Gazetteer, Scope, Taxonomy};
 use std::path::Path;
 
 /// The largest blueprint accepted from a URL: a blueprint is a few kilobytes.
@@ -15,9 +15,6 @@ pub const MAX_BLUEPRINT_BYTES: u64 = 1024 * 1024;
 pub const MAX_POSTING_BYTES: u64 = 16 * 1024 * 1024;
 /// `version` of a blueprint generated on the fly: a first draft, as `xtask examples` writes.
 pub const GENERATED_VERSION: &str = "0.1.0";
-/// Seniority of a generated blueprint whose title states none: the middle of the ladder, so a
-/// missing word moves T as little as possible either way. The report shows `reviewed: false`.
-pub const GENERATED_FALLBACK_SENIORITY: Seniority = Seniority::Mid;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Spec<'a> {
@@ -96,7 +93,7 @@ pub fn id_from(source: &str) -> Result<String, String> {
         .ok_or_else(|| format!("generate:{source}: the name gives no blueprint id"))
 }
 
-pub fn resolve(spec: &str, io: &dyn Io, gazetteer: &Gazetteer<'_>) -> Result<Resolved, String> {
+pub fn resolve(spec: &str, io: &dyn Io, taxonomy: &Taxonomy) -> Result<Resolved, String> {
     let plain = |blueprint| {
         Ok(Resolved {
             blueprint,
@@ -125,10 +122,10 @@ pub fn resolve(spec: &str, io: &dyn Io, gazetteer: &Gazetteer<'_>) -> Result<Res
             let options = GenerateOptions {
                 id: id_from(source)?,
                 version: GENERATED_VERSION.to_owned(),
-                fallback_seniority: GENERATED_FALLBACK_SENIORITY,
                 occupational_category: None,
             };
-            let blueprint = generate(&doc.reading_text(), &options, gazetteer)
+            let postings = Gazetteer::new(taxonomy, Scope::Postings);
+            let blueprint = generate(&doc.reading_text(), &options, &postings)
                 .map_err(|e| format!("{source}: {e}"))?;
             let yaml = blueprint.to_yaml().map_err(|e| e.to_string())?;
             Ok(Resolved {
