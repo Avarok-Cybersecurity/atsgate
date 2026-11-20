@@ -1,0 +1,121 @@
+{
+  "description": "Build an ATS-safe resume from a career file, score it against a job blueprint with six simulated vendor parsers, and fail the job when a vendor falls below its floor, a knockout fails, or the document carries hidden text. Scores are a simulated parse and keyword risk, not a vendor's own result.",
+  "inputs": [
+    {
+      "default": null,
+      "description": "build (render only), score (score an existing resume) or gate (build, then score the PDF it rendered).",
+      "name": "mode",
+      "required": true
+    },
+    {
+      "default": null,
+      "description": "score: the PDF or DOCX to score.",
+      "name": "resume",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "build, gate: the career JSON file.",
+      "name": "career",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "build, gate: the tailoring YAML file.",
+      "name": "tailoring",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "build, gate: public, or a private contact JSON file.",
+      "name": "contact",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "build, gate: the directory the resume, partials and manifest are written to.",
+      "name": "out",
+      "required": false
+    },
+    {
+      "default": "false",
+      "description": "build, gate: true to allow a private contact file in CI, where it would otherwise be refused.",
+      "name": "allow-private-contact",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "score, gate: builtin:ID, a blueprint file, an https:// URL, or generate:FILE-OR-URL (a job posting).",
+      "name": "blueprint",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "score, gate: floor overrides such as \"taleo=80, lever=0\". Empty keeps the documented default floors.",
+      "name": "floors",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "score, gate: true or false. Whether hidden or metadata-only text fails the gate.",
+      "name": "fail-on-integrity-flags",
+      "required": false
+    },
+    {
+      "default": null,
+      "description": "score, gate: the JSON report path (must end in .json); the markdown summary is written beside it as .md.",
+      "name": "report",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "default": null,
+      "description": "The verdict as compact JSON: passed, reasons, and each vendor's score and floor.",
+      "name": "score-json",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "The lowest of the six vendor scores.",
+      "name": "min-vendor-score",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "true or false.",
+      "name": "passed",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "build, gate: the rendered PDF.",
+      "name": "resume-pdf",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "build, gate: the rendered DOCX.",
+      "name": "resume-docx",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "build, gate: the directory of HTML partials.",
+      "name": "partials-dir",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "score, gate: the JSON report path.",
+      "name": "report-json",
+      "required": null
+    },
+    {
+      "default": null,
+      "description": "score, gate: the sha256 of the exact file that was scored.",
+      "name": "resume-sha256",
+      "required": null
+    }
+  ]
+}

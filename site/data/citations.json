@@ -1,0 +1,562 @@
+[
+  {
+    "accessed": "2026-11-20",
+    "authors": "S. Patel",
+    "date": "2026",
+    "grade": "CR",
+    "id": "ats-screener-method",
+    "supports": "The six vendor profiles' weights and strictness (MIT, at 4fd3009, re-mapped onto ATSGate's dimensions) and default floors from thresholds.md; its pass floors contradict each other between methodology.md and thresholds.md",
+    "title": "ATS Screener scoring methodology, dimensions and thresholds",
+    "url": "https://github.com/sunnypatell/ats-screener/tree/main/docs/src/content/docs/scoring"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "S. Patel",
+    "date": "2026-02",
+    "grade": "CR",
+    "id": "ats-screener-research",
+    "supports": "Vendor behaviour caveats: Lever and Greenhouse do not auto-score or auto-reject",
+    "title": "ATS parsing, scoring and platform research notes",
+    "url": "https://github.com/sunnypatell/ats-screener/tree/main/research"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Yu, Xu, Xue, Zhang, Ma, Z. Yu",
+    "date": "2025-02",
+    "grade": "AX",
+    "id": "confit-v2",
+    "supports": "BM25 trails dense retrieval on full resume-to-job ranking",
+    "title": "ConFit v2: Improving Resume-Job Matching using Hypothetical Resume Embedding and Runner-Up Hard-Negative Mining",
+    "url": "https://arxiv.org/abs/2502.12361"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Yu et al.",
+    "date": "2026-05",
+    "grade": "AX",
+    "id": "confit-v3",
+    "supports": "State-of-the-art context; LLMs kept out of deterministic scoring",
+    "title": "ConFit v3: Improving Resume-Job Matching with LLM-based Re-Ranking",
+    "url": "https://arxiv.org/abs/2605.09760"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Wang et al.",
+    "date": "2026-03",
+    "grade": "AX",
+    "id": "pjb",
+    "supports": "Domain variance exceeds model gains",
+    "title": "PJB: A Reasoning-Aware Benchmark for Person-Job Retrieval",
+    "url": "https://arxiv.org/abs/2603.17386"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "De Lange et al.",
+    "date": "2026-03",
+    "grade": "AX",
+    "id": "workrb",
+    "supports": "Lexical baselines hold on skill normalization (BM25 47.4 MAP) but collapse on titles (2.5)",
+    "title": "WorkRB: A Community-Driven Evaluation Framework for AI in the Work Domain",
+    "url": "https://arxiv.org/abs/2604.13055"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Jouanneau, Jouffroy, Palyart",
+    "date": "2026-01",
+    "grade": "AX",
+    "id": "lcd-pjf",
+    "supports": "Skill-fit scores and calibration",
+    "title": "An Efficient Long-Context Ranking Architecture With Calibrated LLM Distillation: Application to Person-Job Fit",
+    "url": "https://arxiv.org/abs/2601.10321"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Zhao, Wei",
+    "date": "2026-09",
+    "grade": "AX",
+    "id": "review-recruit",
+    "supports": "Evidence-level evaluation and contestability",
+    "title": "From Matching Models to Recruiting Agents: A Systematized Narrative Review of AI Recruitment Systems, Evaluation, and Governance",
+    "url": "https://arxiv.org/abs/2609.04286"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Yashwant et al.",
+    "date": "2026-09",
+    "grade": "AX",
+    "id": "hybrid-emb",
+    "supports": "Hybrid lexical and dense retrieval",
+    "title": "Semantic Candidate-Job Matching: A Comparative Evaluation of Dense Embedding Models in Hybrid Retrieval",
+    "url": "https://arxiv.org/abs/2609.23307"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Gasco et al.",
+    "date": "2025-07",
+    "grade": "AX",
+    "id": "talentclef25",
+    "supports": "Job-title and skill benchmark; training strategy beat model size",
+    "title": "Overview of the TalentCLEF 2025: Skill and Job Title Intelligence for Human Capital Management",
+    "url": "https://arxiv.org/abs/2507.13275"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Gasco et al.",
+    "date": "2026-06",
+    "grade": "AX",
+    "id": "talentclef26",
+    "supports": "Job-person matching task",
+    "title": "Overview of the TalentCLEF 2026: Skill and Job Title Intelligence for Human Capital Management",
+    "url": "https://arxiv.org/abs/2606.31692"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Zhang, van der Goot",
+    "date": "2025-06",
+    "grade": "AX",
+    "id": "nlpnorth",
+    "supports": "Method comparison on title and skill matching",
+    "title": "NLPnorth @ TalentCLEF 2025: Comparing Discriminative, Contrastive, and Prompt-Based Methods for Job Title and Skill Matching",
+    "url": "https://arxiv.org/abs/2506.19058"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Saroglou et al.",
+    "date": "2025-12",
+    "grade": "AX",
+    "id": "esco-linking",
+    "supports": "Entity linking suits skills; sentence linking suits occupations",
+    "title": "Enhancing Job Matching: Occupation, Skill and Qualification Linking with the ESCO and EQF taxonomies",
+    "url": "https://arxiv.org/abs/2512.03195"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Zhang, Jensen, Sonniks, Plank",
+    "date": "2022",
+    "grade": "PR",
+    "id": "skillspan",
+    "supports": "Span-annotated job-description dataset (NAACL 2022)",
+    "title": "SkillSpan: Hard and Soft Skill Extraction from English Job Postings",
+    "url": "https://arxiv.org/abs/2204.12811"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Nguyen, Zhang, Montariol, Bosselut",
+    "date": "2024",
+    "grade": "PR",
+    "id": "rethink-se",
+    "supports": "In-context LLM extraction still trails supervised taggers (workshop paper)",
+    "title": "Rethinking Skill Extraction in the Job Market Domain using Large Language Models",
+    "url": "https://arxiv.org/abs/2402.03832"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Decorte et al.",
+    "date": "2023",
+    "grade": "PR",
+    "id": "decorte-xml",
+    "supports": "Synthetic-data contrastive models beat literal-match supervision (workshop paper)",
+    "title": "Extreme Multi-Label Skill Extraction Training using Large Language Models",
+    "url": "https://arxiv.org/abs/2307.10778"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Senger, Zhang, van der Goot, Plank",
+    "date": "2024",
+    "grade": "PR",
+    "id": "senger-survey",
+    "supports": "Catalogue of skill-extraction datasets (workshop paper)",
+    "title": "Deep Learning-based Computational Job Market Analysis: A Survey on Skill Extraction and Classification from Job Postings",
+    "url": "https://arxiv.org/abs/2402.05617"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Ling et al.",
+    "date": "2025-11",
+    "grade": "PR",
+    "id": "resumebench",
+    "supports": "Resume parsing benchmark (EMNLP 2025, synthetic)",
+    "title": "Beyond Human Labels: A Multi-Linguistic Auto-Generated Benchmark for Evaluating Large Language Models on Resume Parsing",
+    "url": "https://aclanthology.org/2025.emnlp-main.1626"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Zhu et al.",
+    "date": "2025-10",
+    "grade": "AX",
+    "id": "layout-resume",
+    "supports": "Normalize layout before extracting resume fields",
+    "title": "Layout-Aware Parsing Meets Efficient LLMs: A Unified, Scalable Framework for Resume Information Extraction and Evaluation",
+    "url": "https://arxiv.org/abs/2510.09722"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Adhikari, Agarwal",
+    "date": "2024",
+    "grade": "AX",
+    "id": "pdf-tools",
+    "supports": "Rule-based extractor choice (PyMuPDF and pdfium strongest)",
+    "title": "A Comparative Study of PDF Parsing Tools Across Diverse Document Categories",
+    "url": "https://arxiv.org/abs/2410.09871"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Textkernel",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "tk-columns",
+    "supports": "At least 15% of CVs use columns; naive stream order interleaves them",
+    "title": "Improving extraction from column resumes",
+    "url": "https://textkernel.com/learn-support/blog/improving-extraction-from-column-resumes"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Wen et al.",
+    "date": "2025-04",
+    "grade": "AX",
+    "id": "faire",
+    "supports": "Name-based bias in LLM screeners varies by model",
+    "title": "FAIRE: Assessing Racial and Gender Bias in AI-Driven Resume Evaluations",
+    "url": "https://arxiv.org/abs/2504.01420"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Iso et al.",
+    "date": "2025-03",
+    "grade": "PR",
+    "id": "iso-bias",
+    "supports": "Education bias persists (NAACL 2025 Industry)",
+    "title": "Evaluating Bias in LLMs for Job-Resume Matching: Gender, Race, and Education",
+    "url": "https://arxiv.org/abs/2503.19182"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Karvonen, Marks",
+    "date": "2025-06",
+    "grade": "AX",
+    "id": "karvonen",
+    "supports": "College names act as a demographic proxy despite anti-bias prompts",
+    "title": "Robustly Improving LLM Fairness in Realistic Settings via Interpretability",
+    "url": "https://arxiv.org/abs/2506.10922"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Webster",
+    "date": "2025-07",
+    "grade": "AX",
+    "id": "fairness-not-enough",
+    "supports": "Audit competence as well as bias",
+    "title": "Fairness Is Not Enough: Auditing Competence and Intersectional Bias in AI-powered Resume Screening",
+    "url": "https://arxiv.org/abs/2507.11548"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Yu, Park, Moon",
+    "date": "2026-03",
+    "grade": "AX",
+    "id": "popresume",
+    "supports": "Causal fairness audit dataset",
+    "title": "PopResume: Causal Fairness Evaluation of LLM/VLM Resume Screeners with Population-Representative Dataset",
+    "url": "https://arxiv.org/abs/2603.22714"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Gao, Jiang, Yan",
+    "date": "2026-06",
+    "grade": "AX",
+    "id": "llm-hire-fairly",
+    "supports": "Bias direction flips across model generations",
+    "title": "Can LLMs Hire Fairly? Racial Bias in Resume Screening",
+    "url": "https://arxiv.org/abs/2606.28978"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Nghiem et al.",
+    "date": "2026-04",
+    "grade": "AX",
+    "id": "bias-tails",
+    "supports": "Name-driven variation hides in score-distribution tails",
+    "title": "Bias in the Tails: How Name-conditioned Evaluative Framing in Resume Summaries Destabilizes LLM-based Hiring",
+    "url": "https://arxiv.org/abs/2604.19984"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Vohra, Ravikiran",
+    "date": "2026-09",
+    "grade": "AX",
+    "id": "audit-verdict",
+    "supports": "Audit construction changes the finding (workshop paper)",
+    "title": "The Audit Decides the Verdict: Instrument Effects Rival Demographic Bias in LLM Decision Audits",
+    "url": "https://arxiv.org/abs/2609.09048"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Braun et al.",
+    "date": "2026-04",
+    "grade": "AX",
+    "id": "task-audit",
+    "supports": "Discretion widens gaps; objective rules narrow them",
+    "title": "Hiring Discrimination and the Task Content of Jobs: Evidence from a Large-Scale Resume Audit",
+    "url": "https://arxiv.org/abs/2604.01933"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Zhang et al.",
+    "date": "2026-05",
+    "grade": "AX",
+    "id": "inj-measure",
+    "supports": "About 1% of real resumes carry hidden injections (USENIX Security 2026 listed)",
+    "title": "Measuring Real-World Prompt Injection Attacks in LLM-based Resume Screening",
+    "url": "https://arxiv.org/abs/2605.28999"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Barach",
+    "date": "2026-07",
+    "grade": "AX",
+    "id": "resumeshield",
+    "supports": "Concealment is itself a detectable signal (precision 1.0, recall 0.944)",
+    "title": "ResumeShield: Channel Separation and an Open Benchmark for Indirect Prompt Injection in AI Resume Screening",
+    "url": "https://arxiv.org/abs/2609.20188"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Baxi et al.",
+    "date": "2026-06",
+    "grade": "AX",
+    "id": "inj-multi",
+    "supports": "Manipulation dynamics across screeners (ACL Findings listed)",
+    "title": "Prompt Injection in Automated Résumé Screening with Large Language Models: Single and Multi-Injection Settings",
+    "url": "https://arxiv.org/abs/2606.27287"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Mu et al.",
+    "date": "2025-12",
+    "grade": "AX",
+    "id": "ai-sec-resume",
+    "supports": "Invisible-keyword attacks",
+    "title": "AI Security Beyond Core Domains: Resume Screening as a Case Study of Adversarial Vulnerabilities in Specialized LLM Applications",
+    "url": "https://arxiv.org/abs/2512.20164"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Fuller, Raman, Sage-Gavin, Hines; Harvard Business School and Accenture",
+    "date": "2021-09",
+    "grade": "IB",
+    "id": "hidden-workers",
+    "supports": "Recruiting systems exclude candidates for a gap in employment; ATSGate never penalizes gaps",
+    "title": "Hidden Workers: Untapped Talent (Executive Summary)",
+    "url": "https://pubwww.hbs.edu/managing-the-future-of-work/Documents/research/Hidden%20Workers%20Executive%20Summary.pdf"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Kristal, Nicks, Gloor, Hauser",
+    "date": "2022-12",
+    "grade": "PR",
+    "id": "kristal-gaps",
+    "supports": "Listing years worked instead of dates raised callbacks about 8% (vs no gap) and 15% (vs gap); Nature Human Behaviour 7(2):211-218",
+    "title": "Reducing discrimination against job seekers with and without employment gaps",
+    "url": "https://europepmc.org/article/PMC/PMC7614241"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Greenhouse",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "gh-tm-faq",
+    "supports": "No auto-reject; names and contact details excluded",
+    "title": "Talent Matching Data Processing FAQ",
+    "url": "https://support.greenhouse.io/hc/en-us/articles/41131616864283"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Greenhouse",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "gh-import",
+    "supports": "Unrecognized characters break parsing",
+    "title": "Why didn't the resume import correctly?",
+    "url": "https://support.greenhouse.io/hc/en-us/articles/200721684"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Greenhouse",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "gh-types",
+    "supports": "Accepted input formats",
+    "title": "Supported file types",
+    "url": "https://support.greenhouse.io/hc/en-us/articles/360052218132"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Workday",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "wd-parse",
+    "supports": "Parse results vary with format and word order; avoid image resumes",
+    "title": "Set Up Prospects and Candidates",
+    "url": "https://doc.workday.com/admin-guide/en-us/human-capital-management/recruiting/candidates/set-up-prospects-and-candidates/hdc1552497830785.html"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Oracle",
+    "date": "22D",
+    "grade": "VD",
+    "id": "taleo-attach",
+    "supports": "Accepted attachment formats",
+    "title": "Attachments",
+    "url": "https://docs.oracle.com/en/cloud/saas/taleo-enterprise/22d/otrcg/c-attachment.html"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "iCIMS",
+    "date": "2020-09",
+    "grade": "VD",
+    "id": "icims-blog",
+    "supports": "Context only (vendor blog)",
+    "title": "What is CV/Resume parsing?",
+    "url": "https://www.icims.com/blog/what-is-cv-resume-parsing/"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "SAP",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "sap-kba",
+    "supports": "Resume field-mapping limits",
+    "title": "KBA 2951470",
+    "url": "https://userapps.support.sap.com/sap/support/knowledge/en/2951470"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "U.S. Department of Labor, Employment and Training Administration",
+    "date": "31.0",
+    "grade": "LG",
+    "id": "onet-lic",
+    "supports": "Embedding O*NET data is allowed under CC BY 4.0 with attribution",
+    "title": "O*NET Database License",
+    "url": "https://www.onetcenter.org/license_db.html"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "European Commission",
+    "date": "n.d.",
+    "grade": "LG",
+    "id": "esco-dl",
+    "supports": "Bulk download sits behind a form, so ATSGate imports ESCO v1.2.1 through the public API instead; reuse terms are in esco-faq",
+    "title": "Download ESCO",
+    "url": "https://esco.ec.europa.eu/en/use-esco/download"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "European Commission",
+    "date": "n.d.",
+    "grade": "LG",
+    "id": "esco-faq",
+    "supports": "Free reuse for any purpose under Decision 2011/833/EU; services state \"This service uses the ESCO classification of the European Commission\"; modified versions must say so",
+    "title": "ESCO frequently asked questions: reuse of ESCO",
+    "url": "https://esco.ec.europa.eu/en/about-esco/faq"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "U.S. Department of Labor, Employment and Training Administration",
+    "date": "31.0",
+    "grade": "LG",
+    "id": "onet-db",
+    "supports": "Current release is 31.0, licensed CC BY 4.0; source of the embedded occupations, skills and technology examples",
+    "title": "O*NET 31.0 Database",
+    "url": "https://www.onetcenter.org/database.html"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Zhang et al.",
+    "date": "2023-08",
+    "grade": "CR",
+    "id": "skillspan-data",
+    "supports": "MIT-licensed test split (JSON, BIO skill and knowledge tags, house and tech subsets) used in the evaluation",
+    "title": "SkillSpan data repository",
+    "url": "https://github.com/kris927b/SkillSpan"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Decorte, Verlinden, Van Hautte, Deleu, Develder, Demeester (TechWolf)",
+    "date": "2023",
+    "grade": "CR",
+    "id": "techwolf-sentences",
+    "supports": "138,260 synthetic sentences, ten per ESCO v1.1.0 skill; CC BY 4.0",
+    "title": "Synthetic-ESCO-skill-sentences",
+    "url": "https://huggingface.co/datasets/TechWolf/Synthetic-ESCO-skill-sentences"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Gascó et al. (Avature)",
+    "date": "2025-04",
+    "grade": "CR",
+    "id": "talentclef25-corpus",
+    "supports": "Task A job-title matching data (v0.5.0), CC BY 4.0; the evaluation uses its English validation split",
+    "title": "TalentCLEF 2025 corpus: Skill and Job Title Intelligence for Human Capital Management",
+    "url": "https://zenodo.org/records/15292308"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "possibilistic",
+    "date": "2026-11-02",
+    "grade": "IB",
+    "id": "hn-artcraft",
+    "supports": "Real posting used as the generator's worked example",
+    "title": "ArtCraft: Senior Engineers, onsite San Francisco or Atlanta (Ask HN: Who is hiring? November 2026)",
+    "url": "https://news.ycombinator.com/item?id=50342041"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "Lightcast",
+    "date": "n.d.",
+    "grade": "VD",
+    "id": "lightcast-faq",
+    "supports": "Use is set by the licence type requested; terms are not stated openly, so ATSGate does not embed it",
+    "title": "Lightcast Skill Taxonomy FAQs",
+    "url": "https://lightcast.io/our-data/taxonomies/open-skills/faqs"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "schema.org",
+    "date": "current",
+    "grade": "LG",
+    "id": "schema-jp",
+    "supports": "Blueprint field alignment",
+    "title": "JobPosting",
+    "url": "https://schema.org/JobPosting"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "JSON Resume",
+    "date": "archived",
+    "grade": "CR",
+    "id": "jsonresume",
+    "supports": "Career SSOT base format (MIT)",
+    "title": "resume-schema",
+    "url": "https://github.com/jsonresume/resume-schema"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "NYC Department of Consumer and Worker Protection",
+    "date": "2023",
+    "grade": "LG",
+    "id": "ll144",
+    "supports": "Bias audits compute selection or scoring rates and impact ratios across sex, race/ethnicity and intersectional categories",
+    "title": "Automated Employment Decision Tools: Frequently Asked Questions",
+    "url": "https://www.nyc.gov/site/dca/businesses/faq-automated-employment-decision-tools.page"
+  },
+  {
+    "accessed": "2026-11-20",
+    "authors": "artificialintelligenceact.eu",
+    "date": "2024",
+    "grade": "LG",
+    "id": "eu-aia-a3",
+    "supports": "Recruitment AI is high-risk (Annex III 4(a))",
+    "title": "AI Act Annex III: High-Risk AI Systems",
+    "url": "https://artificialintelligenceact.eu/annex/3/"
+  }
+]

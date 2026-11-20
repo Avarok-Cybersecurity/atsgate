@@ -1,0 +1,156 @@
+{
+  "$schema": null,
+  "certifications": [
+    "Certified Paralegal"
+  ],
+  "domain_keywords": [
+    "discovery",
+    "court filings",
+    "case files"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Paralegal Studies",
+      "Legal Studies"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 5
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/929ef41d-afd0-4d5a-b85b-69eab68fa368",
+  "experience": {
+    "min_years": 2.0,
+    "relevant_titles": [
+      "Paralegal",
+      "Legal Assistant"
+    ]
+  },
+  "id": "paralegal",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "23-2011.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "legal case management",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/66aad490-1c20-4e25-b189-634a218ee53e",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "PACER",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Public Access to Court Electronic Records (PACER)",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Clio",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "atsgate:clio",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Relativity e-Discovery",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Relativity e-Discovery",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "iManage document management software",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:iManage document management software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "contract law",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/5c606d18-6404-4047-b235-350f18e11827",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "assist with litigation matters",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/3a7c95ef-0adc-4dff-a1a3-1e56f1e9ea03",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Adobe Acrobat",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Adobe Acrobat",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "legal research",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/a8585efe-4011-47b2-9aed-cd01bd3652c0",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Westlaw",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Thomson Reuters Westlaw",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "LexisNexis",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:LexisNexis",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "compile legal documents",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/1d7234e4-1c76-4d67-9487-71d8c529cdc9",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "legal terminology",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/c7e686a1-d03e-4641-a229-68247fdc5887",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Microsoft Word",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Microsoft Word",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Paralegal",
+  "title_aliases": [
+    "Legal Assistant",
+    "Litigation Paralegal",
+    "Corporate Paralegal"
+  ],
+  "version": "1.0.0"
+}
