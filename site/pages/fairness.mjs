@@ -10,7 +10,7 @@ const INTEGRITY = {
   'integrity.hidden.zero_width': 'Zero-width characters inside words',
   'integrity.hidden.off_page': 'Text placed outside the visible page',
   'integrity.hidden.vanished': 'DOCX runs marked hidden (<code>w:vanish</code>)',
-  'integrity.metadata_only': 'Terms present only in document metadata, never in the visible text',
+  'integrity.metadata_only': 'A blueprint skill or domain keyword, or a long run of terms, present only in document metadata and never in the visible text. An ordinary title or subject absent from the page is not flagged',
 };
 
 export default function fairnessPage() {

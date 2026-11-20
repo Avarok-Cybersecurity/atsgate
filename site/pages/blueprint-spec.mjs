@@ -12,7 +12,7 @@ const TOP = {
   title_aliases: 'Other titles for the same role, matched as the same words.',
   occupationalCategory: 'schema.org `occupationalCategory`, as an O*NET-SOC code. T credits titles of this occupation and of its SOC broad group.',
   esco_occupation: 'The matching ESCO occupation URI, or `null`.',
-  seniority: 'The level the role is at; T is scaled down by the distance on the seniority ladder (see scoring).',
+  seniority: 'The level the role is at; T is scaled down by the distance on the seniority ladder, half as much for a resume above it as below (see scoring). `unspecified` when the posting states none, which applies no seniority factor.',
   required_skills: 'Skills scored as R.',
   preferred_skills: 'Skills scored as P.',
   knockouts: 'Hard requirements that pass, fail or go to review; never points.',
@@ -64,6 +64,22 @@ function objectTable(name, def) {
   return `<h3 id="${name.toLowerCase()}">${name}</h3>\n${table(`${name} fields`, ['Field', 'Type', 'Required', 'Meaning'], rows)}`;
 }
 
+// A string enum: plain (`enum`), or `oneOf` when schemars keeps a documented variant apart.
+function enumParts(name, d) {
+  if (d.enum) return [{ values: d.enum, description: d.description }];
+  if (d.oneOf) return d.oneOf.flatMap((v) => enumParts(name, v));
+  if (d.const !== undefined) return [{ values: [d.const], description: d.description }];
+  throw new Error(`blueprint spec: ${name} is neither an object nor a string enum`);
+}
+
+function enumRow(name, d) {
+  const parts = enumParts(name, d);
+  const values = parts.flatMap((p) => p.values);
+  const notes = parts.filter((p) => p.description).map((p) => `${p.values.map((v) => `\`${v}\``).join(', ')}: ${p.description.replace(/\n/g, ' ')}`);
+  if (d.description) notes.unshift(d.description);
+  return [`<span id="${name.toLowerCase()}">${name}</span>`, values.map(code).join(', '), notes.length ? notes.map(inline).join('<br>') : '—'];
+}
+
 const EXAMPLE = `required_skills:
   - canonical: "PostgreSQL"
     taxonomy_ref: "onet-tech:PostgreSQL"
@@ -84,9 +100,7 @@ export default function blueprintSpecPage() {
   });
   const defs = Object.entries(schema.$defs);
   const objects = defs.filter(([, d]) => d.type === 'object').map(([n, d]) => objectTable(n, d)).join('\n');
-  const enums = defs
-    .filter(([, d]) => d.enum)
-    .map(([n, d]) => [`<span id="${n.toLowerCase()}">${n}</span>`, d.enum.map(code).join(', '), d.description ? inline(d.description) : '—']);
+  const enums = defs.filter(([, d]) => d.type !== 'object').map(([n, d]) => enumRow(n, d));
   const body = `
 <p>The tables below are generated from <code>schemas/blueprint.schema.json</code>, which is itself generated from the Rust types the parser uses, so the spec, the schema and the parser cannot drift. Every key is required; a value that does not apply is <code>null</code> or <code>[]</code>, never left out. Unknown fields are errors.</p>
 
@@ -104,7 +118,7 @@ ${pre(EXAMPLE)}
 <p>Every built-in skill names a taxonomy concept (O*NET 31.0, ESCO v1.2.1 or the curated table), and a test fails if any stops resolving. A blueprint you write yourself may use <code>taxonomy_ref: null</code> for a skill no taxonomy has.</p>
 
 <h2 id="generate">Can I generate a blueprint from a job posting?</h2>
-<p>Yes: <code>blueprint: generate:posting.txt</code>. The generator is deterministic. Section cues decide required versus preferred, and it also reads years, degrees, certifications and the seniority in the title. Its output is always <code>reviewed: false</code>; its measured precision and recall are on the <a href="/docs/evaluation/">evaluation page</a>.</p>`;
+<p>Yes: <code>blueprint: generate:posting.txt</code>. The generator is deterministic. Section cues decide required versus preferred, and it also reads years, degrees, certifications and the seniority in the title, writing <code>unspecified</code> when the posting states none. Its output is always <code>reviewed: false</code>; its measured precision and recall are on the <a href="/docs/evaluation/">evaluation page</a>.</p>`;
   const page = {
     route: '/docs/blueprint-spec/',
     type: 'TechArticle',

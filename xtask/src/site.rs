@@ -128,6 +128,7 @@ pub fn scoring() -> Value {
             "occupation": title::T_OCCUPATION,
             "broad_group": title::T_BROAD_GROUP,
             "ladder_span": title::LADDER_SPAN,
+            "over_seniority_factor": title::OVER_SENIORITY_FACTOR,
         },
         "page_limit": parse::PAGE_LIMIT,
         "per_item": parse::PER_ITEM,
