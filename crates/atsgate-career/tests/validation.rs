@@ -57,7 +57,7 @@ fn the_valid_file_passes_both() {
 fn a_missing_required_field_fails_both() {
     for doc in [
         edit(|d| drop(d["basics"].as_object_mut().map(|o| o.remove("name")))),
-        edit(|d| drop(d["work"][0].as_object_mut().map(|o| o.remove("startDate")))),
+        edit(|d| drop(d["work"][0].as_object_mut().map(|o| o.remove("position")))),
         edit(|d| drop(d.as_object_mut().map(|o| o.remove("x-atsgate")))),
     ] {
         assert!(!schema_accepts(&doc), "schema accepted {doc}");
@@ -132,4 +132,69 @@ fn malformed_dates_and_ids_fail_both() {
         assert!(!schema_accepts(&doc), "schema accepted {doc}");
         assert!(rust_accepts(&doc).is_err());
     }
+}
+
+#[test]
+fn kind_specific_extension_fields_stay_on_their_kind() {
+    let on_work = edit(|d| d["work"][0]["x-atsgate"]["engagement"] = json!("founder"));
+    rust_accepts(&on_work).expect("engagement belongs on work");
+    let on_project = edit(|d| d["projects"][0]["x-atsgate"]["engagement"] = json!("founder"));
+    assert!(matches!(
+        rust_accepts(&on_project),
+        Err(CareerError::MisplacedField {
+            field: "engagement",
+            ..
+        })
+    ));
+    let repo_on_work = edit(|d| d["work"][0]["x-atsgate"]["repo"] = json!("https://x.test"));
+    assert!(matches!(
+        rust_accepts(&repo_on_work),
+        Err(CareerError::MisplacedField { field: "repo", .. })
+    ));
+}
+
+#[test]
+fn an_award_subject_must_be_an_item_id() {
+    let award = |subject: &str| {
+        edit(|d| {
+            d["awards"] = json!([{ "title": "Prize", "x-atsgate": {
+                "id": "prize", "sources": [], "subject": subject } }])
+        })
+    };
+    rust_accepts(&award("pipeline")).expect("subject resolves");
+    assert!(matches!(
+        rust_accepts(&award("ghost")),
+        Err(CareerError::UnknownSubject { .. })
+    ));
+}
+
+#[test]
+fn dates_are_ordered_and_an_end_needs_a_start() {
+    let undated = edit(|d| drop(d["work"][0].as_object_mut().map(|o| o.remove("startDate"))));
+    rust_accepts(&undated).expect("a role with unknown dates is allowed");
+    let end_only = edit(|d| {
+        drop(d["work"][0].as_object_mut().map(|o| o.remove("startDate")));
+        d["work"][0]["endDate"] = json!("2021-01");
+    });
+    assert!(matches!(
+        rust_accepts(&end_only),
+        Err(CareerError::EndWithoutStart { .. })
+    ));
+    let reversed = edit(|d| d["work"][0]["endDate"] = json!("2019-12"));
+    assert!(matches!(
+        rust_accepts(&reversed),
+        Err(CareerError::EndBeforeStart { .. })
+    ));
+    let same_year = edit(|d| d["work"][0]["endDate"] = json!("2020"));
+    rust_accepts(&same_year).expect("2020 does not end before 2020-01");
+}
+
+#[test]
+fn a_source_with_no_locator_is_an_unlocated_statement() {
+    let unlocated = edit(|d| {
+        let source = &mut d["x-atsgate"]["sources"]["payroll-letter"];
+        drop(source.as_object_mut().map(|o| o.remove("path")))
+    });
+    assert!(schema_accepts(&unlocated));
+    rust_accepts(&unlocated).expect("an owner statement has no url or path");
 }

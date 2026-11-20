@@ -2,7 +2,7 @@
 //! rejected. Each dated section may carry an `x-atsgate` item extension.
 
 use crate::date::IsoDate;
-use crate::extension::ItemExtension;
+use crate::item::{BasicsExtension, ItemExtension, ProfileExtension};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -24,6 +24,8 @@ pub struct Profile {
     pub network: String,
     pub username: Option<String>,
     pub url: Option<String>,
+    #[serde(rename = "x-atsgate")]
+    pub extension: Option<ProfileExtension>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -39,6 +41,8 @@ pub struct Basics {
     pub summary: Option<String>,
     pub location: Option<Location>,
     pub profiles: Option<Vec<Profile>>,
+    #[serde(rename = "x-atsgate")]
+    pub extension: Option<BasicsExtension>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -48,8 +52,10 @@ pub struct Work {
     pub name: String,
     #[schemars(length(min = 1))]
     pub position: String,
+    /// Absent when the dates are not known; such a role cannot be placed on a dated resume.
     #[serde(rename = "startDate")]
-    pub start_date: IsoDate,
+    pub start_date: Option<IsoDate>,
+    /// Absent with a start date means the role is current.
     #[serde(rename = "endDate")]
     pub end_date: Option<IsoDate>,
     pub location: Option<String>,
@@ -125,6 +131,8 @@ pub struct Award {
     pub date: Option<IsoDate>,
     pub awarder: Option<String>,
     pub summary: Option<String>,
+    #[serde(rename = "x-atsgate")]
+    pub extension: Option<ItemExtension>,
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
@@ -145,6 +153,8 @@ pub struct Publication {
     pub release_date: Option<IsoDate>,
     pub url: Option<String>,
     pub summary: Option<String>,
+    #[serde(rename = "x-atsgate")]
+    pub extension: Option<ItemExtension>,
 }
 
 /// A named group of keywords (`skills`, `interests`).

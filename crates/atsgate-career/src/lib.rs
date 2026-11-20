@@ -2,16 +2,30 @@
 //! `x-atsgate` extension. Unknown fields, missing required fields and unsourced statistics are
 //! errors. The JSON Schema in `schemas/career.schema.json` is generated from these types.
 
+mod contact;
 mod date;
 mod extension;
+mod import;
+mod item;
 mod resume;
+mod tailoring;
 mod validate;
 
+pub use contact::{ContactError, PrivateContact};
 pub use date::{ISO_DATE_PATTERN, IsoDate};
-pub use extension::{Extension, Family, ID_PATTERN, Id, ItemExtension, Source, Stat, Variants};
+pub use extension::{Extension, Family, FocusArea, ID_PATTERN, Id, Source, Stat, Variants};
+pub use import::{ImportError, ImportFormat, import};
+pub use item::{
+    BasicsExtension, Display, Engagement, Image, ItemExtension, ItemKind, ProfileExtension,
+    ProfileKind,
+};
 pub use resume::{
     Award, Basics, Certificate, Education, Keywords, Language, Location, Meta, Profile, Project,
     Publication, Reference, Volunteer, Work,
+};
+pub use tailoring::{
+    EntrySelection, Phrasing, Picked, TAILORING_VERSION, Tailored, TailoredEntry, Tailoring,
+    TailoringError,
 };
 pub use validate::CareerError;
 
@@ -53,5 +67,25 @@ impl Career {
         let career: Career = serde_json::from_str(text).map_err(CareerError::Parse)?;
         career.validate()?;
         Ok(career)
+    }
+
+    /// The canonical text of a career file: pretty JSON, absent fields left out rather than
+    /// written as `null`, ending in a newline.
+    pub fn to_json(&self) -> Result<String, CareerError> {
+        fn strip_nulls(v: &mut serde_json::Value) {
+            match v {
+                serde_json::Value::Object(map) => {
+                    map.retain(|_, x| !x.is_null());
+                    map.values_mut().for_each(strip_nulls);
+                }
+                serde_json::Value::Array(items) => items.iter_mut().for_each(strip_nulls),
+                _ => {}
+            }
+        }
+        let mut value = serde_json::to_value(self).map_err(CareerError::Parse)?;
+        strip_nulls(&mut value);
+        let mut text = serde_json::to_string_pretty(&value).map_err(CareerError::Parse)?;
+        text.push('\n');
+        Ok(text)
     }
 }

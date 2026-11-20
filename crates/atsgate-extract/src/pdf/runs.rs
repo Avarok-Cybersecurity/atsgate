@@ -47,15 +47,23 @@ fn continues(run: &GlyphRun, font: &str, run_font: &str, c: &TextChar, tol: f32)
 }
 
 /// The first text-showing operation that starts on `run`'s baseline within its horizontal extent.
+/// A run that no operation starts was split off mid-operation (a kerned pair such as "Aw" or
+/// "r." overlaps by more than the tolerance), so it takes the nearest operation starting to its
+/// left on the same baseline: the one that drew it.
 fn stream_index(run: &GlyphRun, shows: &[TextShow], tol: f32) -> usize {
-    shows
-        .iter()
-        .position(|s| {
-            (s.origin.1 - run.baseline).abs() <= tol
-                && s.origin.0 >= run.bbox.x0 - tol
-                && s.origin.0 <= run.bbox.x1
-        })
-        .unwrap_or(usize::MAX)
+    let on_baseline = |s: &&TextShow| (s.origin.1 - run.baseline).abs() <= tol;
+    let starts_in = shows.iter().position(|s| {
+        on_baseline(&s) && s.origin.0 >= run.bbox.x0 - tol && s.origin.0 <= run.bbox.x1
+    });
+    let drew_it = || {
+        shows
+            .iter()
+            .enumerate()
+            .filter(|(_, s)| on_baseline(s) && s.origin.0 < run.bbox.x0)
+            .max_by(|(ia, a), (ib, b)| a.origin.0.total_cmp(&b.origin.0).then(ib.cmp(ia)))
+            .map(|(i, _)| i)
+    };
+    starts_in.or_else(drew_it).unwrap_or(usize::MAX)
 }
 
 /// Runs of glyphs that share font, size, colour and baseline and sit next to each other.
@@ -90,4 +98,45 @@ pub fn assemble(chars: &[TextChar], shows: &[TextShow], tol: f32) -> Vec<GlyphRu
         .collect();
     out.sort_by_key(|r| r.stream_index);
     out
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn run(x0: f32, x1: f32) -> GlyphRun {
+        GlyphRun {
+            text: String::new(),
+            bbox: BBox {
+                x0,
+                y0: 100.0,
+                x1,
+                y1: 110.0,
+            },
+            baseline: 100.0,
+            font_size: 10.0,
+            color: Rgb {
+                r: 0.0,
+                g: 0.0,
+                b: 0.0,
+            },
+            stream_index: 0,
+        }
+    }
+
+    fn show(x: f32, y: f32) -> TextShow {
+        TextShow {
+            font: Vec::new(),
+            origin: (x, y),
+        }
+    }
+
+    #[test]
+    fn a_run_split_off_by_kerning_keeps_its_operation() {
+        let shows = [show(54.0, 100.0), show(200.0, 100.0), show(54.0, 80.0)];
+        assert_eq!(stream_index(&run(54.0, 63.0), &shows, 0.5), 0);
+        assert_eq!(stream_index(&run(62.4, 96.0), &shows, 0.5), 0);
+        assert_eq!(stream_index(&run(210.0, 230.0), &shows, 0.5), 1);
+        assert_eq!(stream_index(&run(20.0, 30.0), &shows, 0.5), usize::MAX);
+    }
 }

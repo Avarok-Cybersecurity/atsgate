@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ATSGate tailoring file",
+  "description": "Selects, orders and chooses phrasings from a career file; never adds facts.",
+  "type": "object",
+  "properties": {
+    "awards": {
+      "description": "Award entry ids.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Id"
+      }
+    },
+    "blueprint": {
+      "description": "The job blueprint the selection targets: `builtin:<id>`, an `https://` URL, or a path\nrelative to the repository root.",
+      "type": "string",
+      "minLength": 1
+    },
+    "education": {
+      "description": "Education entry ids.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Id"
+      }
+    },
+    "max_pages": {
+      "description": "The longest the rendered PDF may be.",
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 1
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EntrySelection"
+      }
+    },
+    "publications": {
+      "description": "Publication entry ids.",
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Id"
+      }
+    },
+    "skills": {
+      "description": "Skill group names (`skills[].name`).",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "summary": {
+      "$ref": "#/$defs/Phrasing"
+    },
+    "title": {
+      "$ref": "#/$defs/Phrasing"
+    },
+    "version": {
+      "type": "integer",
+      "format": "uint32",
+      "minimum": 0
+    },
+    "work": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EntrySelection"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "blueprint",
+    "title",
+    "summary",
+    "max_pages",
+    "work",
+    "projects",
+    "skills",
+    "education",
+    "publications",
+    "awards"
+  ],
+  "$defs": {
+    "EntrySelection": {
+      "description": "One work or project entry, and which of its highlights and statistics appear, in order.",
+      "type": "object",
+      "properties": {
+        "highlights": {
+          "description": "Zero-based indexes into the entry's `highlights`.",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint",
+            "minimum": 0
+          }
+        },
+        "id": {
+          "$ref": "#/$defs/Id"
+        },
+        "stats": {
+          "description": "Zero-based indexes into the entry's `x-atsgate.stats`.",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint",
+            "minimum": 0
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "highlights",
+        "stats"
+      ]
+    },
+    "Id": {
+      "description": "A stable identifier: lowercase letters, digits and hyphens.",
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "Phrasing": {
+      "description": "Which existing phrasing a resume line uses.",
+      "oneOf": [
+        {
+          "description": "The career file's own `basics.label` (for the title) or `basics.summary`.",
+          "type": "string",
+          "const": "basics"
+        },
+        {
+          "description": "An id from `x-atsgate.variants.titles` or `x-atsgate.variants.summaries`.",
+          "type": "object",
+          "properties": {
+            "variant": {
+              "$ref": "#/$defs/Id"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "variant"
+          ]
+        }
+      ]
+    }
+  }
+}

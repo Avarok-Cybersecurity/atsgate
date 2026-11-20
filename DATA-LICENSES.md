@@ -89,3 +89,18 @@ own code (`cargo run -p xtask -- fixtures --write`). They are covered by the cod
 
 `tests/fixtures/jd/artcraft-hn-2026-11-02.txt` is a public Hacker News job posting quoted with its
 source, author and retrieval date in its header, as a test input for the generator.
+
+The render inputs under `fixtures/career/`, `fixtures/tailoring/` and `fixtures/contact/` describe
+an invented person and are covered by the code license. `fixtures/import/tbraun96-career.json` is a
+copy of the career file of ATSGate's author, Thomas Braun (no phone number or street address), included
+at his request as a real-world import test; `fixtures/import/tbraun96.career.json` is generated
+from it.
+
+## Fonts
+
+`atsgate-render` embeds Libertinus Serif Regular and Bold
+([`crates/atsgate-render/fonts/`](crates/atsgate-render/fonts)), copyright 2012-2024 The Libertinus
+Project Authors, under the [SIL Open Font License 1.1](crates/atsgate-render/fonts/OFL.txt). The
+font files are unmodified and ship with that license; the OFL does not apply to the resumes
+rendered with them. No other font is embedded: `typst-assets`' `fonts` feature is not enabled,
+because it would also bundle a GPL-3.0 (with font exception) font.

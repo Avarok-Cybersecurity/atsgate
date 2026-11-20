@@ -1,17 +1,21 @@
 //! Pure segmentation: an extracted [`Document`] in, a [`Resume`] with evidence out.
 //!
 //! Basic by design: standard headings, common date formats, bullets and dated entries. Header
-//! and footer lines are kept apart, because many parsers never read them.
+//! and footer lines are kept apart, because many parsers never read them. Lines a PDF wrapped
+//! are joined back first (see [`logical_lines`]).
 
 mod dates;
 mod entries;
 mod headings;
 mod normalize;
+mod tokens;
+mod wrap;
 
 pub use dates::{DateEnd, DateRange, PartialDate};
 pub use entries::Entry;
 pub use headings::SectionKind;
 pub use normalize::{LineRef, normalize};
+pub use wrap::{FIT_SLACK, LEFT_EDGE_TOLERANCE_PT, WRAP_MAX_ADVANCE, logical_lines};
 
 use atsgate_extract::{Document, Region};
 
@@ -45,12 +49,33 @@ impl Resume {
     }
 }
 
+const ITEM_SEPARATORS: [char; 5] = [',', ';', '|', '\u{2022}', '\u{00B7}'];
+
+/// `text` split on item separators outside parentheses: "PQC (ML-KEM, ML-DSA), TLS" is two
+/// items, not three.
+fn split_items(text: &str) -> Vec<&str> {
+    let (mut out, mut depth, mut start) = (Vec::new(), 0usize, 0);
+    for (at, c) in text.char_indices() {
+        match c {
+            '(' | '[' => depth += 1,
+            ')' | ']' => depth = depth.saturating_sub(1),
+            c if depth == 0 && ITEM_SEPARATORS.contains(&c) => {
+                out.push(&text[start..at]);
+                start = at + c.len_utf8();
+            }
+            _ => {}
+        }
+    }
+    out.push(&text[start..]);
+    out
+}
+
 fn items(lines: &[(String, LineRef)]) -> Vec<String> {
     lines
         .iter()
         .map(|(text, _)| normalize::bullet_text(text).unwrap_or(text))
         .map(|text| text.split_once(':').map_or(text, |(_, rest)| rest))
-        .flat_map(|text| text.split([',', ';', '|', '\u{2022}', '\u{00B7}']))
+        .flat_map(split_items)
         .map(|item| item.trim().to_owned())
         .filter(|item| !item.is_empty())
         .collect()
@@ -92,11 +117,8 @@ type OpenSection = (SectionKind, LineRef, Vec<(String, LineRef)>);
 pub fn parse(doc: &Document) -> Resume {
     let mut resume = Resume::default();
     let mut open: Option<OpenSection> = None;
-    for (index, line) in doc.lines.iter().enumerate() {
-        let text = normalize(&line.text);
-        if text.is_empty() {
-            continue;
-        }
+    for (index, text) in logical_lines(doc) {
+        let line = &doc.lines[index];
         if matches!(line.region, Region::Header | Region::Footer) {
             resume.header_footer.push(text);
             continue;
@@ -121,4 +143,24 @@ pub fn parse(doc: &Document) -> Resume {
         resume.sections.push(build(k, h, lines));
     }
     resume
+}
+
+#[cfg(test)]
+mod tests {
+    use super::split_items;
+
+    #[test]
+    fn separators_inside_parentheses_do_not_split_items() {
+        let items = split_items("PQC (ML-KEM, ML-DSA), TLS; QUIC | Rust [async, sync]");
+        assert_eq!(
+            items,
+            [
+                "PQC (ML-KEM, ML-DSA)",
+                " TLS",
+                " QUIC ",
+                " Rust [async, sync]"
+            ]
+        );
+        assert_eq!(split_items("a) b, c"), ["a) b", " c"]);
+    }
 }

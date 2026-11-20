@@ -1,0 +1,131 @@
+{
+  "basics": {
+    "name": "Jordan Example",
+    "label": "Backend Engineer",
+    "email": "jordan@example.com",
+    "url": "https://jordan.example.com",
+    "summary": "Backend engineer with eight years of experience building data pipelines, payment APIs and the tooling around them for finance teams. Comfortable owning a service from the first schema to the on-call rotation, and in writing the documentation that lets someone else take it over.",
+    "location": {
+      "city": "Springfield",
+      "region": "Illinois",
+      "countryCode": "US"
+    },
+    "profiles": [
+      { "network": "GitHub", "username": "github.com/jordan-example", "url": "https://github.com/jordan-example", "x-atsgate": { "kind": "identity", "icon": "github" } },
+      { "network": "Ledgerline", "url": "https://ledgerline.example.com", "x-atsgate": { "kind": "product", "icon": "cpu" } }
+    ]
+  },
+  "work": [
+    {
+      "name": "Northwind Analytics",
+      "position": "Senior Software Engineer",
+      "startDate": "2020-01",
+      "location": "Remote",
+      "summary": "Data platform for the finance organization.",
+      "highlights": [
+        "Moved the nightly batch pipelines from Python to Rust and rewrote the scheduler around idempotent steps, cutting compute cost by 30% and the median run from four hours to fifty minutes.",
+        "Designed a PostgreSQL schema for 2M requests/day.",
+        "Ran the incident review program for the data platform."
+      ],
+      "x-atsgate": {
+        "id": "northwind",
+        "sources": ["northwind-letter"],
+        "stats": [{ "label": "cost reduction", "value": "30%", "source": "northwind-letter", "retrieved": "2026-11-20" }],
+        "engagement": "employee",
+        "unit": "Data Platform"
+      }
+    },
+    {
+      "name": "Contoso Labs",
+      "position": "Software Engineer",
+      "startDate": "2016-06",
+      "endDate": "2019-12",
+      "highlights": [
+        "Built REST APIs in Go for internal billing.",
+        "Mentored four junior engineers."
+      ],
+      "x-atsgate": { "id": "contoso", "sources": [] }
+    },
+    {
+      "name": "Fabrikam",
+      "position": "Intern",
+      "highlights": ["Wrote test fixtures."],
+      "x-atsgate": { "id": "fabrikam", "sources": [], "note": "Dates unknown." }
+    }
+  ],
+  "education": [
+    {
+      "institution": "State University",
+      "area": "Computer Science",
+      "studyType": "Bachelor of Science",
+      "startDate": "2012-09",
+      "endDate": "2016-05",
+      "x-atsgate": { "id": "state-university", "sources": [] }
+    }
+  ],
+  "projects": [
+    {
+      "name": "Ledgerline",
+      "description": "An open-source double-entry ledger library.",
+      "highlights": [
+        "Double-entry ledger with property-based tests over every posting rule.",
+        "Used by three internal teams."
+      ],
+      "keywords": ["Rust", "PostgreSQL"],
+      "startDate": "2021-03",
+      "url": "https://ledgerline.example.com",
+      "roles": ["Creator and maintainer"],
+      "x-atsgate": {
+        "id": "ledgerline",
+        "sources": [],
+        "stats": [
+          { "label": "GitHub stars", "value": "1,204", "source": "gh repo view jordan-example/ledgerline", "retrieved": "2026-11-20" },
+          { "label": "crates.io downloads", "value": "48,000", "source": "crates.io API", "retrieved": "2026-11-20" }
+        ],
+        "repo": "https://github.com/jordan-example/ledgerline"
+      }
+    },
+    {
+      "name": "Invoice Linter",
+      "description": "A command-line checker for invoice files.",
+      "highlights": ["Checks 40 invoice rules in under a second."],
+      "x-atsgate": { "id": "invoice-linter", "sources": [] }
+    }
+  ],
+  "publications": [
+    {
+      "name": "Idempotent Batch Pipelines",
+      "publisher": "Example Engineering Blog",
+      "releaseDate": "2023-04",
+      "x-atsgate": { "id": "idempotent-pipelines", "sources": [] }
+    }
+  ],
+  "awards": [
+    {
+      "title": "Engineering Excellence Award",
+      "awarder": "Northwind Analytics",
+      "date": "2022",
+      "x-atsgate": { "id": "excellence", "sources": [], "subject": "northwind" }
+    }
+  ],
+  "skills": [
+    { "name": "Languages", "keywords": ["Rust", "Go", "Python", "SQL"] },
+    { "name": "Data", "keywords": ["PostgreSQL", "Kafka", "Batch scheduling", "Change data capture", "Columnar storage", "Data quality checks", "Idempotent pipelines", "Backfills and replays"] },
+    { "name": "Operations", "keywords": ["Kubernetes", "Terraform", "Incident review"] }
+  ],
+  "x-atsgate": {
+    "version": 1,
+    "sources": {
+      "northwind-letter": { "title": "Northwind employment letter", "path": "evidence/northwind.pdf", "retrieved": "2026-11-20" }
+    },
+    "families": [],
+    "variants": {
+      "summaries": {
+        "data": "Data engineer who builds batch and streaming pipelines for finance."
+      },
+      "titles": {
+        "data": "Senior Data Engineer"
+      }
+    }
+  }
+}
