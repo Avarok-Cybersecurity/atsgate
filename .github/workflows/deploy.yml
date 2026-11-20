@@ -49,7 +49,8 @@ jobs:
           project-name: atsgate-site
           domains: ats.express
           lighthouse: "true"
-          lighthouse-max-urls: "8"
+          # Every processed page (the sitemap is alphabetical, so 8 covered only blueprint pages).
+          lighthouse-max-urls: "22"
           geo-min-score: "90"
           # ats.express is a zone of its own, so every zone-wide optimization is ours to set.
           extra-optimizations: all
@@ -87,7 +88,7 @@ jobs:
           project-name: atsgate-site
           domains: ats.express
           lighthouse: "true"
-          lighthouse-max-urls: "8"
+          lighthouse-max-urls: "22"
           geo-min-score: "90"
           extra-optimizations: all
           deploy: "false"
