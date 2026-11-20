@@ -10,7 +10,7 @@ preprint (not peer-reviewed), **VD** vendor documentation, **IB** industry repor
 
 | id | title | authors | date | url | accessed | grade | supports |
 |---|---|---|---|---|---|---|---|
-| ats-screener-method | ATS Screener scoring methodology, dimensions and thresholds | S. Patel | 2026 | https://github.com/sunnypatell/ats-screener/tree/main/docs/src/content/docs/scoring | 2026-11-20 | CR | Baseline weights and strictness; its pass floors contradict each other between methodology.md and thresholds.md |
+| ats-screener-method | ATS Screener scoring methodology, dimensions and thresholds | S. Patel | 2026 | https://github.com/sunnypatell/ats-screener/tree/main/docs/src/content/docs/scoring | 2026-11-20 | CR | The six vendor profiles' weights and strictness (MIT, at 4fd3009, re-mapped onto ATSGate's dimensions) and default floors from thresholds.md; its pass floors contradict each other between methodology.md and thresholds.md |
 | ats-screener-research | ATS parsing, scoring and platform research notes | S. Patel | 2026-02 | https://github.com/sunnypatell/ats-screener/tree/main/research | 2026-11-20 | CR | Vendor behaviour caveats: Lever and Greenhouse do not auto-score or auto-reject |
 | confit-v2 | ConFit v2: Improving Resume-Job Matching using Hypothetical Resume Embedding and Runner-Up Hard-Negative Mining | Yu, Xu, Xue, Zhang, Ma, Z. Yu | 2025-02 | https://arxiv.org/abs/2502.12361 | 2026-11-20 | AX | BM25 trails dense retrieval on full resume-to-job ranking |
 | confit-v3 | ConFit v3: Improving Resume-Job Matching with LLM-based Re-Ranking | Yu et al. | 2026-05 | https://arxiv.org/abs/2605.09760 | 2026-11-20 | AX | State-of-the-art context; LLMs kept out of deterministic scoring |

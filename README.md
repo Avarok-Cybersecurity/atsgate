@@ -14,6 +14,7 @@ Docs: <a href="https://ats.express">ats.express</a> (coming with v0.1)</p>
 
 - [What it is](#what-it-is)
 - [Quick start](#quick-start)
+- [GitHub Action](#github-action)
 - [Formats](#formats)
 - [Schemas](#schemas)
 - [Rendering](#rendering)
@@ -48,23 +49,82 @@ network.
 | `atsgate-career` | The career SSOT format (JSON Resume plus `x-atsgate`) | Phase 2b |
 | `atsgate-blueprint` | The job blueprint schema, built-ins and generator | Phase 2b / 3 |
 | `atsgate-taxonomy` | Skill and title alias tables from O*NET and ESCO | Phase 3 |
-| `atsgate-score` | Resume x blueprint to a report | Phase 4 |
+| `atsgate-score` | Resume x blueprint to an evidence-carrying report, six simulated vendor scores and the gate | Phase 4 |
 | `atsgate-render` | Career SSOT and tailoring file to resume PDF/DOCX, site partials and JSON-LD, each PDF and DOCX checked by a parse round trip | Phase 2b |
-| `atsgate-cli` | The `atsgate` command: the only crate that performs I/O (`import`, `build`, `inject` today; scoring in phase 4) | Phase 2b / 4 |
+| `atsgate-cli` | The `atsgate` command: the only crate that performs I/O (`import`, `build`, `inject`, `score`, `gate`) | Phase 2b / 4 |
 
 ## Quick start
 
-> **Coming in v0.1.** The action below does not exist yet; this shows the intended interface.
+Render a resume from a career file, score exactly the PDF that was rendered, and fail the job if
+any simulated vendor falls below its floor:
 
 ```yaml
-- uses: Avarok-Cybersecurity/atsgate@v0.1 # pin by SHA once released
+- uses: Avarok-Cybersecurity/atsgate@<release tag or commit> # see "Release binaries" below
+  id: atsgate
   with:
     mode: gate
-    resume: dist/resume.pdf
+    career: career.json
+    tailoring: tailoring/general.yaml
+    contact: public
+    out: dist
     blueprint: builtin:software-engineer-backend
-    fail-on-integrity-flags: true
-    report: atsgate-report.json
+    fail-on-integrity-flags: "true"
+    report: atsgate/report.json
+- uses: actions/upload-artifact@<sha>
+  if: always()
+  with:
+    name: resume
+    path: |
+      dist/
+      atsgate/
 ```
+
+The same from a shell:
+
+```sh
+atsgate gate --career career.json --tailoring tailoring/general.yaml --contact public --out dist \
+  --blueprint builtin:software-engineer-backend --fail-on-integrity-flags true \
+  --as-of today --report atsgate/report.json --summary atsgate/report.md
+atsgate score --resume my-resume.pdf --blueprint generate:posting.txt --floors "taleo=80" \
+  --fail-on-integrity-flags true --as-of today --report report.json --summary report.md
+```
+
+Exit status: 0 when the gate passes, 1 when it fails (the report is still written) or on an
+error, 2 on a usage error.
+
+## GitHub Action
+
+| Input | Modes | Required | Meaning |
+|---|---|---|---|
+| `mode` | all | yes, no default | `build` (render only), `score` (score an existing resume) or `gate` (build, then score the PDF it rendered) |
+| `resume` | score | yes | The PDF or DOCX to score |
+| `career`, `tailoring` | build, gate | yes | The career JSON and the tailoring YAML |
+| `contact` | build, gate | yes | `public`, or a private contact JSON file |
+| `out` | build, gate | yes | Output directory |
+| `allow-private-contact` | build, gate | no (`false`) | A private contact file is refused in CI unless this is `true` |
+| `blueprint` | score, gate | yes | `builtin:ID`, a blueprint file, an `https://` URL, or `generate:FILE-OR-URL` (a job posting; the generated blueprint is written beside the report and marked `reviewed: false`) |
+| `floors` | score, gate | no | Overrides such as `taleo=80, lever=0`; vendors not named keep the default floors below |
+| `fail-on-integrity-flags` | score, gate | yes, no default | `true` or `false`: whether hidden or metadata-only text fails the gate |
+| `report` | score, gate | yes | The JSON report path, ending in `.json`; the markdown summary goes beside it as `.md` and is appended to the job summary |
+
+| Output | Meaning |
+|---|---|
+| `passed` | `true` or `false` |
+| `min-vendor-score` | The lowest of the six vendor scores |
+| `score-json` | The verdict as compact JSON: reasons, and each vendor's score and floor |
+| `report-json` | The report path |
+| `resume-sha256` | The sha256 of the exact file that was scored |
+| `resume-pdf`, `resume-docx`, `partials-dir` | What `build` and `gate` rendered |
+
+"Present" counts through the month the job runs in.
+
+**Release binaries.** Outside this repository the action downloads the `atsgate` binary for the
+runner (Linux x86_64 and arm64, macOS arm64, Windows x86_64) from the GitHub release named in
+[`action/release-pins.txt`](action/release-pins.txt) and refuses it unless its sha256 matches the
+pin. Each binary is built by [`release.yml`](.github/workflows/release.yml) on a `v*` tag with a
+build-provenance attestation (`gh attestation verify <file> --repo Avarok-Cybersecurity/atsgate`).
+A revision with no pins refuses to run rather than fetch an unverified binary. Within this
+repository (`uses: ./`) the action builds from source, which is how CI tests it.
 
 ## Formats
 
@@ -84,8 +144,9 @@ network.
 | [`schemas/blueprint.schema.json`](schemas/blueprint.schema.json) | A job blueprint, aligned with schema.org JobPosting. Every key is required; a value that does not apply is `null` or `[]` |
 | [`schemas/tailoring.schema.json`](schemas/tailoring.schema.json) | A tailoring file (`tailoring/*.yaml`): which career entries, highlights, statistics and variants one resume shows, in order. It only selects, orders and chooses; it has no field that could carry a new fact |
 | [`schemas/contact.schema.json`](schemas/contact.schema.json) | A private contact file: the phone and street that never live in the career file |
+| [`schemas/report.schema.json`](schemas/report.schema.json) | The JSON report of `score` and `gate`: the resume's sha256, every dimension with its evidence, the six vendor scores, knockouts, integrity flags and the verdict |
 
-The schemas are generated from the Rust types in `atsgate-career` and `atsgate-blueprint` (`cargo run -p xtask -- schemas --write`), so the schema and the parser cannot drift: CI fails if the committed copy differs. Unknown fields are errors in all of them.
+The schemas are generated from the Rust types in `atsgate-career`, `atsgate-blueprint` and `atsgate-score` (`cargo run -p xtask -- schemas --write`), so the schema and the parser cannot drift: CI fails if the committed copy differs. Unknown fields are errors in all of them.
 
 ## Rendering
 
@@ -97,6 +158,7 @@ atsgate import --from json-resume --input resume.json --out career.json
 atsgate build --career career.json --tailoring tailoring/general.yaml --contact public --out dist
 
 # Fill <!-- atsgate:NAME --> ... <!-- /atsgate:NAME --> markers in a page with the partials.
+# (score and gate: see Quick start.)
 atsgate inject --partials dist/partials --page site/index.html --out site/index.html
 ```
 
@@ -134,24 +196,47 @@ The resumes under [`fixtures/`](fixtures) are generated by `cargo run -p xtask -
 
 ## Scoring
 
-Scoring arrives in phase 4. In summary, a resume is scored against a blueprint on:
-knockouts (met, unmet or unknown; no points), required and preferred skills (each counted once,
-so stuffing gains nothing), title and seniority, years of experience (the union of dated
-intervals, with **gaps never penalized**), education level and field (institutions never
-weighted), and parse integrity. Integrity flags such as hidden text are reported, never scored up,
-and fail the gate by default.
+Text a reader cannot see (white, tiny, off-page, zero-width or hidden runs) is removed before the
+resume is parsed, so it earns nothing; it is reported as an **integrity flag**. Every number in
+the report names its rule and the page, bounding box and text it came from.
 
-Vendor profiles (Workday, Taleo, iCIMS, Greenhouse, Lever, SuccessFactors) re-weight these
-dimensions. Their starting weights come from [ats-screener](#cite-ats-screener-method), whose own
-documents contradict each other on pass floors. **Every vendor result is simulated**: no vendor
-publishes its scoring, and Greenhouse and Lever document no auto-scoring at all.
+| Dimension | Formula |
+|---|---|
+| R, P: required and preferred skills | Σ w·m·c / Σ w, each skill counted once at its best occurrence. m = 1 canonical name, 0.85 taxonomy alias, 0.5 broader or narrower concept. c = 1 where the blueprint's `evidence_scope` asks for it; 0.8 for a skill an `experience_or_projects` blueprint finds only in the skills list or summary |
+| T: title | The best title match (1 the same words, 0.85 a title of the blueprint's O*NET occupation, 0.5 one in the same SOC broad group) × (1 − \|seniority steps apart\| / 9) |
+| E: years | min(1, relevant years / the blueprint's minimum), years being the union of relevant dated roles (overlaps once, **gaps never subtract**) |
+| D: education | Level and field; institutions and dates are never read |
+| F: parse integrity | max(0, 100 − Σ penalty · σ), penalties per layout signal (image-only page 100, columns 15, tables 12, header or footer content 10, and so on; see `parse.rs`) |
+| Q: quantification | Share of bullets with a number. Reported as a heuristic with no outcome evidence; never scored |
+| Knockouts | Met, unmet or unknown, never points. Unmet fails the gate unless the blueprint says `review` |
+
+Each vendor's score is 100 · Σ weight · dimension over the dimensions the blueprint uses,
+renormalized, rounded to 0.1. The weights and parser strictness σ are adapted from
+[ats-screener](#cite-ats-screener-method) (MIT; see [DATA-LICENSES.md](DATA-LICENSES.md)), and
+the default floors are its `thresholds.md` values, because its own profiles disagree with them:
+
+| Vendor | σ | Default floor | Note |
+|---|---|---|---|
+| Taleo | 0.85 | 75 | |
+| Workday | 0.9 | 70 | |
+| SuccessFactors | 0.85 | 65 | |
+| iCIMS | 0.6 | 60 | |
+| Greenhouse | 0.4 | 50 | no documented auto-scoring |
+| Lever | 0.35 | 50 | no documented auto-scoring |
+
+**Every vendor result is a simulated parse and keyword risk**, not a vendor's score: no vendor
+publishes its scoring. The gate fails when any vendor is below its floor (a score equal to the
+floor passes), any knockout fails, or, with `fail-on-integrity-flags: true`, any integrity flag is
+raised. The weights live in [`vendor.rs`](crates/atsgate-score/src/vendor.rs); a test keeps the
+table above equal to them.
 
 ## Fairness
 
 LLM screeners carry name, school and gap bias ([faire](#cite-faire), [iso-bias](#cite-iso-bias),
 [karvonen](#cite-karvonen), [llm-hire-fairly](#cite-llm-hire-fairly)). ATSGate never reads a
 name, photo, address, school name, graduation year or employment gap as a scoring input, and
-metamorphic tests will prove that changing any of them leaves every score bit-identical.
+metamorphic tests ([`fairness.rs`](crates/atsgate-score/tests/fairness.rs)) show that changing
+any of them leaves every score bit-identical, over every built-in blueprint.
 Because it is deterministic, those properties are checkable rather than statistical.
 
 ## Citations
@@ -160,7 +245,7 @@ Generated from [CITATIONS.md](CITATIONS.md), the single source of truth for sour
 this list drifts.
 
 <!-- citations:begin (generated from CITATIONS.md; do not edit) -->
-- <a id="cite-ats-screener-method"></a>**ats-screener-method**: S. Patel. *ATS Screener scoring methodology, dimensions and thresholds*. 2026. <https://github.com/sunnypatell/ats-screener/tree/main/docs/src/content/docs/scoring> (CR; accessed 2026-11-20). Supports: Baseline weights and strictness; its pass floors contradict each other between methodology.md and thresholds.md.
+- <a id="cite-ats-screener-method"></a>**ats-screener-method**: S. Patel. *ATS Screener scoring methodology, dimensions and thresholds*. 2026. <https://github.com/sunnypatell/ats-screener/tree/main/docs/src/content/docs/scoring> (CR; accessed 2026-11-20). Supports: The six vendor profiles' weights and strictness (MIT, at 4fd3009, re-mapped onto ATSGate's dimensions) and default floors from thresholds.md; its pass floors contradict each other between methodology.md and thresholds.md.
 - <a id="cite-ats-screener-research"></a>**ats-screener-research**: S. Patel. *ATS parsing, scoring and platform research notes*. 2026-02. <https://github.com/sunnypatell/ats-screener/tree/main/research> (CR; accessed 2026-11-20). Supports: Vendor behaviour caveats: Lever and Greenhouse do not auto-score or auto-reject.
 - <a id="cite-confit-v2"></a>**confit-v2**: Yu, Xu, Xue, Zhang, Ma, Z. Yu. *ConFit v2: Improving Resume-Job Matching using Hypothetical Resume Embedding and Runner-Up Hard-Negative Mining*. 2025-02. <https://arxiv.org/abs/2502.12361> (AX; accessed 2026-11-20). Supports: BM25 trails dense retrieval on full resume-to-job ranking.
 - <a id="cite-confit-v3"></a>**confit-v3**: Yu et al.. *ConFit v3: Improving Resume-Job Matching with LLM-based Re-Ranking*. 2026-05. <https://arxiv.org/abs/2605.09760> (AX; accessed 2026-11-20). Supports: State-of-the-art context; LLMs kept out of deterministic scoring.

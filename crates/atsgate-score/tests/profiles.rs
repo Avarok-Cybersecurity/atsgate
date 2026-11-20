@@ -81,3 +81,15 @@ fn reports_label_every_vendor_result_as_simulated() {
     }
     assert_eq!(r.quantification.label, "heuristic, no outcome evidence");
 }
+
+#[test]
+fn the_readme_vendor_table_matches_the_profiles() {
+    let readme = include_str!("../../../README.md");
+    for p in &atsgate_score::PROFILES {
+        let note = p
+            .auto_scoring_note
+            .map_or(" ".to_owned(), |n| format!(" {n} "));
+        let row = format!("| {} | {} | {} |{note}|", p.name, p.sigma, p.floor);
+        assert!(readme.contains(&row), "README lacks {row:?}");
+    }
+}
