@@ -1,0 +1,4 @@
+# The release binaries this revision of the action downloads, one line per runner target:
+#   <version> <asset> <sha256>
+# Written after a release is published, from the .sha256 files attached to it. A revision with
+# no pins refuses to run outside this repository instead of downloading an unverified binary.
