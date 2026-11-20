@@ -159,6 +159,16 @@
         },
         "title": {
           "type": "string"
+        },
+        "x-atsgate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ItemExtension"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
@@ -227,12 +237,41 @@
             "string",
             "null"
           ]
+        },
+        "x-atsgate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BasicsExtension"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
       "required": [
         "name"
       ]
+    },
+    "BasicsExtension": {
+      "description": "Longer and shorter forms of `basics.name`.",
+      "type": "object",
+      "properties": {
+        "full_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "short_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
     },
     "Certificate": {
       "type": "object",
@@ -267,6 +306,37 @@
       "required": [
         "name"
       ]
+    },
+    "Display": {
+      "description": "Presentation hints for a site. The resume renderers never read them.",
+      "type": "object",
+      "properties": {
+        "icon": {
+          "description": "An icon name from the site's own icon set.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "image": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Image"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "logo": {
+          "description": "A site asset path, such as `/logos/acme.svg`.",
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
     },
     "Education": {
       "type": "object",
@@ -344,6 +414,15 @@
         "institution"
       ]
     },
+    "Engagement": {
+      "description": "How a role was held.",
+      "type": "string",
+      "enum": [
+        "employee",
+        "contract",
+        "founder"
+      ]
+    },
     "Extension": {
       "description": "The top-level extension.",
       "type": "object",
@@ -352,6 +431,16 @@
           "type": "array",
           "items": {
             "$ref": "#/$defs/Family"
+          }
+        },
+        "focus_areas": {
+          "description": "Areas of expertise, each a name and a sentence; for a site, not for the resume.",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/FocusArea"
           }
         },
         "sources": {
@@ -406,10 +495,53 @@
         "members"
       ]
     },
+    "FocusArea": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "summary"
+      ]
+    },
     "Id": {
       "description": "A stable identifier: lowercase letters, digits and hyphens.",
       "type": "string",
       "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "Image": {
+      "type": "object",
+      "properties": {
+        "alt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "height": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "format": "uint32",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "alt",
+        "width",
+        "height"
+      ]
     },
     "IsoDate": {
       "description": "ISO 8601 date: YYYY, YYYY-MM or YYYY-MM-DD.",
@@ -417,12 +549,85 @@
       "pattern": "^[1-2][0-9]{3}(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?$"
     },
     "ItemExtension": {
-      "description": "The per-item extension on work, volunteer, education and project entries.",
+      "description": "The extension on one entry. The kind-specific fields are rejected on other kinds.",
       "type": "object",
       "properties": {
+        "category": {
+          "description": "Projects only: a short category line.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "display": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Display"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "engagement": {
+          "description": "Work only.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Engagement"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "highlights": {
+          "description": "Publications only: highlights, as JSON Resume gives work and projects.",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
         "id": {
-          "description": "Referenced by tailoring files and families.",
+          "description": "Referenced by tailoring files, families and awards.",
           "$ref": "#/$defs/Id"
+        },
+        "location": {
+          "description": "Education only: where the institution is.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "note": {
+          "description": "A note for whoever maintains the file. Never rendered.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "number": {
+          "description": "Publications only: an identifier such as a patent number.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "on_resume": {
+          "description": "Whether the source format listed the entry on its resume. Tailoring files decide what a\nresume shows; this keeps an imported file lossless.",
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "repo": {
+          "description": "Projects only: the source repository.",
+          "type": [
+            "string",
+            "null"
+          ]
         },
         "sources": {
           "description": "Ids of entries in the top-level `x-atsgate.sources`.",
@@ -439,6 +644,31 @@
           "items": {
             "$ref": "#/$defs/Stat"
           }
+        },
+        "subject": {
+          "description": "Awards only: the id of the entry this award recognizes.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "summary": {
+          "description": "Education only: a description of the studies.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "unit": {
+          "description": "Work only: the team, division or product inside the organization.",
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "additionalProperties": false,
@@ -570,11 +800,47 @@
             "string",
             "null"
           ]
+        },
+        "x-atsgate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProfileExtension"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
       "required": [
         "network"
+      ]
+    },
+    "ProfileExtension": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "$ref": "#/$defs/ProfileKind"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "kind"
+      ]
+    },
+    "ProfileKind": {
+      "description": "Whether a profile is a way to reach the person or a product they made.",
+      "type": "string",
+      "enum": [
+        "identity",
+        "product"
       ]
     },
     "Project": {
@@ -704,6 +970,16 @@
             "string",
             "null"
           ]
+        },
+        "x-atsgate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ItemExtension"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "additionalProperties": false,
@@ -730,9 +1006,15 @@
       ]
     },
     "Source": {
-      "description": "Where a fact came from. Exactly one of `url` or `path` locates it.",
+      "description": "Where a fact came from. At most one of `url` or `path` locates it; a source with neither is\nan unlocated statement (for example a figure the owner stated) and reads as unverified.",
       "type": "object",
       "properties": {
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
         "path": {
           "type": [
             "string",
@@ -903,6 +1185,7 @@
           ]
         },
         "endDate": {
+          "description": "Absent with a start date means the role is current.",
           "anyOf": [
             {
               "$ref": "#/$defs/IsoDate"
@@ -936,7 +1219,15 @@
           "minLength": 1
         },
         "startDate": {
-          "$ref": "#/$defs/IsoDate"
+          "description": "Absent when the dates are not known; such a role cannot be placed on a dated resume.",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/IsoDate"
+            },
+            {
+              "type": "null"
+            }
+          ]
         },
         "summary": {
           "type": [
@@ -964,8 +1255,7 @@
       "additionalProperties": false,
       "required": [
         "name",
-        "position",
-        "startDate"
+        "position"
       ]
     }
   }

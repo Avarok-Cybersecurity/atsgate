@@ -11,6 +11,17 @@ yanked = "deny"
 ignore = [
     { id = "RUSTSEC-2026-0543", reason = "chrono is unmaintained; reached only through pdf_oxide" },
     { id = "RUSTSEC-2026-0192", reason = "ttf-parser is unmaintained; reached only through pdf_oxide" },
+    # Transitive dependencies of typst 0.15.1 (atsgate-render), which has no features to drop them.
+    # The renderer evaluates one built-in template; career data reaches it only as JSON strings, never
+    # as markup, so bibliographies (hayagriva, citationberg, biblatex), code highlighting (syntect)
+    # and YAML loading are never invoked. Revisit on each typst bump.
+    { id = "RUSTSEC-2026-0194", reason = "quick-xml 0.38 via citationberg: CSL styles are never parsed; the template has no bibliography" },
+    { id = "RUSTSEC-2026-0195", reason = "quick-xml 0.38 via citationberg: CSL styles are never parsed; the template has no bibliography" },
+    { id = "RUSTSEC-2025-0141", reason = "bincode is unmaintained; reached only through typst (syntect)" },
+    { id = "RUSTSEC-2024-0436", reason = "paste is unmaintained; reached only through typst (biblatex)" },
+    { id = "RUSTSEC-2026-0206", reason = "rustybuzz is unmaintained; reached only through typst (krilla, usvg)" },
+    { id = "RUSTSEC-2024-0449", reason = "unsafe-libyaml is unmaintained; reached only through typst (hayagriva)" },
+    { id = "RUSTSEC-2024-0320", reason = "yaml-rust is unmaintained; reached only through typst (syntect)" },
 ]
 
 [licenses]
@@ -39,6 +50,8 @@ exceptions = [
     { allow = ["MPL-2.0"], crate = "cssparser-macros" },
     { allow = ["MPL-2.0"], crate = "dtoa-short" },
     { allow = ["MPL-2.0"], crate = "selectors" },
+    # Public-domain-equivalent, reached only through typst (biblatex). Allowed for this crate only.
+    { allow = ["0BSD", "CC0-1.0"], crate = "roman-numerals-rs" },
 ]
 
 [bans]

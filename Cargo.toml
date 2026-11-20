@@ -25,3 +25,4 @@ atsgate-extract = { path = "crates/atsgate-extract", version = "0.0.1" }
 atsgate-resume = { path = "crates/atsgate-resume", version = "0.0.1" }
 atsgate-blueprint = { path = "crates/atsgate-blueprint", version = "0.0.1" }
 atsgate-career = { path = "crates/atsgate-career", version = "0.0.1" }
+atsgate-render = { path = "crates/atsgate-render", version = "0.0.1" }

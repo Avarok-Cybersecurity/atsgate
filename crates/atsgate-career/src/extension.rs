@@ -44,7 +44,14 @@ impl Id {
     }
 }
 
-/// Where a fact came from. Exactly one of `url` or `path` locates it.
+impl std::fmt::Display for Id {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.write_str(&self.0)
+    }
+}
+
+/// Where a fact came from. At most one of `url` or `path` locates it; a source with neither is
+/// an unlocated statement (for example a figure the owner stated) and reads as unverified.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct Source {
@@ -53,6 +60,7 @@ pub struct Source {
     pub url: Option<String>,
     pub path: Option<String>,
     pub retrieved: IsoDate,
+    pub note: Option<String>,
 }
 
 /// A statistic and the evidence for it. A statistic without a source is invalid.
@@ -68,17 +76,6 @@ pub struct Stat {
     pub source: String,
     pub retrieved: IsoDate,
     pub note: Option<String>,
-}
-
-/// The per-item extension on work, volunteer, education and project entries.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
-#[serde(deny_unknown_fields)]
-pub struct ItemExtension {
-    /// Referenced by tailoring files and families.
-    pub id: Id,
-    /// Ids of entries in the top-level `x-atsgate.sources`.
-    pub sources: Vec<Id>,
-    pub stats: Option<Vec<Stat>>,
 }
 
 /// Related products shown together, by project id.
@@ -108,4 +105,15 @@ pub struct Extension {
     pub sources: BTreeMap<Id, Source>,
     pub families: Vec<Family>,
     pub variants: Variants,
+    /// Areas of expertise, each a name and a sentence; for a site, not for the resume.
+    pub focus_areas: Option<Vec<FocusArea>>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
+#[serde(deny_unknown_fields)]
+pub struct FocusArea {
+    #[schemars(length(min = 1))]
+    pub name: String,
+    #[schemars(length(min = 1))]
+    pub summary: String,
 }

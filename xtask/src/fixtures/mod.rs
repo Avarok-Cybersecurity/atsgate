@@ -61,5 +61,17 @@ pub fn all() -> Result<Vec<(String, Vec<u8>)>, String> {
             docx_package::build(&make())?,
         ));
     }
+    out.push((
+        "fixtures/import/tbraun96.career.json".to_owned(),
+        imported_tbraun96()?.into_bytes(),
+    ));
     Ok(out)
+}
+
+/// The golden import: the committed copy of tbraun96's `content/career.json`, converted.
+fn imported_tbraun96() -> Result<String, String> {
+    const SOURCE: &str = include_str!("../../../fixtures/import/tbraun96-career.json");
+    let career = atsgate_career::import(SOURCE, atsgate_career::ImportFormat::Tbraun96)
+        .map_err(|e| format!("importing the tbraun96 fixture: {e}"))?;
+    career.to_json().map_err(|e| e.to_string())
 }
