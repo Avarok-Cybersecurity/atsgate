@@ -1,0 +1,82 @@
+# Built-in blueprint `builtin:accountant`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: accountant
+version: "1.0.0"
+title: "Accountant"
+title_aliases:
+  - "Staff Accountant"
+  - "Senior Accountant"
+  - "General Ledger Accountant"
+  - "Accounting Officer"
+occupationalCategory: "13-2011.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/eda0d957-3c3c-4139-b89a-a18bc9e18897"
+seniority: mid
+required_skills:
+  - canonical: "accounting"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/ecc18804-a466-40d9-98b4-fba5cd67dd4b"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "prepare financial statements"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/60f51172-37c0-4933-a27a-cbf55dcd7580"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "generally accepted accounting principles"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/d0c425c6-e3de-465e-923d-d4d30ec4be9b"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "Microsoft Excel"
+    taxonomy_ref: "onet-tech:Microsoft Excel"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "financial analysis"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/99571e68-801f-49af-a897-5f75996642e1"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+preferred_skills:
+  - canonical: "QuickBooks"
+    taxonomy_ref: "onet-tech:Intuit QuickBooks"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "NetSuite"
+    taxonomy_ref: "onet-tech:Oracle NetSuite"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Xero"
+    taxonomy_ref: "atsgate:xero"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "tax legislation"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/d669af41-756c-48d9-a286-1443253f54b1"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "internal auditing"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/8804d963-5a31-4609-b5df-f741b7199fb7"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+knockouts: []
+education:
+  min_level: { framework: isced, level: 6 }
+  fields: ["Accounting", "Finance"]
+  experience_in_place_of_education: false
+experience:
+  min_years: 2.0
+  relevant_titles: ["Accountant", "Staff Accountant", "Auditor"]
+certifications: ["CPA"]
+domain_keywords: ["month-end close", "reconciliation", "general ledger"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

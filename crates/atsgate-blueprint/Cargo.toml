@@ -13,10 +13,13 @@ authors.workspace = true
 workspace = true
 
 [dependencies]
+atsgate-taxonomy.workspace = true
 schemars = "1.2.3"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
+serde-saphyr = "=2.1.1"
 thiserror = "2.0.21"
 
 [dev-dependencies]
+atsgate-extract.workspace = true
 jsonschema = { version = "=0.60.2", default-features = false }

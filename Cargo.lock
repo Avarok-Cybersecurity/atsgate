@@ -198,9 +198,12 @@ dependencies = [
 name = "atsgate-blueprint"
 version = "0.0.1"
 dependencies = [
+ "atsgate-extract",
+ "atsgate-taxonomy",
  "jsonschema",
  "schemars",
  "serde",
+ "serde-saphyr",
  "serde_json",
  "thiserror",
 ]
@@ -271,6 +274,14 @@ version = "0.0.1"
 [[package]]
 name = "atsgate-taxonomy"
 version = "0.0.1"
+dependencies = [
+ "ruzstd",
+ "serde",
+ "serde-saphyr",
+ "serde_json",
+ "thiserror",
+ "unicode-normalization",
+]
 
 [[package]]
 name = "autocfg"
@@ -2141,6 +2152,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "nohash-hasher"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2bf50223579dc7cdcfb3bfcacf7069ff68243f8c363f62ffa99cf000a6b9c451"
+
+[[package]]
 name = "nom"
 version = "8.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2966,6 +2983,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "ruzstd"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "69e4ce4a039f42bf25920b95667e4d789e98749ab11bbb8d2c2936f788421bb5"
+
+[[package]]
 name = "ryu"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3065,11 +3088,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d43fb82d550b07e6f929a58d7d0935182602f48ddead875f5ee313c41c8f07fe"
 dependencies = [
  "annotate-snippets",
+ "base64 0.23.1",
  "encoding_rs_io",
  "granit-parser",
+ "nohash-hasher",
  "num-traits",
  "serde_core",
  "smallvec",
+ "zmij",
 ]
 
 [[package]]
@@ -4506,9 +4532,16 @@ version = "0.0.1"
 dependencies = [
  "atsgate-blueprint",
  "atsgate-career",
+ "atsgate-taxonomy",
+ "csv",
+ "flate2",
  "lopdf",
+ "ruzstd",
  "schemars",
+ "serde",
+ "serde-saphyr",
  "serde_json",
+ "sha2",
  "zip",
 ]
 

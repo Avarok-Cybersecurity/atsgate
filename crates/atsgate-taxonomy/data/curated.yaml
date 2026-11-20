@@ -1,0 +1,90 @@
+# ATSGate curated alias table (part of this crate's code: MIT OR Apache-2.0).
+#
+# - skills / titles: `ref` names an imported concept (renamed to `canonical`, `aliases` added) or a
+#   new `atsgate:` concept the imported taxonomies lack, linked into them through `broader`.
+# - denied_aliases: imported aliases that are wrong for their concept.
+# - case_sensitive: phrases that are also ordinary words; in free text they match only with this
+#   exact capitalization and never as the first word of a sentence.
+# - gazetteer_stoplist: phrases too generic to report as a requirement on their own.
+# Every `ref` must exist; loading fails otherwise.
+version: "2026-11-20"
+skills:
+  # Programming languages
+  - { canonical: Rust, ref: "onet-tech:Rust programming language", aliases: [Rust lang, Rust-lang, rustlang, Rust language], broader: [] }
+  - { canonical: JavaScript, ref: "onet-tech:JavaScript", aliases: [JS, ECMAScript, ES6], broader: [] }
+  - { canonical: TypeScript, ref: "onet-tech:TypeScript", aliases: [], broader: [] }
+  - { canonical: Python, ref: "onet-tech:Python", aliases: [Python 3, Python3], broader: [] }
+  - { canonical: Go, ref: "onet-tech:Go", aliases: [Golang, Go lang], broader: [] }
+  - { canonical: C++, ref: "onet-tech:C++", aliases: [cpp, CPP], broader: [] }
+  - { canonical: Java, ref: "onet-tech:Oracle Java", aliases: [], broader: [] }
+  - { canonical: SQL, ref: "onet-tech:Structured query language SQL", aliases: [], broader: [] }
+  - { canonical: HTML, ref: "onet-tech:Hypertext markup language HTML", aliases: [HTML5], broader: [] }
+  - { canonical: CSS, ref: "onet-tech:Cascading style sheets CSS", aliases: [CSS3], broader: [] }
+  - { canonical: Sass, ref: "onet-tech:Syntactically awesome style sheets SASS", aliases: [SASS, SCSS], broader: [] }
+  - { canonical: MATLAB, ref: "onet-tech:The MathWorks MATLAB", aliases: [], broader: [] }
+  # Frameworks and libraries
+  - { canonical: React, ref: "onet-tech:React", aliases: [React.js, ReactJS], broader: [] }
+  - { canonical: Vue.js, ref: "onet-tech:Vue.js", aliases: [VueJS, Vue], broader: [] }
+  - { canonical: Angular, ref: "onet-tech:Google Angular", aliases: [AngularJS], broader: [] }
+  - { canonical: Node.js, ref: "onet-tech:Node.js", aliases: [NodeJS, Node JS], broader: [] }
+  - { canonical: Redux, ref: "onet-tech:React Redux", aliases: [], broader: [] }
+  - { canonical: scikit-learn, ref: "onet-tech:Scikit-learn", aliases: [sklearn, scikit learn], broader: [] }
+  - { canonical: Jupyter, ref: "onet-tech:Jupyter Notebook", aliases: [Jupyter Notebooks], broader: [] }
+  - { canonical: Hugging Face, ref: "onet-tech:Hugging Face", aliases: [HuggingFace, Hugging Face Transformers], broader: [] }
+  - { canonical: MLflow, ref: "onet-tech:Mlflow", aliases: [], broader: [] }
+  # Infrastructure and data
+  - { canonical: Kubernetes, ref: "onet-tech:Kubernetes", aliases: [k8s, kube], broader: [] }
+  - { canonical: PostgreSQL, ref: "onet-tech:PostgreSQL", aliases: [Postgres, Postgre, psql], broader: [] }
+  - { canonical: AWS, ref: "onet-tech:Amazon Web Services AWS software", aliases: [Amazon Web Services], broader: [] }
+  - { canonical: Microsoft Azure, ref: "onet-tech:Microsoft Azure software", aliases: [Azure], broader: [] }
+  - { canonical: Google Cloud, ref: "onet-tech:Google Cloud software", aliases: [GCP, Google Cloud Platform], broader: [] }
+  - { canonical: Apache Kafka, ref: "onet-tech:Apache Kafka", aliases: [Kafka], broader: [] }
+  - { canonical: Apache Spark, ref: "onet-tech:Apache Spark", aliases: [Spark, PySpark], broader: [] }
+  - { canonical: Terraform, ref: "onet-tech:IBM Terraform", aliases: [HashiCorp Terraform], broader: [] }
+  - { canonical: Grafana, ref: "onet-tech:Grafana Labs Grafana Cloud", aliases: [], broader: [] }
+  - { canonical: Jenkins, ref: "onet-tech:Jenkins CI", aliases: [], broader: [] }
+  - { canonical: Jira, ref: "onet-tech:Atlassian JIRA", aliases: [JIRA], broader: [] }
+  - { canonical: Confluence, ref: "onet-tech:Atlassian Confluence", aliases: [], broader: [] }
+  - { canonical: Power BI, ref: "onet-tech:Microsoft Power BI", aliases: [PowerBI], broader: [] }
+  - { canonical: Looker, ref: "onet-tech:Google Looker Analytics", aliases: [], broader: [] }
+  - { canonical: Stata, ref: "onet-tech:StataCorp Stata", aliases: [], broader: [] }
+  - { canonical: SPSS, ref: "onet-tech:IBM SPSS Statistics", aliases: [], broader: [] }
+  # Business software
+  - { canonical: Microsoft Excel, ref: "onet-tech:Microsoft Excel", aliases: [Excel, MS Excel], broader: [] }
+  - { canonical: Microsoft Office, ref: "onet-tech:Microsoft Office software", aliases: [MS Office, Office 365, Microsoft 365], broader: [] }
+  - { canonical: QuickBooks, ref: "onet-tech:Intuit QuickBooks", aliases: [Intuit QuickBooks], broader: [] }
+  - { canonical: NetSuite, ref: "onet-tech:Oracle NetSuite", aliases: [], broader: [] }
+  - { canonical: Salesforce, ref: "onet-tech:Salesforce software", aliases: [Salesforce CRM, SFDC], broader: [] }
+  - { canonical: HubSpot, ref: "onet-tech:HubSpot software", aliases: [], broader: [] }
+  - { canonical: Marketo, ref: "onet-tech:Marketo Marketing Automation", aliases: [], broader: [] }
+  - { canonical: Google Ads, ref: "onet-tech:Google Ads", aliases: [AdWords, Google AdWords], broader: [] }
+  - { canonical: InVision, ref: "onet-tech:InVision software", aliases: [], broader: [] }
+  - { canonical: generally accepted accounting principles, ref: "http://data.europa.eu/esco/skill/d0c425c6-e3de-465e-923d-d4d30ec4be9b", aliases: [GAAP, US GAAP], broader: [] }
+  - { canonical: Westlaw, ref: "onet-tech:Thomson Reuters Westlaw", aliases: [], broader: [] }
+  - { canonical: PACER, ref: "onet-tech:Public Access to Court Electronic Records (PACER)", aliases: [], broader: [] }
+  - { canonical: Unreal Engine, ref: "onet-tech:Unreal Technology Unreal Engine", aliases: [Unreal, UE5], broader: [] }
+  - { canonical: SolidWorks, ref: "onet-tech:Dassault Systemes SolidWorks", aliases: [Solidworks], broader: [] }
+  # Not in O*NET 31.0 or ESCO v1.2.1: curated concepts linked to the O*NET software category
+  - { canonical: CUDA, ref: "atsgate:cuda", aliases: [NVIDIA CUDA], broader: ["onet:2.E.7.b"] }
+  - { canonical: Tauri, ref: "atsgate:tauri", aliases: [], broader: ["onet:2.E.7.d"] }
+  - { canonical: egui, ref: "atsgate:egui", aliases: [], broader: ["onet:2.E.7.d"] }
+  - { canonical: Tokio, ref: "atsgate:tokio", aliases: [], broader: ["onet:2.E.7.e"] }
+  - { canonical: WebAssembly, ref: "atsgate:webassembly", aliases: [Wasm, WASM], broader: ["onet:2.E.7.h"] }
+  - { canonical: WebGPU, ref: "atsgate:webgpu", aliases: [], broader: ["onet:2.E.7.d"] }
+  - { canonical: Next.js, ref: "atsgate:nextjs", aliases: [NextJS], broader: ["onet:2.E.7.h"] }
+  - { canonical: gRPC, ref: "atsgate:grpc", aliases: [], broader: ["onet:2.E.10.a"] }
+  - { canonical: ONNX, ref: "atsgate:onnx", aliases: [ONNX Runtime], broader: ["onet:2.E.9.d"] }
+  - { canonical: TensorRT, ref: "atsgate:tensorrt", aliases: [NVIDIA TensorRT], broader: ["onet:2.E.9.d"] }
+  - { canonical: vLLM, ref: "atsgate:vllm", aliases: [], broader: ["onet:2.E.9.d"] }
+  - { canonical: Xero, ref: "atsgate:xero", aliases: [], broader: ["onet:2.E.2.a"] }
+  - { canonical: Clio, ref: "atsgate:clio", aliases: [], broader: ["onet:2.E.9.n"] }
+titles:
+  # O*NET labels are plural and its reported titles omit the singular.
+  - { canonical: Data Scientists, ref: "onet-soc:15-2051.00", aliases: [Data Scientist], broader: [] }
+denied_aliases:
+  # "open source" in a posting is not the Source game engine.
+  - { ref: "http://data.europa.eu/esco/skill/c8d53d69-d900-4092-af80-c5d0422bcdb3", alias: Source }
+  # Mocha is a JavaScript test framework, not JavaScript.
+  - { ref: "http://data.europa.eu/esco/skill/3cd569a2-4f88-4c1e-9995-8dce8c5e51a7", alias: Mocha }
+case_sensitive: [Go, Rust, React, Swift, Spark, Excel, Unity, Ruby, R, C, Slack, Clio, Vue, Angular, Jenkins, Looker, Confluence, Grafana, Unreal, Redux, Stata, Java]
+gazetteer_stoplist: [Writing, Speaking, Monitoring, Coordination, Installation, Instructing, Science, Mechanical, Administrative, Design, Repairing, Learning Strategies, Active Learning]

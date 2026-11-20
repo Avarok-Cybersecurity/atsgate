@@ -1,0 +1,101 @@
+# Built-in blueprint `builtin:paralegal`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: paralegal
+version: "1.0.0"
+title: "Paralegal"
+title_aliases:
+  - "Legal Assistant"
+  - "Litigation Paralegal"
+  - "Corporate Paralegal"
+occupationalCategory: "23-2011.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/929ef41d-afd0-4d5a-b85b-69eab68fa368"
+seniority: mid
+required_skills:
+  - canonical: "legal research"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/a8585efe-4011-47b2-9aed-cd01bd3652c0"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "Westlaw"
+    taxonomy_ref: "onet-tech:Thomson Reuters Westlaw"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "LexisNexis"
+    taxonomy_ref: "onet-tech:LexisNexis"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "compile legal documents"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/1d7234e4-1c76-4d67-9487-71d8c529cdc9"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "legal terminology"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/c7e686a1-d03e-4641-a229-68247fdc5887"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Microsoft Word"
+    taxonomy_ref: "onet-tech:Microsoft Word"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+preferred_skills:
+  - canonical: "legal case management"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/66aad490-1c20-4e25-b189-634a218ee53e"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "PACER"
+    taxonomy_ref: "onet-tech:Public Access to Court Electronic Records (PACER)"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Clio"
+    taxonomy_ref: "atsgate:clio"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Relativity e-Discovery"
+    taxonomy_ref: "onet-tech:Relativity e-Discovery"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "iManage document management software"
+    taxonomy_ref: "onet-tech:iManage document management software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "contract law"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/5c606d18-6404-4047-b235-350f18e11827"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "assist with litigation matters"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/3a7c95ef-0adc-4dff-a1a3-1e56f1e9ea03"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Adobe Acrobat"
+    taxonomy_ref: "onet-tech:Adobe Acrobat"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+knockouts: []
+education:
+  min_level: { framework: isced, level: 5 }
+  fields: ["Paralegal Studies", "Legal Studies"]
+  experience_in_place_of_education: true
+experience:
+  min_years: 2.0
+  relevant_titles: ["Paralegal", "Legal Assistant"]
+certifications: ["Certified Paralegal"]
+domain_keywords: ["discovery", "court filings", "case files"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

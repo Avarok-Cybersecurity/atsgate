@@ -1,20 +1,24 @@
 //! Repository maintenance tasks. This binary is the I/O boundary; the generators it calls are pure.
 
 mod citations;
+mod eval;
+mod examples;
+mod fetch;
 mod fixtures;
 mod schemas;
+mod taxonomy;
 
 use std::path::Path;
 use std::process::ExitCode;
 
 /// Whether a task writes its generated output or only verifies the committed copy.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-enum Mode {
+pub enum Mode {
     Write,
     Check,
 }
 
-fn parse_mode(flag: Option<&str>) -> Result<Mode, String> {
+pub fn parse_mode(flag: Option<&str>) -> Result<Mode, String> {
     match flag {
         Some("--write") => Ok(Mode::Write),
         Some("--check") => Ok(Mode::Check),
@@ -22,14 +26,14 @@ fn parse_mode(flag: Option<&str>) -> Result<Mode, String> {
     }
 }
 
-fn root() -> &'static Path {
+pub fn root() -> &'static Path {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .parent()
         .expect("xtask lives one level below the repository root")
 }
 
 /// Writes `expected` to `path`, or in check mode fails when the committed file differs or is missing.
-fn sync_file(path: &Path, expected: &[u8], mode: Mode) -> Result<(), String> {
+pub fn sync_file(path: &Path, expected: &[u8], mode: Mode) -> Result<(), String> {
     let current = match std::fs::read(path) {
         Ok(bytes) => Some(bytes),
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => None,
@@ -69,14 +73,20 @@ fn run_citations(mode: Mode) -> Result<(), String> {
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
     let task = args.first().map(String::as_str);
-    let result = parse_mode(args.get(1).map(String::as_str)).and_then(|mode| match task {
-        Some("citations") => run_citations(mode),
-        Some("fixtures") => fixtures::all().and_then(|f| sync_all(f, mode)),
-        Some("schemas") => schemas::all().and_then(|f| sync_all(f, mode)),
-        other => Err(format!(
-            "unknown task {other:?}; tasks: citations, fixtures, schemas"
-        )),
-    });
+    let flag = args.get(1).map(String::as_str);
+    let result = match task {
+        Some("taxonomy") => taxonomy::run(flag),
+        _ => parse_mode(flag).and_then(|mode| match task {
+            Some("citations") => run_citations(mode),
+            Some("fixtures") => fixtures::all().and_then(|f| sync_all(f, mode)),
+            Some("schemas") => schemas::all().and_then(|f| sync_all(f, mode)),
+            Some("examples") => examples::all().and_then(|f| sync_all(f, mode)),
+            Some("eval") => eval::run(mode),
+            other => Err(format!(
+                "unknown task {other:?}; tasks: citations, eval, examples, fixtures, schemas, taxonomy"
+            )),
+        }),
+    };
     match result {
         Ok(()) => ExitCode::SUCCESS,
         Err(message) => {
