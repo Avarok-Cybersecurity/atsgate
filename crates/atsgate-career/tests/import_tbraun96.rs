@@ -117,3 +117,34 @@ fn a_field_the_importer_does_not_know_fails_rather_than_vanishing() {
     let err = import(&doc.to_string(), ImportFormat::Tbraun96).expect_err("half-known dates");
     assert!(matches!(err, ImportError::Unrepresentable { .. }), "{err}");
 }
+
+#[test]
+fn title_variants_become_the_careers_title_variants() {
+    let source: Value = serde_json::from_str(SOURCE).expect("source is JSON");
+    let career = imported();
+    assert_eq!(career.basics.name, "Thomas Braun");
+    let titles = &career.extension.variants.titles;
+    let want = source["person"]["titleVariants"]
+        .as_object()
+        .expect("variants");
+    assert_eq!(titles.len(), want.len());
+    assert!(!titles.is_empty());
+    for (id, title) in titles {
+        assert_eq!(want[id.as_str()], Value::from(title.as_str()), "{id:?}");
+    }
+}
+
+#[test]
+fn the_old_short_name_shape_and_a_bad_variant_id_are_refused() {
+    let mut doc: Value = serde_json::from_str(SOURCE).expect("source is JSON");
+    doc["person"]["shortName"] = Value::from("Thomas P. Braun");
+    let err = import(&doc.to_string(), ImportFormat::Tbraun96).expect_err("removed field");
+    assert!(matches!(err, ImportError::Parse { .. }), "{err}");
+    let mut doc: Value = serde_json::from_str(SOURCE).expect("source is JSON");
+    doc["person"]["titleVariants"]["Rust Systems!"] = Value::from("Rust Engineer");
+    let err = import(&doc.to_string(), ImportFormat::Tbraun96).expect_err("bad id");
+    assert!(
+        matches!(&err, ImportError::Unrepresentable { item, .. } if item == "person.titleVariants.Rust Systems!"),
+        "{err}"
+    );
+}

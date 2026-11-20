@@ -42,12 +42,24 @@ fn location(text: &str) -> Result<Location, ImportError> {
     })
 }
 
-fn basics(person: Person, summary: String) -> Result<Basics, ImportError> {
+/// The variant ids, checked like every other id in the career file.
+fn titles(variants: BTreeMap<String, String>) -> Result<BTreeMap<Id, String>, ImportError> {
+    variants
+        .into_iter()
+        .map(|(key, title)| {
+            let field = format!("person.titleVariants.{key}");
+            let id = Id::try_from(key).map_err(|e| ImportError::unrepresentable(&field, e))?;
+            Ok((id, title))
+        })
+        .collect()
+}
+
+fn basics(person: Person, summary: String) -> Result<(Basics, BTreeMap<Id, String>), ImportError> {
     let Person {
         name,
         full_name,
-        short_name,
         headline,
+        title_variants,
         email,
         website,
         profiles,
@@ -70,7 +82,7 @@ fn basics(person: Person, summary: String) -> Result<Basics, ImportError> {
             }),
         },
     );
-    Ok(Basics {
+    let basics = Basics {
         name,
         label: Some(headline),
         image: None,
@@ -82,9 +94,9 @@ fn basics(person: Person, summary: String) -> Result<Basics, ImportError> {
         profiles: Some(profiles.collect()),
         extension: Some(BasicsExtension {
             full_name: Some(full_name),
-            short_name: Some(short_name),
         }),
-    })
+    };
+    Ok((basics, titles(title_variants)?))
 }
 
 fn sources(map: BTreeMap<String, SiteSource>) -> Result<BTreeMap<Id, Source>, ImportError> {
@@ -124,6 +136,7 @@ pub fn convert(site: SiteCareer) -> Result<Career, ImportError> {
         skills,
         sources: srcs,
     } = site;
+    let (basics, titles) = basics(person, summary)?;
     let mut ids = Ids::default();
     let work = experience
         .into_iter()
@@ -152,7 +165,7 @@ pub fn convert(site: SiteCareer) -> Result<Career, ImportError> {
     });
     Ok(Career {
         schema: None,
-        basics: basics(person, summary)?,
+        basics,
         work: Some(work),
         volunteer: None,
         education: Some(education),
@@ -171,7 +184,7 @@ pub fn convert(site: SiteCareer) -> Result<Career, ImportError> {
             families: Vec::new(),
             variants: Variants {
                 summaries: BTreeMap::new(),
-                titles: BTreeMap::new(),
+                titles,
             },
             focus_areas: Some(focus.collect()),
         },

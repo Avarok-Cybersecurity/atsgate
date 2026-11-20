@@ -67,8 +67,7 @@
     "summary": "Rust systems engineer and founder with eight years building a family of inter-related open source products: the Atlas Inference Engine (pure Rust and CUDA LLM inference, submitted to MLPerf Inference v6.1 on NVIDIA and AMD), the patented post-quantum Citadel Protocol, the Citadel Workspace built on it, and the browser-side tools around them. Expertise in GPU kernel optimization, quantization, applied post-quantum and threshold cryptography, asynchronous networking and peer-to-peer systems.",
     "url": "https://thomaspbraun.com",
     "x-atsgate": {
-      "full_name": "Thomas Phillip Braun",
-      "short_name": "Thomas P. Braun"
+      "full_name": "Thomas Phillip Braun"
     }
   },
   "education": [
@@ -1124,7 +1123,11 @@
     },
     "variants": {
       "summaries": {},
-      "titles": {}
+      "titles": {
+        "founding-rust": "Founding Rust Engineer | Shipped LLM Inference, Post-Quantum Networking and Local-First Products",
+        "inference": "Inference Engineer | Rust and CUDA LLM Serving, Hand-Tuned GPU Kernels",
+        "rust-systems": "Senior Rust Systems Engineer | LLM Inference, GPU Kernels, Post-Quantum Peer-to-Peer"
+      }
     },
     "version": 1
   }

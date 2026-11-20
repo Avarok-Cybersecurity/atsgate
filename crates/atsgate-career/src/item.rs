@@ -116,10 +116,9 @@ pub struct ProfileExtension {
     pub icon: Option<String>,
 }
 
-/// Longer and shorter forms of `basics.name`.
+/// The longer form of `basics.name`, which is the name a resume prints.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, JsonSchema)]
 #[serde(deny_unknown_fields)]
 pub struct BasicsExtension {
     pub full_name: Option<String>,
-    pub short_name: Option<String>,
 }

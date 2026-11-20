@@ -255,16 +255,10 @@
       ]
     },
     "BasicsExtension": {
-      "description": "Longer and shorter forms of `basics.name`.",
+      "description": "The longer form of `basics.name`, which is the name a resume prints.",
       "type": "object",
       "properties": {
         "full_name": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "short_name": {
           "type": [
             "string",
             "null"
