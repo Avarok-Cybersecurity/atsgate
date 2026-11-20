@@ -1,6 +1,8 @@
 //! Date ranges as resumes write them: "Jan 2020 - Present", "06/2016 - 12/2019", "2012 - 2016",
 //! "2016-06 to 2019-12", "Sept. 2019 - now", or a single date such as a graduation year.
 
+use crate::tokens::{cut, tokens};
+
 /// A year with an optional month (1-12).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub struct PartialDate {
@@ -62,7 +64,7 @@ fn year(word: &str) -> Option<u16> {
 }
 
 /// "06/2016", "6/2016" or "2016-06": a month and year in one token.
-fn numeric_month(word: &str) -> Option<PartialDate> {
+pub(crate) fn numeric_month(word: &str) -> Option<PartialDate> {
     let w = word.trim_end_matches([',', '.']);
     let (m, y) = match (w.split_once('/'), w.split_once('-')) {
         (Some((m, y)), _) => (m, y),
@@ -74,26 +76,6 @@ fn numeric_month(word: &str) -> Option<PartialDate> {
         year: year(y)?,
         month: Some(month),
     })
-}
-
-/// Splits words, and splits dashes off everything but an ISO year-month ("2016-06").
-fn tokens(text: &str) -> Vec<String> {
-    let mut out = Vec::new();
-    for word in text.split_whitespace() {
-        if numeric_month(word).is_some() {
-            out.push(word.to_owned());
-            continue;
-        }
-        for (i, part) in word.split('-').enumerate() {
-            if i > 0 {
-                out.push("-".to_owned());
-            }
-            if !part.is_empty() {
-                out.push(part.to_owned());
-            }
-        }
-    }
-    out
 }
 
 /// A date starting at `t[i]`, with the number of tokens it used.
@@ -131,7 +113,7 @@ fn end_at(t: &[String], i: usize) -> Option<(DateEnd, usize)> {
 
 /// The first date range in `text`, and the text with it removed.
 pub fn find_range(text: &str) -> Option<(DateRange, String)> {
-    let t = tokens(text);
+    let (t, at) = tokens(text);
     for i in 0..t.len() {
         let Some((start, used)) = date_at(&t, i) else {
             continue;
@@ -144,7 +126,7 @@ pub fn find_range(text: &str) -> Option<(DateRange, String)> {
             continue;
         }
         if let Some((end, used_end)) = end_at(&t, sep + 1) {
-            let rest = [&t[..i], &t[sep + 1 + used_end..]].concat().join(" ");
+            let rest = cut(text, &at, i, sep + 1 + used_end);
             return Some((DateRange { start, end }, rest));
         }
     }
@@ -153,16 +135,15 @@ pub fn find_range(text: &str) -> Option<(DateRange, String)> {
 
 /// A single trailing date ("2016", "May 2016") as a one-point range, for header lines only.
 pub fn find_single(text: &str) -> Option<(DateRange, String)> {
-    let t = tokens(text);
+    let (t, at) = tokens(text);
     (0..t.len()).rev().find_map(|i| {
         let (d, used) = date_at(&t, i).filter(|(_, used)| i + used == t.len())?;
-        let _ = used;
         Some((
             DateRange {
                 start: d,
                 end: DateEnd::Date(d),
             },
-            t[..i].join(" "),
+            cut(text, &at, i, i + used),
         ))
     })
 }

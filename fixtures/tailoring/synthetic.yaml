@@ -1,0 +1,16 @@
+# A data-engineering resume selected from fixtures/career/synthetic.career.json.
+version: 1
+blueprint: builtin:data-engineering
+title: { variant: data }
+summary: basics
+max_pages: 1
+work:
+  - { id: northwind, highlights: [0, 1], stats: [0] }
+  - { id: contoso, highlights: [1, 0], stats: [] }
+projects:
+  - { id: ledgerline, highlights: [0], stats: [0, 1] }
+  - { id: invoice-linter, highlights: [0], stats: [] }
+skills: [Data, Languages]
+education: [state-university]
+publications: [idempotent-pipelines]
+awards: [excellence]

@@ -16,6 +16,7 @@ Docs: <a href="https://ats.express">ats.express</a> (coming with v0.1)</p>
 - [Quick start](#quick-start)
 - [Formats](#formats)
 - [Schemas](#schemas)
+- [Rendering](#rendering)
 - [Test fixtures](#test-fixtures)
 - [Scoring](#scoring)
 - [Fairness](#fairness)
@@ -47,8 +48,8 @@ network.
 | `atsgate-blueprint` | The job blueprint schema, built-ins and generator | Phase 2b / 3 |
 | `atsgate-taxonomy` | Skill and title alias tables from O*NET and ESCO | Phase 3 |
 | `atsgate-score` | Resume x blueprint to a report | Phase 4 |
-| `atsgate-render` | Career SSOT to resume PDF/DOCX and site partials | Phase 2b+ |
-| `atsgate-cli` | The `atsgate` command: the only crate that performs I/O | Phase 4 |
+| `atsgate-render` | Career SSOT and tailoring file to resume PDF/DOCX, site partials and JSON-LD, each PDF and DOCX checked by a parse round trip | Phase 2b |
+| `atsgate-cli` | The `atsgate` command: the only crate that performs I/O (`import`, `build`, `inject` today; scoring in phase 4) | Phase 2b / 4 |
 
 ## Quick start
 
@@ -80,8 +81,29 @@ network.
 |---|---|
 | [`schemas/career.schema.json`](schemas/career.schema.json) | The career SSOT: a JSON Resume document plus an `x-atsgate` block (sources, statistics with a required source, families, variants) |
 | [`schemas/blueprint.schema.json`](schemas/blueprint.schema.json) | A job blueprint, aligned with schema.org JobPosting. Every key is required; a value that does not apply is `null` or `[]` |
+| [`schemas/tailoring.schema.json`](schemas/tailoring.schema.json) | A tailoring file (`tailoring/*.yaml`): which career entries, highlights, statistics and variants one resume shows, in order. It only selects, orders and chooses; it has no field that could carry a new fact |
+| [`schemas/contact.schema.json`](schemas/contact.schema.json) | A private contact file: the phone and street that never live in the career file |
 
-Both schemas are generated from the Rust types in `atsgate-career` and `atsgate-blueprint` (`cargo run -p xtask -- schemas --write`), so the schema and the parser cannot drift: CI fails if the committed copy differs. Unknown fields are errors in both.
+The schemas are generated from the Rust types in `atsgate-career` and `atsgate-blueprint` (`cargo run -p xtask -- schemas --write`), so the schema and the parser cannot drift: CI fails if the committed copy differs. Unknown fields are errors in all of them.
+
+## Rendering
+
+```sh
+# Convert a JSON Resume (or the tbraun96 site format) into a career file; every field is mapped.
+atsgate import --from json-resume --input resume.json --out career.json
+
+# Render one tailoring of it. --contact is `public` or a private contact file.
+atsgate build --career career.json --tailoring tailoring/general.yaml --contact public --out dist
+
+# Fill <!-- atsgate:NAME --> ... <!-- /atsgate:NAME --> markers in a page with the partials.
+atsgate inject --partials dist/partials --page site/index.html --out site/index.html
+```
+
+`build` writes `resume.pdf`, `resume.docx`, `partials/{experience,projects,skills,education}.html`, `partials/jsonld.json` (schema.org `Person` with `hasOccupation`, `worksFor` and `alumniOf`) and `manifest.json` with the SHA-256 of each file. Output is byte-for-byte reproducible.
+
+- **One column, real text.** The PDF is typeset by [Typst](https://typst.app) embedded as a library, with one built-in template: standard headings, contact details in the body, no tables, dates as `Mon YYYY - Mon YYYY` or `Mon YYYY - Present`. Career text reaches the template only as data, never as markup.
+- **Round trip.** Before anything is written, the PDF and the DOCX are read back through `atsgate-extract` and `atsgate-resume`. Every section, entry, date, bullet and skill must come back in order, with no integrity flag, no layout-risk signal and no unrecognized heading, or the build fails.
+- **Contact profiles.** `public` prints city and region, email, website and identity profiles. A private contact file adds the phone and street. A phone, street or postal code in the career file itself is an error. In CI (`GITHUB_ACTIONS=true`) a private contact file is refused unless `--allow-private-contact` is passed.
 
 ## Test fixtures
 

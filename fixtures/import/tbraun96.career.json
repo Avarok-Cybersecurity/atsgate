@@ -1,0 +1,1131 @@
+{
+  "awards": [
+    {
+      "awarder": "Swanson Reed",
+      "summary": "Recognized as Patent of the Month by Swanson Reed, the largest R&D tax advisory firm in the United States.",
+      "title": "Delaware Patent of the Month",
+      "x-atsgate": {
+        "id": "delaware-patent-of-the-month",
+        "sources": [],
+        "subject": "us-patent-12-224-993-b2"
+      }
+    }
+  ],
+  "basics": {
+    "email": "thomas@avarok.net",
+    "label": "AI Inference Innovator & Rust Expert",
+    "location": {
+      "city": "Charlotte",
+      "countryCode": "US",
+      "region": "North Carolina"
+    },
+    "name": "Thomas Braun",
+    "profiles": [
+      {
+        "network": "Atlas Inference Engine",
+        "url": "https://atlasinference.io",
+        "x-atsgate": {
+          "icon": "cpu",
+          "kind": "product"
+        }
+      },
+      {
+        "network": "GitHub",
+        "url": "https://github.com/tbraun96",
+        "username": "github.com/tbraun96",
+        "x-atsgate": {
+          "icon": "github",
+          "kind": "identity"
+        }
+      },
+      {
+        "network": "LinkedIn",
+        "url": "https://linkedin.com/in/tpbraun",
+        "username": "linkedin.com/in/tpbraun",
+        "x-atsgate": {
+          "icon": "linkedin",
+          "kind": "identity"
+        }
+      },
+      {
+        "network": "CertifiedCopy",
+        "url": "https://certified.sh",
+        "x-atsgate": {
+          "icon": "filecheck",
+          "kind": "product"
+        }
+      },
+      {
+        "network": "Medium Blog",
+        "url": "https://blog.thomaspbraun.com/",
+        "x-atsgate": {
+          "icon": "medium",
+          "kind": "identity"
+        }
+      }
+    ],
+    "summary": "Rust systems engineer and founder with eight years building a family of inter-related open source products: the Atlas Inference Engine (pure Rust and CUDA LLM inference, submitted to MLPerf Inference v6.1 on NVIDIA and AMD), the patented post-quantum Citadel Protocol, the Citadel Workspace built on it, and the browser-side tools around them. Expertise in GPU kernel optimization, quantization, applied post-quantum and threshold cryptography, asynchronous networking and peer-to-peer systems.",
+    "url": "https://thomaspbraun.com",
+    "x-atsgate": {
+      "full_name": "Thomas Phillip Braun",
+      "short_name": "Thomas P. Braun"
+    }
+  },
+  "education": [
+    {
+      "area": "Geospatial Sciences and Geography",
+      "endDate": "2020",
+      "institution": "Oregon State University",
+      "studyType": "Bachelor of Science",
+      "x-atsgate": {
+        "display": {
+          "logo": "/logos/oregon-state-logo.svg"
+        },
+        "id": "oregon-state-university",
+        "location": "Corvallis, Oregon",
+        "on_resume": true,
+        "sources": [
+          "resume-2026-06",
+          "site-2026-11"
+        ],
+        "summary": "Specialized in Geographic Information Systems (GIS) and spatial data analysis, providing a foundation for work with location-based systems and mapping technologies."
+      }
+    },
+    {
+      "area": "Physics",
+      "institution": "California Polytechnic State University",
+      "studyType": "Studies in Physics",
+      "x-atsgate": {
+        "display": {
+          "logo": "/logos/cal-poly-logo.svg"
+        },
+        "id": "california-polytechnic-state-university",
+        "location": "San Luis Obispo, California",
+        "on_resume": false,
+        "sources": [
+          "site-2026-11"
+        ],
+        "summary": "Pursued studies in physics for one year, gaining valuable knowledge in the fundamental principles of matter and energy that would later inform cybersecurity and cryptography work."
+      }
+    },
+    {
+      "area": "General Studies",
+      "institution": "DHS",
+      "studyType": "Honors Diploma",
+      "x-atsgate": {
+        "display": {
+          "logo": "/img/graduation.webp"
+        },
+        "id": "dhs",
+        "location": "",
+        "on_resume": false,
+        "sources": [
+          "site-2026-11"
+        ],
+        "summary": "Received an Honors Diploma, demonstrating academic excellence and a foundation for future educational pursuits."
+      }
+    }
+  ],
+  "projects": [
+    {
+      "description": "Atlas is an open-source LLM inference engine written in pure Rust and CUDA, hand-tuned for NVIDIA DGX Spark. It serves OpenAI-, Anthropic- and Responses-compatible APIs from a single ~75 MB binary with no Python and no PyTorch, runs on edge-class accelerators, and scales across nodes with expert parallelism.",
+      "highlights": [
+        "Pure Rust and CUDA: a single ~75 MB binary, no Python or PyTorch runtime, no runtime compilation",
+        "Hand-tuned CUDA kernels per hardware, model and quantization target; ~170 kernel sources for GB10, compiled unchanged for AMD Strix Halo through SCALE",
+        "Out-serves vLLM at every rung of the published GB10 concurrency ladder (C=1 to C=128); 478 tok/s at C=128 against 359 for vLLM",
+        "131 tok/s single-stream on Qwen3.5-35B-A3B with MTP speculative decoding on one DGX Spark",
+        "MLPerf Inference v6.1 submitted, closed edge division, on NVIDIA GB10 and AMD Strix Halo from the same CUDA source",
+        "Fused Qwen Gated DeltaNet kernel merged into Hugging Face Transformers, as stated by the project",
+        "32 model recipes across Qwen, Gemma, Nemotron, Mistral, MiniMax and DeepSeek, with multi-node expert parallelism over RoCEv2",
+        "Release gate ships an image only after every model boots, stays coherent and holds throughput within 10% of its baseline"
+      ],
+      "keywords": [
+        "Rust",
+        "CUDA",
+        "LLM Inference",
+        "NVIDIA DGX Spark",
+        "AMD Strix Halo",
+        "NVFP4 / FP8 Quantization",
+        "Speculative Decoding",
+        "Expert Parallelism"
+      ],
+      "name": "Atlas Inference Engine",
+      "roles": [
+        "Founder and lead engineer"
+      ],
+      "startDate": "2026-03",
+      "type": "product",
+      "url": "https://atlasinference.io",
+      "x-atsgate": {
+        "category": "AI Inference · Rust & CUDA",
+        "display": {
+          "icon": "cpu"
+        },
+        "id": "atlas-inference-engine",
+        "repo": "https://github.com/Avarok-Cybersecurity/atlas",
+        "sources": [
+          "atlas-readme",
+          "atlascybernetics-site",
+          "github-api",
+          "docker-hub",
+          "owner-2026-11-20",
+          "site-2026-11"
+        ],
+        "stats": [
+          {
+            "label": "monthly unique visitors (atlasinference.io)",
+            "note": "Owner-provided; not independently verified in this work.",
+            "retrieved": "2026-11-20",
+            "source": "Owner-stated figure from the Cloudflare dashboard",
+            "value": "200K+"
+          },
+          {
+            "label": "GitHub stars",
+            "retrieved": "2026-11-20",
+            "source": "gh repo view Avarok-Cybersecurity/atlas",
+            "value": "737"
+          },
+          {
+            "label": "forks",
+            "retrieved": "2026-11-20",
+            "source": "gh repo view Avarok-Cybersecurity/atlas",
+            "value": "107"
+          },
+          {
+            "label": "contributors",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/atlas/contributors",
+            "value": "25"
+          },
+          {
+            "label": "Docker Hub pulls (avarok/atlas-gb10)",
+            "retrieved": "2026-11-20",
+            "source": "hub.docker.com/v2/repositories/avarok/atlas-gb10/",
+            "value": "22,401"
+          },
+          {
+            "label": "release builds",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/atlas/releases",
+            "value": "208"
+          }
+        ]
+      }
+    },
+    {
+      "description": "A post-quantum secure networking protocol and SDK that makes building hyper-secure client-server and peer-to-peer applications easy. Written in 100% safe Rust on Tokio, it provides built-in NAT traversal, post-quantum key exchange (Kyber and NTRU), multi-layered encryption with the patented 3D-matrix ratchet, and a Remote Encrypted Virtual Filesystem, with a very low memory footprint.",
+      "highlights": [
+        "Post-quantum key exchange with Kyber (default) and NTRU; AES-256-GCM, ChaCha20-Poly1305 and Ascon-80pq ciphers",
+        "Patented 3D-matrix ratcheting with per-message re-keying and a true perfect-forward-secrecy mode (US 12,224,993)",
+        "Client-server and P2P with built-in NAT traversal (STUN/TURN), over TCP, TLS or QUIC, with optional WebRTC compatibility",
+        "Remote Encrypted Virtual Filesystem, device- and credential-based authentication, automatic peer discovery",
+        "Filesystem, Redis, MySQL, PostgreSQL and SQLite backends; single- and multi-threaded runtimes; Linux, macOS, Windows, iOS and Android",
+        "17-crate workspace; MIT or Apache-2.0 licensed"
+      ],
+      "keywords": [
+        "Rust",
+        "Tokio",
+        "Post-Quantum Cryptography",
+        "P2P Networking",
+        "NAT Traversal",
+        "QUIC",
+        "TLS",
+        "WebRTC"
+      ],
+      "name": "The Citadel Protocol",
+      "roles": [
+        "Creator and maintainer"
+      ],
+      "startDate": "2022-01",
+      "type": "open-source",
+      "url": "https://avarok.net",
+      "x-atsgate": {
+        "category": "Rust & P2P Networking",
+        "display": {
+          "icon": "shield"
+        },
+        "id": "citadel-protocol",
+        "repo": "https://github.com/Avarok-Cybersecurity/Citadel-Protocol",
+        "sources": [
+          "citadel-readme",
+          "github-api",
+          "crates-io",
+          "site-2026-11"
+        ],
+        "stats": [
+          {
+            "label": "crates.io downloads across the 9 published crates",
+            "retrieved": "2026-11-20",
+            "source": "crates.io/api/v1/crates/<crate> total downloads, summed",
+            "value": "131,510"
+          },
+          {
+            "label": "GitHub stars",
+            "retrieved": "2026-11-20",
+            "source": "gh repo view Avarok-Cybersecurity/Citadel-Protocol",
+            "value": "166"
+          },
+          {
+            "label": "forks",
+            "retrieved": "2026-11-20",
+            "source": "gh repo view Avarok-Cybersecurity/Citadel-Protocol",
+            "value": "23"
+          },
+          {
+            "label": "commits",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/Citadel-Protocol/commits (Link header)",
+            "value": "1,489"
+          },
+          {
+            "label": "tagged versions, latest v0.14.0",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/Citadel-Protocol/tags",
+            "value": "163"
+          }
+        ]
+      }
+    },
+    {
+      "description": "A collaborative workspace where every message, file and call is encrypted end to end with post-quantum cryptography, and traffic travels directly between people rather than through a server that could read it. Built on The Citadel Protocol: teams chat, call, share files and edit live documents together, with each member running a local agent that keeps keys and plaintext on their own machine.",
+      "highlights": [
+        "End-to-end encrypted direct and group messaging with offline delivery, voice and video calls, and direct file transfer between peers",
+        "One-to-one and group calls over WebCodecs in the browser: no SFU, no TURN server, no third party in the media path",
+        "Live collaborative documents merged by a CRDT",
+        "Post-quantum only: lattice-based key exchange with no classical-only fallback; a local agent (citadeld) holds the keys",
+        "Workspaces organised into a tree of offices and rooms with inherited permissions and custom roles; installable as a PWA",
+        "Three-tier architecture: React/TypeScript UI, WASM client layer, Rust backend services across a 5-crate workspace and 3 submodules"
+      ],
+      "keywords": [
+        "Rust",
+        "WebAssembly",
+        "TypeScript",
+        "React",
+        "Post-Quantum Cryptography",
+        "P2P",
+        "CRDT",
+        "WebCodecs",
+        "Cloudflare Workers"
+      ],
+      "name": "Citadel Workspace",
+      "roles": [
+        "Founder and lead engineer"
+      ],
+      "startDate": "2023-05",
+      "type": "product",
+      "url": "https://work.avarok.net",
+      "x-atsgate": {
+        "category": "Post-Quantum P2P Collaboration",
+        "display": {
+          "icon": "briefcase"
+        },
+        "id": "citadel-workspace",
+        "repo": "https://github.com/Avarok-Cybersecurity/citadel-workspace",
+        "sources": [
+          "citadel-workspace-repo",
+          "github-api",
+          "site-2026-11"
+        ],
+        "stats": [
+          {
+            "label": "commits on the main repository",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/citadel-workspace/commits (Link header)",
+            "value": "1,496"
+          },
+          {
+            "label": "releases, latest agent-v0.13.1",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/citadel-workspace/releases",
+            "value": "30"
+          },
+          {
+            "label": "contributors",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/citadel-workspace/contributors",
+            "value": "5"
+          }
+        ]
+      }
+    },
+    {
+      "description": "CertifiedCopy exports iPhone and Mac text messages to PDF, CSV, JSON or RSMF entirely inside the browser. The SQLite engine, Apple's undocumented typedstream decoder and the PDF renderer are all compiled to WebAssembly and run on the reader's own machine, so nothing is uploaded: there is no server to upload it to. Every export opens with a SHA-256 record of the source file.",
+      "highlights": [
+        "100% client-side: the parser, the SQLite engine and the PDF renderer are compiled to WebAssembly and run on the reader's machine; the test suite asserts it on every change",
+        "Lighthouse 100 on every category, installable as a PWA, works offline; also a signed and notarised native Mac desktop app",
+        "Reads a Mac chat.db or finds sms.db inside an iPhone backup automatically; RSMF output validated against Relativity's published schema 2.0.0",
+        "SHA-256 certification page, scoped to FRE 902(14) rather than claiming admissibility; optional notary witnessing with passkey or email-link sign-in",
+        "Reverse-engineered Apple's typedstream format to 100% fidelity across 19,724 real messages",
+        "Free to export with no account; open source under AGPL-3.0"
+      ],
+      "keywords": [
+        "Rust",
+        "WebAssembly",
+        "Dioxus",
+        "SQLite",
+        "PDF",
+        "PWA"
+      ],
+      "name": "CertifiedCopy",
+      "roles": [
+        "Creator"
+      ],
+      "type": "product",
+      "url": "https://certified.sh",
+      "x-atsgate": {
+        "category": "Rust & WebAssembly",
+        "display": {
+          "icon": "filecheck"
+        },
+        "id": "certifiedcopy",
+        "sources": [
+          "site-2026-11",
+          "certified-sh",
+          "avarok-net"
+        ],
+        "stats": []
+      }
+    },
+    {
+      "description": "A hybrid graph and vector database built in pure Rust that runs in the browser with zero backend: production-grade HNSW vector search and Cypher graph queries from a ~500 KB WebAssembly module, with a Qdrant-compatible REST API and Neo4j-compatible Cypher when served natively.",
+      "highlights": [
+        "HNSW index with SIMD distance kernels, product and scalar quantization; BFS/DFS traversal, Cypher queries and weighted edges",
+        "ACID durability with a write-ahead log; ~500 KB WASM, 2.4 MB memory footprint",
+        "Browser (WASM SIMD128), Linux x86_64 (AVX2/AVX-512), macOS Apple Silicon (NEON) and Windows x86_64, plus Service Worker and Cloudflare Workers serving",
+        "Published benchmark at 1,000 x 128-dim vectors: 84 us in-memory search and 168 us over HTTP against 330 us for Qdrant over HTTP",
+        "Powers AutoRepoRAG corpora and the browser-side search planned for GeoHarness"
+      ],
+      "keywords": [
+        "Rust",
+        "WebAssembly",
+        "HNSW",
+        "Cypher",
+        "SIMD",
+        "Vector Search",
+        "RAG"
+      ],
+      "name": "LatticeDB",
+      "roles": [
+        "Creator and maintainer"
+      ],
+      "startDate": "2026-01",
+      "type": "open-source",
+      "url": "https://avarok-cybersecurity.github.io/lattice-db/",
+      "x-atsgate": {
+        "category": "Developer Tools · Rust & WebAssembly",
+        "display": {
+          "icon": "network"
+        },
+        "id": "latticedb",
+        "repo": "https://github.com/Avarok-Cybersecurity/lattice-db",
+        "sources": [
+          "latticedb-readme",
+          "github-api",
+          "npm-api"
+        ],
+        "stats": [
+          {
+            "label": "npm downloads of lattice-db in the last month",
+            "retrieved": "2026-11-20",
+            "source": "api.npmjs.org/downloads/point/last-month/lattice-db",
+            "value": "578"
+          },
+          {
+            "label": "npm downloads in the last year",
+            "retrieved": "2026-11-20",
+            "source": "api.npmjs.org/downloads/point/last-year/lattice-db",
+            "value": "1,986"
+          },
+          {
+            "label": "releases, latest v0.5.1",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/lattice-db/releases",
+            "value": "16"
+          },
+          {
+            "label": "GitHub stars",
+            "retrieved": "2026-11-20",
+            "source": "gh repo view Avarok-Cybersecurity/lattice-db",
+            "value": "11"
+          }
+        ]
+      }
+    },
+    {
+      "description": "A GitHub Action that makes any website agent-ready on Cloudflare's free plan: it builds the site, gives every page a markdown twin served to AI agents on Accept: text/markdown, writes llms.txt, a sitemap and robots.txt Content Signals, gates the build on an evidence-graded GEO score and Lighthouse 100 in all four categories, deploys to Cloudflare Workers or Pages, and verifies the live site with real AI user agents. This site is deployed by it.",
+      "highlights": [
+        "29 evidence-graded checks in 5 scoring categories (AI access, indexability, markdown delivery, extractability, signals), each cited to a published source",
+        "Pure WebAssembly core with no filesystem, network, clock or process access; tools pinned by exact version and inputs passed as environment variables, never a shell",
+        "Lighthouse gate: 100 in performance, accessibility, best practices and SEO as the median of 3 runs, locally against the deploy's own wrangler config and again against the live site, with automatic rollback",
+        "Live verification with an Accept matrix and eight AI user agents; ACME certificate renewal through Cloudflare DNS-01",
+        "Adapters for npm, Vite, SvelteKit, Python, make and static sites"
+      ],
+      "keywords": [
+        "Rust",
+        "WebAssembly",
+        "TypeScript",
+        "GitHub Actions",
+        "Cloudflare Workers",
+        "Lighthouse",
+        "SEO / GEO"
+      ],
+      "name": "GeoHarness",
+      "roles": [
+        "Creator"
+      ],
+      "startDate": "2026-11",
+      "type": "open-source",
+      "url": "https://geo.avarok.net",
+      "x-atsgate": {
+        "category": "Developer Tools · Rust & TypeScript",
+        "display": {
+          "icon": "code"
+        },
+        "id": "geoharness",
+        "repo": "https://github.com/Avarok-Cybersecurity/geoharness",
+        "sources": [
+          "geoharness-repo",
+          "github-api"
+        ],
+        "stats": []
+      }
+    },
+    {
+      "description": "A GitHub Action that turns a repository into a ready-to-query vector corpus straight from CI: it chunks the source, embeds it against any OpenAI-compatible embeddings endpoint (or deterministic mock vectors that need no secrets), loads and verifies every vector against a checksum-pinned LatticeDB server, and exports a byte-deterministic corpus that a browser, a bot or another pipeline can load directly.",
+      "highlights": [
+        "Zero npm dependencies, no Docker, no build step: a composite action running vendored Node ESM",
+        "Verifies point counts, self-retrieval and scroll fidelity against the live index before exporting",
+        "Byte-deterministic lattice-jsonl corpus with a gzip twin and a metadata manifest",
+        "Every input that shapes the corpus is required and has no default"
+      ],
+      "keywords": [
+        "JavaScript",
+        "GitHub Actions",
+        "RAG",
+        "Embeddings",
+        "LatticeDB"
+      ],
+      "name": "AutoRepoRAG",
+      "roles": [
+        "Creator"
+      ],
+      "startDate": "2026-08",
+      "type": "open-source",
+      "x-atsgate": {
+        "category": "Developer Tools · AI",
+        "display": {
+          "icon": "code"
+        },
+        "id": "autoreporag",
+        "repo": "https://github.com/Avarok-Cybersecurity/AutoRepoRAG",
+        "sources": [
+          "autoreporag-readme",
+          "github-api"
+        ],
+        "stats": [
+          {
+            "label": "releases, latest v3.0.0",
+            "retrieved": "2026-11-20",
+            "source": "gh api repos/Avarok-Cybersecurity/AutoRepoRAG/releases",
+            "value": "9"
+          }
+        ]
+      }
+    },
+    {
+      "description": "Cross-person coordination for coding agents: one live tree of projects, tasks, people, agents and progress, with post-quantum signed prompts and Sign in with Citadel. Rust compiled to WebAssembly on Cloudflare Workers, with the Citadel Protocol as its transport.",
+      "highlights": [
+        "Agents join the tree through an MCP server; a remote prompt reaches an agent only if it is signed with ML-DSA-65",
+        "One live tree, Project > Task > Person > Agent > Progress, with cooperation tiers off, aware and synchronized",
+        "Sealed messages use ML-KEM-768 with HKDF-SHA3-256 and AES-256-GCM",
+        "Rust and WebAssembly on Cloudflare Workers; MIT or Apache-2.0 licensed"
+      ],
+      "keywords": [
+        "Rust",
+        "WebAssembly",
+        "Cloudflare Workers",
+        "MCP",
+        "ML-DSA-65",
+        "ML-KEM-768",
+        "Citadel Protocol"
+      ],
+      "name": "synchronized.work",
+      "roles": [
+        "Creator"
+      ],
+      "startDate": "2026-11",
+      "type": "product",
+      "url": "https://synchronized.work",
+      "x-atsgate": {
+        "category": "Developer Tools · P2P & AI Agents",
+        "display": {
+          "icon": "briefcase"
+        },
+        "id": "synchronized-work",
+        "repo": "https://github.com/Avarok-Cybersecurity/synchronized.work",
+        "sources": [
+          "synchronized-work-site",
+          "github-api",
+          "avarok-net"
+        ],
+        "stats": []
+      }
+    },
+    {
+      "description": "Quantizing, serving and optimizing open LLMs on 2x NVIDIA DGX Spark: published quantized models on Hugging Face and an optimized vLLM image for DGX Spark that ran novel NVFP4 quants with a single command, the work that led to the Atlas Inference Engine.",
+      "highlights": [
+        "Quantized nvidia/NVIDIA-Nemotron-Nano-12B-v2 to Q4_K_M, cutting on-disk size from 23 GB to 7 GB while maintaining accuracy with the base model",
+        "Built a custom vLLM image that runs the NVFP4 quant of Qwen3-Next-80B-A3B-Instruct on DGX Spark with a single copy-and-paste command",
+        "Benchmarked attention, batching, GEMM and GEMV paths against vLLM, the groundwork for Atlas"
+      ],
+      "keywords": [
+        "vLLM",
+        "NVFP4",
+        "GGUF",
+        "Quantization",
+        "CUDA",
+        "Docker",
+        "Hugging Face"
+      ],
+      "name": "Applied Machine Learning on DGX Spark",
+      "roles": [
+        "Quantization, serving and benchmarking"
+      ],
+      "startDate": "2025-10",
+      "type": "research",
+      "url": "https://huggingface.co/Avarok",
+      "x-atsgate": {
+        "category": "AI Inference · Research",
+        "display": {
+          "icon": "cpu"
+        },
+        "id": "applied-ml-dgx-spark",
+        "note": "The June 2026 resume also lists Avarok/GLM-4.6V-NVFP4-W4A4; that model is not publicly visible on Hugging Face (HTTP 401) and is omitted until the owner confirms it.",
+        "repo": "https://github.com/Avarok-Cybersecurity/dgx-vllm",
+        "sources": [
+          "resume-2026-06",
+          "huggingface-api",
+          "docker-hub",
+          "github-api"
+        ],
+        "stats": [
+          {
+            "label": "Docker Hub pulls (avarok/vllm-dgx-spark)",
+            "retrieved": "2026-11-20",
+            "source": "hub.docker.com/v2/repositories/avarok/vllm-dgx-spark/",
+            "value": "44,798"
+          },
+          {
+            "label": "GitHub stars (dgx-vllm)",
+            "retrieved": "2026-11-20",
+            "source": "gh repo view Avarok-Cybersecurity/dgx-vllm",
+            "value": "128"
+          },
+          {
+            "label": "all-time downloads of the Nemotron Q4_K_M quant",
+            "retrieved": "2026-11-20",
+            "source": "huggingface.co/api/models/Avarok/nvidia-nemotron-nano-12b-v2-q4_k_m (downloadsAllTime)",
+            "value": "1,175"
+          }
+        ]
+      }
+    },
+    {
+      "description": "A pure-Rust HEIC/HEIF image decoder with no libheif, no C toolchain and no unsafe code, published on crates.io.",
+      "highlights": [
+        "No libheif, no C toolchain, no unsafe",
+        "4.28x faster than the AGPL alternative, per the project README"
+      ],
+      "keywords": [
+        "Rust",
+        "Image Codecs",
+        "no_std"
+      ],
+      "name": "heic-rs",
+      "roles": [
+        "Author"
+      ],
+      "startDate": "2026-09",
+      "type": "open-source",
+      "x-atsgate": {
+        "category": "Open Source · Rust",
+        "display": {
+          "icon": "code"
+        },
+        "id": "heic-rs",
+        "note": "Not on the site or the June resume; added because it is a verified, published crate of the owner's. Owner may drop it.",
+        "repo": "https://github.com/tbraun96/heic-rs",
+        "sources": [
+          "github-api",
+          "crates-io"
+        ],
+        "stats": [
+          {
+            "label": "crates.io downloads",
+            "retrieved": "2026-11-20",
+            "source": "crates.io/api/v1/crates/heic-rs",
+            "value": "260,115"
+          }
+        ]
+      }
+    }
+  ],
+  "publications": [
+    {
+      "name": "Recursive Cryptography Protocol",
+      "publisher": "Avarok Corp",
+      "releaseDate": "2025-02-11",
+      "summary": "A post-quantum session-layer protocol with highly configurable security: per-message re-keying, multi-layered encryption, 3D-matrix ratcheting and post-quantum key exchange inside a networking protocol for peer-to-peer messaging and network applications.",
+      "url": "https://patents.google.com/patent/US12224993B2/en",
+      "x-atsgate": {
+        "display": {
+          "image": {
+            "alt": "Recursive Cryptography Protocol Algorithm",
+            "height": 1114,
+            "width": 1346
+          }
+        },
+        "highlights": [
+          "Establishes true perfect forward secrecy: compromising a single key exposes a single ciphertext rather than a session of ciphertexts.",
+          "Introduces symmetric key matrices and recursion to interweave multiple levels of encryption and multiple levels of ratcheting.",
+          "Filed 2022-06-13, granted 2025-02-11; implemented in The Citadel Protocol, which stays free and open source."
+        ],
+        "id": "us-patent-12-224-993-b2",
+        "number": "US Patent 12,224,993 B2",
+        "sources": [
+          "resume-2026-06",
+          "site-2026-11",
+          "google-patents"
+        ]
+      }
+    }
+  ],
+  "skills": [
+    {
+      "keywords": [
+        "Rust",
+        "CUDA",
+        "Python",
+        "TypeScript",
+        "JavaScript",
+        "Java",
+        "Solidity",
+        "SQL"
+      ],
+      "name": "Languages"
+    },
+    {
+      "keywords": [
+        "LLM inference engines",
+        "CUDA kernel optimization",
+        "NVFP4 and FP8 quantization",
+        "Speculative decoding (MTP)",
+        "Expert parallelism",
+        "Prefix caching",
+        "vLLM",
+        "MLPerf Inference",
+        "NVIDIA DGX Spark (GB10)",
+        "AMD Strix Halo"
+      ],
+      "name": "AI Inference & GPU"
+    },
+    {
+      "keywords": [
+        "Post-quantum cryptography (ML-KEM/Kyber, NTRU, ML-DSA)",
+        "Threshold cryptography (DKG, FROST)",
+        "Ratcheting and perfect forward secrecy",
+        "AES-256-GCM",
+        "ChaCha20-Poly1305",
+        "CP-ABE",
+        "WebAuthn",
+        "NIST PQC standards"
+      ],
+      "name": "Cryptography & Security"
+    },
+    {
+      "keywords": [
+        "Async Rust (Tokio)",
+        "Multithreading",
+        "TCP/UDP",
+        "QUIC",
+        "TLS",
+        "NAT traversal (STUN/TURN)",
+        "Peer-to-peer architecture",
+        "WebRTC and WebCodecs",
+        "CRDTs",
+        "RPC microservices"
+      ],
+      "name": "Networking & Distributed Systems"
+    },
+    {
+      "keywords": [
+        "WebAssembly",
+        "React",
+        "Dioxus",
+        "Progressive Web Apps",
+        "Cloudflare Workers",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "Playwright",
+        "Lighthouse"
+      ],
+      "name": "Web, WebAssembly & Cloud"
+    },
+    {
+      "keywords": [
+        "Vector and graph databases (HNSW, Cypher)",
+        "Retrieval-augmented generation",
+        "SQLite",
+        "PostgreSQL",
+        "MySQL",
+        "Redis",
+        "Stellar",
+        "ERC-2535 Diamond Proxy"
+      ],
+      "name": "Data & Blockchain"
+    }
+  ],
+  "work": [
+    {
+      "highlights": [
+        "Created an open-source LLM inference engine in pure Rust and CUDA that serves OpenAI-, Anthropic- and Responses-compatible APIs from a single ~75 MB binary with no Python, PyTorch or runtime compilation.",
+        "Hand-tuned CUDA kernels per hardware, model and quantization target (NVFP4 and FP8 quantization, MTP speculative decoding, radix-tree prefix caching, expert parallelism across nodes) for NVIDIA GB10, compiled unchanged for AMD Strix Halo through SCALE.",
+        "Out-served vLLM at all 8 concurrency levels measured (1 to 128) on DGX Spark; 2-3x faster than vLLM on the Qwen 3.5 and 3.6 35B-A3B and 27B models.",
+        "Submitted MLPerf Inference v6.1 results in the closed edge division on NVIDIA GB10 and AMD Strix Halo from the same CUDA source, as a member of the MLCommons Edge-LLM taskforce.",
+        "Partnered with AMD and Spectral Compute to bring faster local inference to AMD hardware, and with NVIDIA on tool-call benchmarking standardization.",
+        "Selected as an official Qwen Ambassador (Alibaba) from thousands of engineering applicants.",
+        "Built atlasctl, the fleet control plane, and a release gate that publishes an image only after every model boots, stays coherent and holds throughput within 10% of its committed baseline."
+      ],
+      "name": "Atlas Cybernetics Corp",
+      "position": "Co-Founder",
+      "startDate": "2026-03",
+      "summary": "Leading the Atlas Inference Engine: LLM inference in pure Rust and CUDA with hand-tuned kernels for NVIDIA DGX Spark, the same kernels compiled for AMD Strix Halo, MLPerf Inference v6.1 submissions in the closed edge division on both, and a release gate that ships an image only after every model passes the serve matrix.",
+      "url": "https://atlasinference.io",
+      "x-atsgate": {
+        "display": {
+          "logo": "/logos/atlas-cybernetics.svg"
+        },
+        "engagement": "founder",
+        "id": "atlas",
+        "sources": [
+          "resume-2026-06",
+          "site-2026-11",
+          "atlas-readme",
+          "atlascybernetics-site"
+        ],
+        "unit": "Atlas Inference Engine"
+      }
+    },
+    {
+      "highlights": [
+        "Implemented ERC-2535 (the Diamond Proxy Standard) for the Stellar network, giving granular control over smart-contract upgradeability with shared storage so contracts governed by one proxy communicate through memory.",
+        "Authored Stellar Ecosystem Proposals (SEPs) and upstream pull requests for shared-storage integration between diamond facets.",
+        "Delivered a full-stack, blockchain-agnostic and smart-wallet-agnostic decentralized application that runs on any Turing-complete chain and supports DFNS WebAuthn flows or WalletConnect.",
+        "Found and fixed storage leaks that were consuming gas on per-contract storage, hardening the Diamond Proxy implementation.",
+        "Produced multiple 40+ page infringement charts on cryptographic software for a top-10 patent litigation firm, supporting recovery of tens of millions of dollars in damages."
+      ],
+      "location": "Remote",
+      "name": "Nomyx",
+      "position": "Principal Rust Software Engineer",
+      "startDate": "2025-02",
+      "summary": "Smart-contract infrastructure and full-stack decentralized applications on the Stellar network, plus expert technical analysis for patent litigation.",
+      "x-atsgate": {
+        "engagement": "employee",
+        "id": "nomyx",
+        "sources": [
+          "resume-2026-06"
+        ]
+      }
+    },
+    {
+      "highlights": [
+        "Designed and implemented The Citadel Protocol, a post-quantum peer-to-peer and client-server networking SDK in 100% safe Rust on Tokio, with built-in NAT traversal, TCP/TLS/QUIC transports and a Remote Encrypted Virtual Filesystem.",
+        "Invented and implemented the patented Recursive Cryptography Protocol (US 12,224,993): multi-layered encryption with 3D-matrix ratcheting, per-message re-keying and Kyber key exchange for crypto-agility and true perfect forward secrecy.",
+        "Led interns and contributors building Citadel Workspace, a Slack-like collaboration product with Signal-like security, and shipped a family of six open-source products on one protocol.",
+        "Directed the integration of industry security policies into the protocol architecture, aligning with NIST and ISO/IEC standards across 3 product lines and enabling regular security audits.",
+        "Published 9 crates on crates.io (citadel_sdk and its workspace) with over 131,000 downloads."
+      ],
+      "location": "Remote",
+      "name": "Avarok Cybersecurity",
+      "position": "Founder & Rust Consultant",
+      "startDate": "2018-01",
+      "summary": "Leading the development of post-quantum communication protocols. Created The Citadel Protocol, a Rust-based secure communications framework designed to protect against quantum computing threats, and the family of open-source products built on it. Providing expert Rust consulting for complex systems.",
+      "url": "https://avarok.net",
+      "x-atsgate": {
+        "display": {
+          "logo": "/logos/avarok-logo.svg"
+        },
+        "engagement": "founder",
+        "id": "avarok",
+        "sources": [
+          "resume-2026-06",
+          "site-2026-11",
+          "citadel-readme",
+          "crates-io",
+          "avarok-net"
+        ]
+      }
+    },
+    {
+      "endDate": "2026-03",
+      "highlights": [
+        "Designed and solely implemented Synopsys Data Shield, a CP-ABE based proxy and vector/graph database encryptor that keeps company IP encrypted at rest and decrypted only for use in agentic RAG.",
+        "Built a Python-based DSL that lets engineers design FEA simulations in code.",
+        "Secured and extended the GitHub workflow pipelines so cross-repository development stayed in sync and nothing shipped broken.",
+        "Drove adoption of Data Shield for domain-specific applications through parameterized Docker builds."
+      ],
+      "location": "Remote",
+      "name": "Synopsys",
+      "position": "Senior Software Engineer",
+      "startDate": "2023-02",
+      "summary": "Encryption-at-rest for AI retrieval pipelines, a simulation DSL and the CI that kept cross-repository development in sync.",
+      "x-atsgate": {
+        "engagement": "employee",
+        "id": "synopsys",
+        "sources": [
+          "resume-2026-06"
+        ]
+      }
+    },
+    {
+      "endDate": "2025-02",
+      "highlights": [
+        "Implemented a threshold distributed key generator (DKG) in Rust using multi-party ECDSA and WT-FROST for voting and signing proposals on a distributed system.",
+        "Designed and built a zkSaaS (zero-knowledge SaaS) networking layer in Rust using parallelism, multiplexing and asynchronous code around distributed FFT and MSM.",
+        "Introduced asynchronous protocol support on Tokio, improving network latency by 60%.",
+        "Reduced the system's database size by 22% by optimizing data structures and object serialization; wrote unit and automated tests for performance and stability.",
+        "Integrated AES-256 and Ed25519 encryption into Rust modules across 3+ distributed projects with OpenSSL and RustCrypto, reducing the vulnerability count by 45%.",
+        "Refactored the networking layer for strict OSI-model compliance using Wireshark and async Rust, increasing throughput across 3 distributed applications."
+      ],
+      "location": "Remote",
+      "name": "Commonwealth Labs",
+      "position": "Rust Software Engineer",
+      "startDate": "2022-12",
+      "summary": "Threshold cryptography and zero-knowledge networking for distributed systems in Rust.",
+      "x-atsgate": {
+        "engagement": "employee",
+        "id": "commonwealth-labs",
+        "sources": [
+          "resume-2026-06"
+        ]
+      }
+    },
+    {
+      "endDate": "2022-12",
+      "highlights": [
+        "Implemented RPC microservice endpoints in Rust for two-factor authentication and device approval.",
+        "Engineered a cryptographic authentication module adhering to NIST PQC standards, using Rust, OpenSSL and Kubernetes to secure core microservices.",
+        "Tested locally and deployed to the cloud with Tilt, Kubernetes and Docker; reported requirements, suggestions and ETAs to stakeholders."
+      ],
+      "location": "Remote",
+      "name": "Kraken Digital Asset Exchange",
+      "position": "Software Engineer I",
+      "startDate": "2022-10",
+      "summary": "Applied cryptographic expertise to secure financial systems on the core backend security team.",
+      "x-atsgate": {
+        "display": {
+          "logo": "/logos/kraken-logo.svg"
+        },
+        "engagement": "employee",
+        "id": "kraken",
+        "sources": [
+          "resume-2026-06",
+          "site-2026-11"
+        ],
+        "unit": "Core Backend - Security"
+      }
+    },
+    {
+      "endDate": "2022-10",
+      "highlights": [
+        "Converted a rounds-based serial protocol into a parallel, asynchronous protocol, doubling efficiency and performance.",
+        "Extended the GitHub Actions pipeline with holistic unit, integration and acceptance testing; communicated requirements with stakeholders."
+      ],
+      "location": "Remote",
+      "name": "Webb.tools",
+      "position": "Rust Software Engineer",
+      "startDate": "2021-11",
+      "summary": "Asynchronous protocol engineering for a privacy-focused blockchain project.",
+      "x-atsgate": {
+        "engagement": "contract",
+        "id": "webb",
+        "sources": [
+          "resume-2026-06"
+        ]
+      }
+    },
+    {
+      "endDate": "2021-02",
+      "highlights": [
+        "Developed a lottery algorithm using dynamic-difficulty bitmasks that lets transactions randomly award bonus tokens.",
+        "Created an ERC-20 contract that probabilistically mints a gem token on each transaction; increased gas efficiency by 40% by rewriting and optimizing functions."
+      ],
+      "location": "Remote",
+      "name": "Bitgem NFT",
+      "position": "Solidity Developer",
+      "startDate": "2020-12",
+      "summary": "Smart-contract development for an NFT token project.",
+      "x-atsgate": {
+        "engagement": "contract",
+        "id": "bitgem",
+        "sources": [
+          "resume-2026-06"
+        ]
+      }
+    },
+    {
+      "highlights": [],
+      "name": "Ansys",
+      "position": "R&D Engineer II",
+      "summary": "Research and development of simulation technologies, applying technical expertise to engineering challenges in a high-performance computing environment.",
+      "x-atsgate": {
+        "display": {
+          "logo": "/logos/ansys-logo.svg"
+        },
+        "engagement": "employee",
+        "id": "ansys",
+        "note": "Listed on the site without dates and absent from the June 2026 resume. Owner to supply dates, or confirm whether this is the same position as the Synopsys role (Synopsys acquired Ansys in 2025).",
+        "sources": [
+          "site-2026-11"
+        ]
+      }
+    }
+  ],
+  "x-atsgate": {
+    "families": [],
+    "focus_areas": [
+      {
+        "name": "LLM Inference Engineering",
+        "summary": "Inference engines in pure Rust and CUDA: NVFP4 and FP8 quantization, MTP speculative decoding, and expert parallelism across nodes."
+      },
+      {
+        "name": "GPU Kernel Optimization",
+        "summary": "Hand-tuned CUDA kernels for NVIDIA Grace Blackwell (GB10), compiled unchanged for AMD RDNA 3.5 with SCALE."
+      },
+      {
+        "name": "Rust Consultancy",
+        "summary": "Professional consulting services for Rust-based systems, focusing on performance, safety, and scalability."
+      },
+      {
+        "name": "Post-Quantum Communication",
+        "summary": "Development of communication protocols secure against quantum computing threats."
+      },
+      {
+        "name": "Cryptographic Protocol Design",
+        "summary": "Invention and implementation of novel cryptographic protocols for secure systems."
+      },
+      {
+        "name": "Computer & Network Security",
+        "summary": "Comprehensive approaches to securing computer systems and network infrastructure."
+      }
+    ],
+    "sources": {
+      "atlas-readme": {
+        "retrieved": "2026-11-20",
+        "title": "README of Avarok-Cybersecurity/atlas",
+        "url": "https://github.com/Avarok-Cybersecurity/atlas"
+      },
+      "atlascybernetics-site": {
+        "retrieved": "2026-11-20",
+        "title": "atlascybernetics.ai and atlasinference.io (same content) with /llms.txt",
+        "url": "https://atlascybernetics.ai/llms.txt"
+      },
+      "autoreporag-readme": {
+        "retrieved": "2026-11-20",
+        "title": "README and releases of Avarok-Cybersecurity/AutoRepoRAG",
+        "url": "https://github.com/Avarok-Cybersecurity/AutoRepoRAG"
+      },
+      "avarok-net": {
+        "retrieved": "2026-11-20",
+        "title": "avarok.net home page (product family, founder statement)",
+        "url": "https://avarok.net"
+      },
+      "certified-sh": {
+        "retrieved": "2026-11-20",
+        "title": "certified.sh home, pricing and llms.txt",
+        "url": "https://certified.sh/llms.txt"
+      },
+      "citadel-readme": {
+        "retrieved": "2026-11-20",
+        "title": "README of Avarok-Cybersecurity/Citadel-Protocol",
+        "url": "https://github.com/Avarok-Cybersecurity/Citadel-Protocol"
+      },
+      "citadel-workspace-repo": {
+        "retrieved": "2026-11-20",
+        "title": "README and ARCHITECTURE of citadel-workspace (local ~/avarok/citadel-workspace) and work.avarok.net",
+        "url": "https://github.com/Avarok-Cybersecurity/citadel-workspace"
+      },
+      "cloudflare-rum": {
+        "note": "Beacon-based page loads and visits only; no unique-visitor metric exists in this dataset.",
+        "retrieved": "2026-11-20",
+        "title": "Cloudflare Web Analytics (RUM) rumPageloadEventsAdaptiveGroups, read with the narrow account tokens; zone analytics (uniques) were not readable",
+        "url": "https://api.cloudflare.com/client/v4/graphql"
+      },
+      "crates-io": {
+        "retrieved": "2026-11-20",
+        "title": "crates.io API (total downloads per crate)",
+        "url": "https://crates.io/api/v1/crates/citadel_sdk"
+      },
+      "docker-hub": {
+        "retrieved": "2026-11-20",
+        "title": "Docker Hub repository API (pull_count)",
+        "url": "https://hub.docker.com/v2/repositories/avarok/atlas-gb10/"
+      },
+      "geoharness-repo": {
+        "retrieved": "2026-11-20",
+        "title": "GeoHarness README, action.yml, CHANGELOG (local ~/geoharness) and geo.avarok.net/docs/geo-score",
+        "url": "https://geo.avarok.net"
+      },
+      "github-api": {
+        "retrieved": "2026-11-20",
+        "title": "GitHub REST API via gh (repo view, contributors, releases, tags, commits)",
+        "url": "https://api.github.com"
+      },
+      "google-patents": {
+        "retrieved": "2026-11-20",
+        "title": "Google Patents, US 12224993 B2",
+        "url": "https://patents.google.com/patent/US12224993B2/en"
+      },
+      "huggingface-api": {
+        "retrieved": "2026-11-20",
+        "title": "Hugging Face models API (author=Avarok)",
+        "url": "https://huggingface.co/api/models?author=Avarok"
+      },
+      "latticedb-readme": {
+        "retrieved": "2026-11-20",
+        "title": "README of Avarok-Cybersecurity/lattice-db",
+        "url": "https://github.com/Avarok-Cybersecurity/lattice-db"
+      },
+      "npm-api": {
+        "retrieved": "2026-11-20",
+        "title": "npm downloads API",
+        "url": "https://api.npmjs.org/downloads/point/last-month/lattice-db"
+      },
+      "owner-2026-11-20": {
+        "retrieved": "2026-11-20",
+        "title": "Figure stated by the owner in the brief for this work (from his Cloudflare dashboard); not independently verified"
+      },
+      "resume-2026-06": {
+        "path": "/Users/nologik/Downloads/Resume-June.pdf",
+        "retrieved": "2026-11-20",
+        "title": "Thomas P Braun resume, June 2026 (Resume-June.pdf)"
+      },
+      "site-2026-11": {
+        "retrieved": "2026-11-20",
+        "title": "thomaspbraun.com as served on 2026-11-20 (content/profile.mjs at commit 6ec2a02)",
+        "url": "https://thomaspbraun.com"
+      },
+      "synchronized-work-site": {
+        "retrieved": "2026-11-20",
+        "title": "synchronized.work page head and avarok.net/synchronized-work/",
+        "url": "https://avarok.net/synchronized-work/"
+      }
+    },
+    "variants": {
+      "summaries": {},
+      "titles": {}
+    },
+    "version": 1
+  }
+}
