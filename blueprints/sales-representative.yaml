@@ -1,0 +1,92 @@
+# Built-in blueprint `builtin:sales-representative`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: sales-representative
+version: "1.0.0"
+title: "Sales Representative"
+title_aliases:
+  - "Account Executive"
+  - "Business Development Representative"
+  - "B2B Sales Representative"
+  - "Sales Development Representative"
+occupationalCategory: "41-3091.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/14031d4a-6e99-442f-b4fe-18262b6432b2"
+seniority: mid
+required_skills:
+  - canonical: "prospect new customers"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/6d97bf55-6fb6-4795-8282-3ef915ae0bb8"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "negotiate sales contracts"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/71152876-b629-4a99-b9ea-0f25a0d07e4e"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "customer relationship management"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/dc9a236c-c640-43c3-812f-269403591edb"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Salesforce"
+    taxonomy_ref: "onet-tech:Salesforce software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "deliver a sales pitch"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/2f573ad6-1fa6-46c5-a48d-912368fe55aa"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+preferred_skills:
+  - canonical: "HubSpot"
+    taxonomy_ref: "onet-tech:HubSpot software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "LinkedIn"
+    taxonomy_ref: "onet-tech:LinkedIn"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Microsoft Dynamics CRM"
+    taxonomy_ref: "onet-tech:Microsoft Dynamics CRM"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "sales strategies"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/e7219848-a27a-4bf4-8775-d367707be7c9"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Negotiation"
+    taxonomy_ref: "onet:2.B.1.d"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Persuasion"
+    taxonomy_ref: "onet:2.B.1.c"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Microsoft Excel"
+    taxonomy_ref: "onet-tech:Microsoft Excel"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+knockouts: []
+education:
+  min_level: null
+  fields: []
+  experience_in_place_of_education: true
+experience:
+  min_years: 2.0
+  relevant_titles: ["Sales Representative", "Account Executive", "Business Development Representative"]
+certifications: []
+domain_keywords: ["quota", "pipeline", "B2B"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

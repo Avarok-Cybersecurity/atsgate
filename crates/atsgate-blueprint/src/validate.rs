@@ -8,6 +8,10 @@ use crate::types::{
 pub enum BlueprintError {
     #[error("blueprint does not match the schema: {0}")]
     Parse(serde_json::Error),
+    #[error("blueprint YAML does not match the schema: {0}")]
+    Yaml(String),
+    #[error("no built-in blueprint {0:?}")]
+    UnknownBuiltin(String),
     #[error("occupationalCategory {0:?} is not an O*NET-SOC code ({ONET_SOC_PATTERN})")]
     OccupationalCategory(String),
     #[error("esco_occupation {0:?} is not an ESCO occupation URI")]

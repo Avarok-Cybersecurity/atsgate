@@ -1,0 +1,97 @@
+# Built-in blueprint `builtin:software-engineer-systems-rust`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: software-engineer-systems-rust
+version: "1.0.0"
+title: "Systems Software Engineer (Rust)"
+title_aliases:
+  - "Rust Engineer"
+  - "Rust Developer"
+  - "Systems Engineer"
+  - "Systems Programmer"
+occupationalCategory: "15-1252.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/a7c1d23d-aeca-4bee-9a08-5993ed98b135"
+seniority: senior
+required_skills:
+  - canonical: "Rust"
+    taxonomy_ref: "onet-tech:Rust programming language"
+    aliases: []
+    weight: 3.0
+    evidence_scope: experience_or_projects
+  - canonical: "Linux"
+    taxonomy_ref: "onet-tech:Linux"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "use concurrent programming"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/25b291b5-8245-4d9d-b391-86a8a31d7109"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "operating systems"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/f9a6f35b-01a7-40c9-8b61-b6ee46f97272"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Git"
+    taxonomy_ref: "onet-tech:Git"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+preferred_skills:
+  - canonical: "C++"
+    taxonomy_ref: "onet-tech:C++"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "C"
+    taxonomy_ref: "onet-tech:C"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Tokio"
+    taxonomy_ref: "atsgate:tokio"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "WebAssembly"
+    taxonomy_ref: "atsgate:webassembly"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Low-level virtual machine LLVM compilers"
+    taxonomy_ref: "onet-tech:Low-level virtual machine LLVM compilers"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Kubernetes"
+    taxonomy_ref: "onet-tech:Kubernetes"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "gRPC"
+    taxonomy_ref: "atsgate:grpc"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "distributed computing"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+knockouts: []
+education:
+  min_level: { framework: isced, level: 6 }
+  fields: ["Computer Science", "Computer Engineering"]
+  experience_in_place_of_education: true
+experience:
+  min_years: 5.0
+  relevant_titles: ["Systems Engineer", "Software Engineer", "Rust Developer"]
+certifications: []
+domain_keywords: ["performance", "memory safety", "networking"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

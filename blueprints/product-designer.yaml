@@ -1,0 +1,92 @@
+# Built-in blueprint `builtin:product-designer`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: product-designer
+version: "1.0.0"
+title: "Product Designer"
+title_aliases:
+  - "UX Designer"
+  - "UI/UX Designer"
+  - "Interaction Designer"
+  - "Digital Product Designer"
+occupationalCategory: "15-1255.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/96e20037-0a25-4bf6-a25e-808d1605d890"
+seniority: mid
+required_skills:
+  - canonical: "Figma"
+    taxonomy_ref: "onet-tech:Figma"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "create prototype of user experience solutions"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/07dd856d-6141-48a7-a228-918f88494812"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "software interaction design"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/de0be6e8-644c-4cc9-9c8d-925dd98dda56"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "create website wireframe"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/f0f5bb34-71df-4715-9c9e-03567b76ec8f"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "usability engineering"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/95ee5e38-5c1e-4cd2-a21d-6921390025a9"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+preferred_skills:
+  - canonical: "graphic design"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/7fb699d9-182a-430e-b7a0-6d8ed05c284b"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Adobe Photoshop"
+    taxonomy_ref: "onet-tech:Adobe Photoshop"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Adobe Illustrator"
+    taxonomy_ref: "onet-tech:Adobe Illustrator"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Adobe XD"
+    taxonomy_ref: "onet-tech:Adobe XD"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "InVision"
+    taxonomy_ref: "onet-tech:InVision software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "HTML"
+    taxonomy_ref: "onet-tech:Hypertext markup language HTML"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "CSS"
+    taxonomy_ref: "onet-tech:Cascading style sheets CSS"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+knockouts: []
+education:
+  min_level: { framework: isced, level: 6 }
+  fields: ["Interaction Design", "Graphic Design", "Human-Computer Interaction"]
+  experience_in_place_of_education: true
+experience:
+  min_years: 3.0
+  relevant_titles: ["Product Designer", "UX Designer", "UI Designer"]
+certifications: []
+domain_keywords: ["user research", "design systems", "accessibility"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

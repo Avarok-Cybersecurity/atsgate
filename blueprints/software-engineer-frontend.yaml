@@ -1,0 +1,102 @@
+# Built-in blueprint `builtin:software-engineer-frontend`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: software-engineer-frontend
+version: "1.0.0"
+title: "Frontend Software Engineer"
+title_aliases:
+  - "Frontend Engineer"
+  - "Front End Developer"
+  - "UI Engineer"
+  - "Web Developer"
+occupationalCategory: "15-1254.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/c40a2919-48a9-40ea-b506-1f34f693496d"
+seniority: mid
+required_skills:
+  - canonical: "JavaScript"
+    taxonomy_ref: "onet-tech:JavaScript"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "TypeScript"
+    taxonomy_ref: "onet-tech:TypeScript"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "React"
+    taxonomy_ref: "onet-tech:React"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "HTML"
+    taxonomy_ref: "onet-tech:Hypertext markup language HTML"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "CSS"
+    taxonomy_ref: "onet-tech:Cascading style sheets CSS"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Git"
+    taxonomy_ref: "onet-tech:Git"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+preferred_skills:
+  - canonical: "Next.js"
+    taxonomy_ref: "atsgate:nextjs"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Redux"
+    taxonomy_ref: "onet-tech:React Redux"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Jest"
+    taxonomy_ref: "onet-tech:Jest"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "webpack"
+    taxonomy_ref: "onet-tech:webpack"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Node.js"
+    taxonomy_ref: "onet-tech:Node.js"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "GraphQL"
+    taxonomy_ref: "onet-tech:GraphQL"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Vue.js"
+    taxonomy_ref: "onet-tech:Vue.js"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Figma"
+    taxonomy_ref: "onet-tech:Figma"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+knockouts: []
+education:
+  min_level: { framework: isced, level: 6 }
+  fields: ["Computer Science"]
+  experience_in_place_of_education: true
+experience:
+  min_years: 3.0
+  relevant_titles: ["Frontend Engineer", "Web Developer", "Software Engineer"]
+certifications: []
+domain_keywords: ["accessibility", "web performance", "design systems"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

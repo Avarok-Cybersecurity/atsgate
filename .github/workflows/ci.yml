@@ -39,6 +39,10 @@ jobs:
         run: cargo run -p xtask --locked -- fixtures --check
       - name: committed JSON Schemas match the Rust types
         run: cargo run -p xtask --locked -- schemas --check
+      - name: embedded taxonomy data matches its pins, credits and size budget
+        run: cargo run -p xtask --locked -- taxonomy --verify
+      - name: committed example blueprints match the generator
+        run: cargo run -p xtask --locked -- examples --check
 
   deny:
     runs-on: ubuntu-latest

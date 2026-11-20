@@ -1,0 +1,117 @@
+# Built-in blueprint `builtin:software-engineer-backend`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: software-engineer-backend
+version: "1.0.0"
+title: "Backend Software Engineer"
+title_aliases:
+  - "Backend Engineer"
+  - "Back End Developer"
+  - "Server-Side Engineer"
+  - "Software Developer"
+occupationalCategory: "15-1252.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1"
+seniority: mid
+required_skills:
+  - canonical: "SQL"
+    taxonomy_ref: "onet-tech:Structured query language SQL"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "PostgreSQL"
+    taxonomy_ref: "onet-tech:PostgreSQL"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Git"
+    taxonomy_ref: "onet-tech:Git"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Docker"
+    taxonomy_ref: "onet-tech:Docker"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Linux"
+    taxonomy_ref: "onet-tech:Linux"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "perform software unit testing"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/7961413f-61d0-4722-9cd9-20a050a29899"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "distributed computing"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+preferred_skills:
+  - canonical: "Go"
+    taxonomy_ref: "onet-tech:Go"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Python"
+    taxonomy_ref: "onet-tech:Python"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Java"
+    taxonomy_ref: "onet-tech:Oracle Java"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Kubernetes"
+    taxonomy_ref: "onet-tech:Kubernetes"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Redis"
+    taxonomy_ref: "onet-tech:Redis"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Apache Kafka"
+    taxonomy_ref: "onet-tech:Apache Kafka"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "AWS"
+    taxonomy_ref: "onet-tech:Amazon Web Services AWS software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Terraform"
+    taxonomy_ref: "onet-tech:IBM Terraform"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "gRPC"
+    taxonomy_ref: "atsgate:grpc"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Elasticsearch"
+    taxonomy_ref: "onet-tech:Elasticsearch"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+knockouts: []
+education:
+  min_level: { framework: isced, level: 6 }
+  fields: ["Computer Science", "Software Engineering"]
+  experience_in_place_of_education: true
+experience:
+  min_years: 3.0
+  relevant_titles: ["Software Engineer", "Backend Engineer", "Software Developer"]
+certifications: []
+domain_keywords: ["APIs", "databases", "distributed systems"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true

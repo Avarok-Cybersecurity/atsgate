@@ -16,6 +16,7 @@ Docs: <a href="https://ats.express">ats.express</a> (coming with v0.1)</p>
 - [Quick start](#quick-start)
 - [Formats](#formats)
 - [Schemas](#schemas)
+- [Blueprints and taxonomy](#blueprints-and-taxonomy)
 - [Test fixtures](#test-fixtures)
 - [Scoring](#scoring)
 - [Fairness](#fairness)
@@ -59,7 +60,7 @@ network.
   with:
     mode: gate
     resume: dist/resume.pdf
-    blueprint: builtin:software-engineering
+    blueprint: builtin:software-engineer-backend
     fail-on-integrity-flags: true
     report: atsgate-report.json
 ```
@@ -82,6 +83,28 @@ network.
 | [`schemas/blueprint.schema.json`](schemas/blueprint.schema.json) | A job blueprint, aligned with schema.org JobPosting. Every key is required; a value that does not apply is `null` or `[]` |
 
 Both schemas are generated from the Rust types in `atsgate-career` and `atsgate-blueprint` (`cargo run -p xtask -- schemas --write`), so the schema and the parser cannot drift: CI fails if the committed copy differs. Unknown fields are errors in both.
+
+## Blueprints and taxonomy
+
+`atsgate-taxonomy` embeds O*NET 31.0 and ESCO v1.2.1 (about 2.9 MB compressed, against a 4 MiB
+budget) plus a curated alias table, [`curated.yaml`](crates/atsgate-taxonomy/data/curated.yaml).
+A lookup returns the canonical name, the taxonomy reference and how it matched (`exact`, `alias`,
+`broader` or `narrower`). `cargo run -p xtask -- taxonomy --write` rebuilds the data from
+downloads pinned by sha256, and `--verify` checks the committed data offline. Terms and
+attribution: [DATA-LICENSES.md](DATA-LICENSES.md).
+
+Ten reviewed built-in blueprints live in [`blueprints/`](blueprints) (`builtin:<id>`):
+`software-engineer-backend`, `software-engineer-systems-rust`, `ml-inference-engineer`,
+`software-engineer-frontend`, `data-scientist`, `product-designer`, `marketing-manager`,
+`sales-representative`, `accountant` and `paralegal`. Every skill names a taxonomy concept, and
+a test fails if any stops resolving.
+
+`atsgate_blueprint::generate` turns a job description into a candidate blueprint. It is
+deterministic: section cues decide required versus preferred, and it also reads years, degrees,
+certifications and the seniority in the title. Its output is always `reviewed: false`.
+[`blueprints/examples/artcraft-senior-engineer.yaml`](blueprints/examples/artcraft-senior-engineer.yaml)
+is a worked example from a real posting. Measured quality, and its limits:
+[docs/evaluation.md](docs/evaluation.md).
 
 ## Test fixtures
 
@@ -159,7 +182,13 @@ this list drifts.
 - <a id="cite-icims-blog"></a>**icims-blog**: iCIMS. *What is CV/Resume parsing?*. 2020-09. <https://www.icims.com/blog/what-is-cv-resume-parsing/> (VD; accessed 2026-11-20). Supports: Context only (vendor blog).
 - <a id="cite-sap-kba"></a>**sap-kba**: SAP. *KBA 2951470*. n.d.. <https://userapps.support.sap.com/sap/support/knowledge/en/2951470> (VD; accessed 2026-11-20). Supports: Resume field-mapping limits.
 - <a id="cite-onet-lic"></a>**onet-lic**: U.S. Department of Labor, Employment and Training Administration. *O*NET Database License*. 31.0. <https://www.onetcenter.org/license_db.html> (LG; accessed 2026-11-20). Supports: Embedding O*NET data is allowed under CC BY 4.0 with attribution.
-- <a id="cite-esco-dl"></a>**esco-dl**: European Commission. *Download ESCO*. n.d.. <https://esco.ec.europa.eu/en/use-esco/download> (LG; accessed 2026-11-20). Supports: Free download; the exact licence text is not stated on the page.
+- <a id="cite-esco-dl"></a>**esco-dl**: European Commission. *Download ESCO*. n.d.. <https://esco.ec.europa.eu/en/use-esco/download> (LG; accessed 2026-11-20). Supports: Bulk download sits behind a form, so ATSGate imports ESCO v1.2.1 through the public API instead; reuse terms are in esco-faq.
+- <a id="cite-esco-faq"></a>**esco-faq**: European Commission. *ESCO frequently asked questions: reuse of ESCO*. n.d.. <https://esco.ec.europa.eu/en/about-esco/faq> (LG; accessed 2026-11-20). Supports: Free reuse for any purpose under Decision 2011/833/EU; services state "This service uses the ESCO classification of the European Commission"; modified versions must say so.
+- <a id="cite-onet-db"></a>**onet-db**: U.S. Department of Labor, Employment and Training Administration. *O*NET 31.0 Database*. 31.0. <https://www.onetcenter.org/database.html> (LG; accessed 2026-11-20). Supports: Current release is 31.0, licensed CC BY 4.0; source of the embedded occupations, skills and technology examples.
+- <a id="cite-skillspan-data"></a>**skillspan-data**: Zhang et al.. *SkillSpan data repository*. 2023-08. <https://github.com/kris927b/SkillSpan> (CR; accessed 2026-11-20). Supports: MIT-licensed test split (JSON, BIO skill and knowledge tags, house and tech subsets) used in the evaluation.
+- <a id="cite-techwolf-sentences"></a>**techwolf-sentences**: Decorte, Verlinden, Van Hautte, Deleu, Develder, Demeester (TechWolf). *Synthetic-ESCO-skill-sentences*. 2023. <https://huggingface.co/datasets/TechWolf/Synthetic-ESCO-skill-sentences> (CR; accessed 2026-11-20). Supports: 138,260 synthetic sentences, ten per ESCO v1.1.0 skill; CC BY 4.0.
+- <a id="cite-talentclef25-corpus"></a>**talentclef25-corpus**: Gascó et al. (Avature). *TalentCLEF 2025 corpus: Skill and Job Title Intelligence for Human Capital Management*. 2025-04. <https://zenodo.org/records/15292308> (CR; accessed 2026-11-20). Supports: Task A job-title matching data (v0.5.0), CC BY 4.0; the evaluation uses its English validation split.
+- <a id="cite-hn-artcraft"></a>**hn-artcraft**: possibilistic. *ArtCraft: Senior Engineers, onsite San Francisco or Atlanta (Ask HN: Who is hiring? November 2026)*. 2026-11-02. <https://news.ycombinator.com/item?id=50342041> (IB; accessed 2026-11-20). Supports: Real posting used as the generator's worked example.
 - <a id="cite-lightcast-faq"></a>**lightcast-faq**: Lightcast. *Lightcast Skill Taxonomy FAQs*. n.d.. <https://lightcast.io/our-data/taxonomies/open-skills/faqs> (VD; accessed 2026-11-20). Supports: Use is set by the licence type requested; terms are not stated openly, so ATSGate does not embed it.
 - <a id="cite-schema-jp"></a>**schema-jp**: schema.org. *JobPosting*. current. <https://schema.org/JobPosting> (LG; accessed 2026-11-20). Supports: Blueprint field alignment.
 - <a id="cite-jsonresume"></a>**jsonresume**: JSON Resume. *resume-schema*. archived. <https://github.com/jsonresume/resume-schema> (CR; accessed 2026-11-20). Supports: Career SSOT base format (MIT).

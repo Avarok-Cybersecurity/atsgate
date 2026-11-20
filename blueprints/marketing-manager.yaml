@@ -1,0 +1,96 @@
+# Built-in blueprint `builtin:marketing-manager`. Skills reference atsgate-taxonomy concepts;
+# the blueprint crate's tests fail if any canonical name or taxonomy_ref drifts from it.
+$schema: null
+id: marketing-manager
+version: "1.0.0"
+title: "Marketing Manager"
+title_aliases:
+  - "Digital Marketing Manager"
+  - "Growth Marketing Manager"
+  - "Product Marketing Manager"
+occupationalCategory: "11-2021.00"
+esco_occupation: "http://data.europa.eu/esco/occupation/6fcf4638-e7c7-4978-9302-9a7b63a3d57c"
+seniority: manager
+required_skills:
+  - canonical: "marketing management"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/5bbaa0e6-0fd7-4df2-9db7-34f78b40dc34"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "digital marketing techniques"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/43dfbe7f-9e10-4871-b171-e5076737b4cf"
+    aliases: []
+    weight: 2.0
+    evidence_scope: experience_or_projects
+  - canonical: "Google Analytics"
+    taxonomy_ref: "onet-tech:Google Analytics"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "search engine optimisation"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/eda4d727-4374-49af-ace4-118c7c906835"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "content marketing strategy"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/b0560439-14eb-41d1-aa53-1938efc24123"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+preferred_skills:
+  - canonical: "Google Ads"
+    taxonomy_ref: "onet-tech:Google Ads"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "HubSpot"
+    taxonomy_ref: "onet-tech:HubSpot software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Marketo"
+    taxonomy_ref: "onet-tech:Marketo Marketing Automation"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Salesforce"
+    taxonomy_ref: "onet-tech:Salesforce software"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "Semrush"
+    taxonomy_ref: "onet-tech:Semrush"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+  - canonical: "social media marketing techniques"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/509909a2-4a8f-4ead-8ad0-968df63b77cc"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "manage budgets"
+    taxonomy_ref: "http://data.europa.eu/esco/skill/21c5790c-0930-4d74-b3b0-84caf5af12ea"
+    aliases: []
+    weight: 1.0
+    evidence_scope: experience_or_projects
+  - canonical: "Microsoft Excel"
+    taxonomy_ref: "onet-tech:Microsoft Excel"
+    aliases: []
+    weight: 1.0
+    evidence_scope: anywhere
+knockouts: []
+education:
+  min_level: { framework: isced, level: 6 }
+  fields: ["Marketing", "Business Administration", "Communications"]
+  experience_in_place_of_education: true
+experience:
+  min_years: 5.0
+  relevant_titles: ["Marketing Manager", "Marketing Specialist", "Brand Manager"]
+certifications: []
+domain_keywords: ["campaigns", "lead generation", "brand"]
+languages: ["English"]
+provenance:
+  source: builtin
+  generator_version: null
+  taxonomy_versions: { atsgate-curated: "2026-11-20", esco: v1.2.1, onet: "31.0" }
+  reviewed: true
