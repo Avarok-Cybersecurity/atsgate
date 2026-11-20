@@ -1,0 +1,143 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "user research",
+    "design systems",
+    "accessibility"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Interaction Design",
+      "Graphic Design",
+      "Human-Computer Interaction"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/96e20037-0a25-4bf6-a25e-808d1605d890",
+  "experience": {
+    "min_years": 3.0,
+    "relevant_titles": [
+      "Product Designer",
+      "UX Designer",
+      "UI Designer"
+    ]
+  },
+  "id": "product-designer",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "15-1255.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "graphic design",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/7fb699d9-182a-430e-b7a0-6d8ed05c284b",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Adobe Photoshop",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Adobe Photoshop",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Adobe Illustrator",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Adobe Illustrator",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Adobe XD",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Adobe XD",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "InVision",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:InVision software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "HTML",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Hypertext markup language HTML",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "CSS",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Cascading style sheets CSS",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "Figma",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Figma",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "create prototype of user experience solutions",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/07dd856d-6141-48a7-a228-918f88494812",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "software interaction design",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/de0be6e8-644c-4cc9-9c8d-925dd98dda56",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "create website wireframe",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/f0f5bb34-71df-4715-9c9e-03567b76ec8f",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "usability engineering",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/95ee5e38-5c1e-4cd2-a21d-6921390025a9",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Product Designer",
+  "title_aliases": [
+    "UX Designer",
+    "UI/UX Designer",
+    "Interaction Designer",
+    "Digital Product Designer"
+  ],
+  "version": "1.0.0"
+}

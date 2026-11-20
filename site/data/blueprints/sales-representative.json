@@ -1,0 +1,136 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "quota",
+    "pipeline",
+    "B2B"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [],
+    "min_level": null
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/14031d4a-6e99-442f-b4fe-18262b6432b2",
+  "experience": {
+    "min_years": 2.0,
+    "relevant_titles": [
+      "Sales Representative",
+      "Account Executive",
+      "Business Development Representative"
+    ]
+  },
+  "id": "sales-representative",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "41-3091.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "HubSpot",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:HubSpot software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "LinkedIn",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:LinkedIn",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Microsoft Dynamics CRM",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Microsoft Dynamics CRM",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "sales strategies",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/e7219848-a27a-4bf4-8775-d367707be7c9",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Negotiation",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet:2.B.1.d",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Persuasion",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet:2.B.1.c",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Microsoft Excel",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Microsoft Excel",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "prospect new customers",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/6d97bf55-6fb6-4795-8282-3ef915ae0bb8",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "negotiate sales contracts",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/71152876-b629-4a99-b9ea-0f25a0d07e4e",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "customer relationship management",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/dc9a236c-c640-43c3-812f-269403591edb",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Salesforce",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Salesforce software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "deliver a sales pitch",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/2f573ad6-1fa6-46c5-a48d-912368fe55aa",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Sales Representative",
+  "title_aliases": [
+    "Account Executive",
+    "Business Development Representative",
+    "B2B Sales Representative",
+    "Sales Development Representative"
+  ],
+  "version": "1.0.0"
+}

@@ -6,6 +6,7 @@ mod examples;
 mod fetch;
 mod fixtures;
 mod schemas;
+mod site;
 mod taxonomy;
 
 use std::path::Path;
@@ -82,8 +83,9 @@ fn main() -> ExitCode {
             Some("schemas") => schemas::all().and_then(|f| sync_all(f, mode)),
             Some("examples") => examples::all().and_then(|f| sync_all(f, mode)),
             Some("eval") => eval::run(mode),
+            Some("site") => site::all().and_then(|f| sync_all(f, mode)),
             other => Err(format!(
-                "unknown task {other:?}; tasks: citations, eval, examples, fixtures, schemas, taxonomy"
+                "unknown task {other:?}; tasks: citations, eval, examples, fixtures, schemas, site, taxonomy"
             )),
         }),
     };

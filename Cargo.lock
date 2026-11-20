@@ -4758,6 +4758,8 @@ version = "0.0.1"
 dependencies = [
  "atsgate-blueprint",
  "atsgate-career",
+ "atsgate-extract",
+ "atsgate-resume",
  "atsgate-score",
  "atsgate-taxonomy",
  "csv",

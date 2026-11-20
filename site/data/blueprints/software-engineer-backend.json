@@ -1,0 +1,177 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "APIs",
+    "databases",
+    "distributed systems"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Computer Science",
+      "Software Engineering"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/f2b15a0e-e65a-438a-affb-29b9d50b77d1",
+  "experience": {
+    "min_years": 3.0,
+    "relevant_titles": [
+      "Software Engineer",
+      "Backend Engineer",
+      "Software Developer"
+    ]
+  },
+  "id": "software-engineer-backend",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "15-1252.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "Go",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Go",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Python",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Python",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Java",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Oracle Java",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Kubernetes",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Kubernetes",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Redis",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Redis",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Apache Kafka",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Apache Kafka",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "AWS",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Amazon Web Services AWS software",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Terraform",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:IBM Terraform",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "gRPC",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:grpc",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Elasticsearch",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Elasticsearch",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "SQL",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Structured query language SQL",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "PostgreSQL",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:PostgreSQL",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Git",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Git",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Docker",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Docker",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Linux",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Linux",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "perform software unit testing",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/7961413f-61d0-4722-9cd9-20a050a29899",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "distributed computing",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Backend Software Engineer",
+  "title_aliases": [
+    "Backend Engineer",
+    "Back End Developer",
+    "Server-Side Engineer",
+    "Software Developer"
+  ],
+  "version": "1.0.0"
+}

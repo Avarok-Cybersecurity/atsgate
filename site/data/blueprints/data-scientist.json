@@ -1,0 +1,143 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "experimentation",
+    "forecasting",
+    "A/B testing"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Statistics",
+      "Computer Science",
+      "Mathematics",
+      "Economics"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 7
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/258e46f9-0075-4a2e-adae-1ff0477e0f30",
+  "experience": {
+    "min_years": 3.0,
+    "relevant_titles": [
+      "Data Scientist",
+      "Data Analyst",
+      "Applied Scientist"
+    ]
+  },
+  "id": "data-scientist",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "15-2051.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "R",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:R",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "scikit-learn",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Scikit-learn",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Apache Spark",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Apache Spark",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Tableau",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Tableau",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Jupyter",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Jupyter Notebook",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "PyTorch",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:PyTorch",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "data mining",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/25f0ea33-b4a2-4f31-b7b4-7d20e827b180",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "Python",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Python",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "SQL",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Structured query language SQL",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "statistics",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/7ee4c2ea-b349-4bd2-81a3-ec31475d4833",
+      "weight": 2.0
+    },
+    {
+      "aliases": [],
+      "canonical": "machine learning",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/3a2d5b45-56e4-4f5a-a55a-4a4a65afdc43",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "pandas",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:pandas",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "mid",
+  "title": "Data Scientist",
+  "title_aliases": [
+    "Applied Scientist",
+    "Data Science Analyst",
+    "Machine Learning Scientist"
+  ],
+  "version": "1.0.0"
+}

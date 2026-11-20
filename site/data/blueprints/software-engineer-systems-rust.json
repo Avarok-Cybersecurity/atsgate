@@ -1,0 +1,149 @@
+{
+  "$schema": null,
+  "certifications": [],
+  "domain_keywords": [
+    "performance",
+    "memory safety",
+    "networking"
+  ],
+  "education": {
+    "experience_in_place_of_education": true,
+    "fields": [
+      "Computer Science",
+      "Computer Engineering"
+    ],
+    "min_level": {
+      "framework": "isced",
+      "level": 6
+    }
+  },
+  "esco_occupation": "http://data.europa.eu/esco/occupation/a7c1d23d-aeca-4bee-9a08-5993ed98b135",
+  "experience": {
+    "min_years": 5.0,
+    "relevant_titles": [
+      "Systems Engineer",
+      "Software Engineer",
+      "Rust Developer"
+    ]
+  },
+  "id": "software-engineer-systems-rust",
+  "knockouts": [],
+  "languages": [
+    "English"
+  ],
+  "occupationalCategory": "15-1252.00",
+  "preferred_skills": [
+    {
+      "aliases": [],
+      "canonical": "C++",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:C++",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "C",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:C",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Tokio",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:tokio",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "WebAssembly",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:webassembly",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Low-level virtual machine LLVM compilers",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Low-level virtual machine LLVM compilers",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Kubernetes",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Kubernetes",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "gRPC",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "atsgate:grpc",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "distributed computing",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/897b393f-e7e0-4248-a40d-d77119694e83",
+      "weight": 1.0
+    }
+  ],
+  "provenance": {
+    "generator_version": null,
+    "reviewed": true,
+    "source": "builtin",
+    "taxonomy_versions": {
+      "atsgate-curated": "2026-11-20",
+      "esco": "v1.2.1",
+      "onet": "31.0"
+    }
+  },
+  "required_skills": [
+    {
+      "aliases": [],
+      "canonical": "Rust",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Rust programming language",
+      "weight": 3.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Linux",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "onet-tech:Linux",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "use concurrent programming",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/25b291b5-8245-4d9d-b391-86a8a31d7109",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "operating systems",
+      "evidence_scope": "experience_or_projects",
+      "taxonomy_ref": "http://data.europa.eu/esco/skill/f9a6f35b-01a7-40c9-8b61-b6ee46f97272",
+      "weight": 1.0
+    },
+    {
+      "aliases": [],
+      "canonical": "Git",
+      "evidence_scope": "anywhere",
+      "taxonomy_ref": "onet-tech:Git",
+      "weight": 1.0
+    }
+  ],
+  "seniority": "senior",
+  "title": "Systems Software Engineer (Rust)",
+  "title_aliases": [
+    "Rust Engineer",
+    "Rust Developer",
+    "Systems Engineer",
+    "Systems Programmer"
+  ],
+  "version": "1.0.0"
+}

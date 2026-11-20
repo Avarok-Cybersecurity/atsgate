@@ -15,6 +15,8 @@ lopdf = { version = "0.47.0", default-features = false }
 zip = { version = "=9.4.0", default-features = false, features = ["deflate-flate2"] }
 flate2 = { version = "1.1.5", default-features = false, features = ["rust_backend"] }
 atsgate-career.workspace = true
+atsgate-extract.workspace = true
+atsgate-resume.workspace = true
 atsgate-blueprint.workspace = true
 atsgate-score.workspace = true
 atsgate-taxonomy.workspace = true
