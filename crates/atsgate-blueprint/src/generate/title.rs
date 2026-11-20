@@ -122,9 +122,9 @@ fn segments(line: &str) -> impl Iterator<Item = &str> {
 /// "Looking for engineers" is prose, not a title.
 fn names_title(segment: &str) -> bool {
     let raw: Vec<&str> = segment.split_whitespace().collect();
-    let cased = raw.iter().all(|w| {
-        TITLE_CONNECTORS.contains(w) || !w.chars().next().is_some_and(char::is_lowercase)
-    });
+    let cased = raw
+        .iter()
+        .all(|w| TITLE_CONNECTORS.contains(w) || !w.chars().next().is_some_and(char::is_lowercase));
     let words: Vec<String> = raw.iter().map(|w| fold(singular(w))).collect();
     cased && words.len() <= 6 && words.iter().any(|w| TITLE_HEADS.contains(&w.as_str()))
 }

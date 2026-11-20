@@ -64,7 +64,10 @@ fn colliding_aliases_resolve_to_the_right_concept() {
         canonical("Software as a service").as_deref(),
         Some("Software as a service SaaS")
     );
-    assert_eq!(canonical("TLS").as_deref(), Some("Transport Layer Security"));
+    assert_eq!(
+        canonical("TLS").as_deref(),
+        Some("Transport Layer Security")
+    );
     assert_eq!(
         canonical("transport layer security").as_deref(),
         Some("Transport Layer Security")

@@ -94,7 +94,11 @@ impl Taxonomy {
             case_sensitive: curated.case_sensitive.clone(),
             stoplist: curated.gazetteer_stoplist.iter().map(|s| fold(s)).collect(),
             contextual: Vec::new(),
-            esco_allow: curated.gazetteer_esco_allow.iter().map(|s| fold(s)).collect(),
+            esco_allow: curated
+                .gazetteer_esco_allow
+                .iter()
+                .map(|s| fold(s))
+                .collect(),
             posting_excluded_prefixes: curated
                 .gazetteer_posting_excluded_prefixes
                 .iter()

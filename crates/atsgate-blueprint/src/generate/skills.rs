@@ -110,7 +110,10 @@ pub fn collect(lines: &[Line<'_>], gazetteer: &Gazetteer<'_>) -> Found {
                 Some((at + start, r.concept))
             })
         });
-        let mentions = gazetteer.find(line.text).into_iter().map(|m| (m.start, m.concept));
+        let mentions = gazetteer
+            .find(line.text)
+            .into_iter()
+            .map(|m| (m.start, m.concept));
         for (start, concept) in mentions.chain(listed) {
             let c = taxonomy.concept(concept);
             if c.kind() != ConceptKind::Skill {

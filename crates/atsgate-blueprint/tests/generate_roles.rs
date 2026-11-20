@@ -71,7 +71,10 @@ fn a_stack_line_names_its_items_whatever_their_case() {
         "AWS",
         "Terraform",
     ] {
-        assert!(required.contains(&skill), "{skill} missing from {required:?}");
+        assert!(
+            required.contains(&skill),
+            "{skill} missing from {required:?}"
+        );
     }
 }
 
