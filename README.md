@@ -1,0 +1,159 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/logo-dark.svg">
+    <img src="brand/logo-light.svg" alt="ATSGate logo: a gate with a check mark passing through it" width="96" height="96">
+  </picture>
+</p>
+
+<h1 align="center">ATSGate</h1>
+
+<p align="center">A deterministic, evidence-carrying resume scorer in pure Rust, shipped as a GitHub Action.<br>
+Docs: <a href="https://ats.express">ats.express</a> (coming with v0.1)</p>
+
+## Contents
+
+- [What it is](#what-it-is)
+- [Quick start](#quick-start)
+- [Formats](#formats)
+- [Scoring](#scoring)
+- [Fairness](#fairness)
+- [Citations](#citations)
+- [License](#license)
+
+## What it is
+
+ATSGate reads a resume (PDF, DOCX, HTML, Markdown or plain text) and scores it against a
+standardized **job blueprint**. It runs in CI, so a resume that is generated from a career file
+can be gated on parse risk and keyword coverage before it ships.
+
+- **Deterministic.** The same input always gives the same score. No language model sits in the
+  scoring path.
+- **Evidence-carrying.** Every point names the rule that awarded it and the page, bounding box and
+  text span it came from.
+- **Honest about vendors.** Real applicant tracking systems mostly do not auto-score
+  ([gh-tm-faq](#cite-gh-tm-faq), [ats-screener-research](#cite-ats-screener-research)). ATSGate
+  reports a *simulated parse and keyword risk* per vendor, never a vendor score.
+
+The crates are pure: they take bytes and return values. Only `atsgate-cli` reads files or the
+network.
+
+| Crate | Role | Status |
+|---|---|---|
+| `atsgate-extract` | Bytes to a `Document`: spans, bounding boxes, reading order, layout and hidden-text signals | Phase 2 |
+| `atsgate-resume` | `Document` to `Resume`: sections, dated roles and bullets with evidence spans | Phase 2 |
+| `atsgate-career` | The career SSOT format (JSON Resume plus `x-atsgate`) | Phase 2b |
+| `atsgate-blueprint` | The job blueprint schema, built-ins and generator | Phase 2b / 3 |
+| `atsgate-taxonomy` | Skill and title alias tables from O*NET and ESCO | Phase 3 |
+| `atsgate-score` | Resume x blueprint to a report | Phase 4 |
+| `atsgate-render` | Career SSOT to resume PDF/DOCX and site partials | Phase 2b+ |
+| `atsgate-cli` | The `atsgate` command: the only crate that performs I/O | Phase 4 |
+
+## Quick start
+
+> **Coming in v0.1.** The action below does not exist yet; this shows the intended interface.
+
+```yaml
+- uses: Avarok-Cybersecurity/atsgate@v0.1 # pin by SHA once released
+  with:
+    mode: gate
+    resume: dist/resume.pdf
+    blueprint: builtin:software-engineering
+    fail-on-integrity-flags: true
+    report: atsgate-report.json
+```
+
+## Formats
+
+| Input | Reader | What it detects |
+|---|---|---|
+| PDF | `pdf_oxide` (spans, boxes, reading order) and `lopdf` (fonts, ToUnicode) | Columns, out-of-flow text boxes, tables, header and footer content, image-only pages, unmapped glyphs and ligatures, white, tiny, zero-width, off-page and metadata-only text |
+| DOCX | `zip` and `quick-xml` | Tables, text boxes, header and footer content, hidden (`w:vanish`), white and tiny runs, zero-width characters, metadata-only text |
+| HTML | `scraper` | Text in document order |
+| Markdown | `pulldown-cmark` | Text in document order |
+| Plain text | built in | Text |
+
+## Scoring
+
+Scoring arrives in phase 4. In summary, a resume is scored against a blueprint on:
+knockouts (met, unmet or unknown; no points), required and preferred skills (each counted once,
+so stuffing gains nothing), title and seniority, years of experience (the union of dated
+intervals, with **gaps never penalized**), education level and field (institutions never
+weighted), and parse integrity. Integrity flags such as hidden text are reported, never scored up,
+and fail the gate by default.
+
+Vendor profiles (Workday, Taleo, iCIMS, Greenhouse, Lever, SuccessFactors) re-weight these
+dimensions. Their starting weights come from [ats-screener](#cite-ats-screener-method), whose own
+documents contradict each other on pass floors. **Every vendor result is simulated**: no vendor
+publishes its scoring, and Greenhouse and Lever document no auto-scoring at all.
+
+## Fairness
+
+LLM screeners carry name, school and gap bias ([faire](#cite-faire), [iso-bias](#cite-iso-bias),
+[karvonen](#cite-karvonen), [llm-hire-fairly](#cite-llm-hire-fairly)). ATSGate never reads a
+name, photo, address, school name, graduation year or employment gap as a scoring input, and
+metamorphic tests will prove that changing any of them leaves every score bit-identical.
+Because it is deterministic, those properties are checkable rather than statistical.
+
+## Citations
+
+Generated from [CITATIONS.md](CITATIONS.md), the single source of truth for sources; CI fails if
+this list drifts.
+
+<!-- citations:begin (generated from CITATIONS.md; do not edit) -->
+- <a id="cite-ats-screener-method"></a>**ats-screener-method**: S. Patel. *ATS Screener scoring methodology, dimensions and thresholds*. 2026. <https://github.com/sunnypatell/ats-screener/tree/main/docs/src/content/docs/scoring> (CR; accessed 2026-11-20). Supports: Baseline weights and strictness; its pass floors contradict each other between methodology.md and thresholds.md.
+- <a id="cite-ats-screener-research"></a>**ats-screener-research**: S. Patel. *ATS parsing, scoring and platform research notes*. 2026-02. <https://github.com/sunnypatell/ats-screener/tree/main/research> (CR; accessed 2026-11-20). Supports: Vendor behaviour caveats: Lever and Greenhouse do not auto-score or auto-reject.
+- <a id="cite-confit-v2"></a>**confit-v2**: Yu, Xu, Xue, Zhang, Ma, Z. Yu. *ConFit v2: Improving Resume-Job Matching using Hypothetical Resume Embedding and Runner-Up Hard-Negative Mining*. 2025-02. <https://arxiv.org/abs/2502.12361> (AX; accessed 2026-11-20). Supports: BM25 trails dense retrieval on full resume-to-job ranking.
+- <a id="cite-confit-v3"></a>**confit-v3**: Yu et al.. *ConFit v3: Improving Resume-Job Matching with LLM-based Re-Ranking*. 2026-05. <https://arxiv.org/abs/2605.09760> (AX; accessed 2026-11-20). Supports: State-of-the-art context; LLMs kept out of deterministic scoring.
+- <a id="cite-pjb"></a>**pjb**: Wang et al.. *PJB: A Reasoning-Aware Benchmark for Person-Job Retrieval*. 2026-03. <https://arxiv.org/abs/2603.17386> (AX; accessed 2026-11-20). Supports: Domain variance exceeds model gains.
+- <a id="cite-workrb"></a>**workrb**: De Lange et al.. *WorkRB: A Community-Driven Evaluation Framework for AI in the Work Domain*. 2026-03. <https://arxiv.org/abs/2604.13055> (AX; accessed 2026-11-20). Supports: Lexical baselines hold on skill normalization (BM25 47.4 MAP) but collapse on titles (2.5).
+- <a id="cite-lcd-pjf"></a>**lcd-pjf**: Jouanneau, Jouffroy, Palyart. *An Efficient Long-Context Ranking Architecture With Calibrated LLM Distillation: Application to Person-Job Fit*. 2026-01. <https://arxiv.org/abs/2601.10321> (AX; accessed 2026-11-20). Supports: Skill-fit scores and calibration.
+- <a id="cite-review-recruit"></a>**review-recruit**: Zhao, Wei. *From Matching Models to Recruiting Agents: A Systematized Narrative Review of AI Recruitment Systems, Evaluation, and Governance*. 2026-09. <https://arxiv.org/abs/2609.04286> (AX; accessed 2026-11-20). Supports: Evidence-level evaluation and contestability.
+- <a id="cite-hybrid-emb"></a>**hybrid-emb**: Yashwant et al.. *Semantic Candidate-Job Matching: A Comparative Evaluation of Dense Embedding Models in Hybrid Retrieval*. 2026-09. <https://arxiv.org/abs/2609.23307> (AX; accessed 2026-11-20). Supports: Hybrid lexical and dense retrieval.
+- <a id="cite-talentclef25"></a>**talentclef25**: Gasco et al.. *Overview of the TalentCLEF 2025: Skill and Job Title Intelligence for Human Capital Management*. 2025-07. <https://arxiv.org/abs/2507.13275> (AX; accessed 2026-11-20). Supports: Job-title and skill benchmark; training strategy beat model size.
+- <a id="cite-talentclef26"></a>**talentclef26**: Gasco et al.. *Overview of the TalentCLEF 2026: Skill and Job Title Intelligence for Human Capital Management*. 2026-06. <https://arxiv.org/abs/2606.31692> (AX; accessed 2026-11-20). Supports: Job-person matching task.
+- <a id="cite-nlpnorth"></a>**nlpnorth**: Zhang, van der Goot. *NLPnorth @ TalentCLEF 2025: Comparing Discriminative, Contrastive, and Prompt-Based Methods for Job Title and Skill Matching*. 2025-06. <https://arxiv.org/abs/2506.19058> (AX; accessed 2026-11-20). Supports: Method comparison on title and skill matching.
+- <a id="cite-esco-linking"></a>**esco-linking**: Saroglou et al.. *Enhancing Job Matching: Occupation, Skill and Qualification Linking with the ESCO and EQF taxonomies*. 2025-12. <https://arxiv.org/abs/2512.03195> (AX; accessed 2026-11-20). Supports: Entity linking suits skills; sentence linking suits occupations.
+- <a id="cite-skillspan"></a>**skillspan**: Zhang, Jensen, Sonniks, Plank. *SkillSpan: Hard and Soft Skill Extraction from English Job Postings*. 2022. <https://arxiv.org/abs/2204.12811> (PR; accessed 2026-11-20). Supports: Span-annotated job-description dataset (NAACL 2022).
+- <a id="cite-rethink-se"></a>**rethink-se**: Nguyen, Zhang, Montariol, Bosselut. *Rethinking Skill Extraction in the Job Market Domain using Large Language Models*. 2024. <https://arxiv.org/abs/2402.03832> (PR; accessed 2026-11-20). Supports: In-context LLM extraction still trails supervised taggers (workshop paper).
+- <a id="cite-decorte-xml"></a>**decorte-xml**: Decorte et al.. *Extreme Multi-Label Skill Extraction Training using Large Language Models*. 2023. <https://arxiv.org/abs/2307.10778> (PR; accessed 2026-11-20). Supports: Synthetic-data contrastive models beat literal-match supervision (workshop paper).
+- <a id="cite-senger-survey"></a>**senger-survey**: Senger, Zhang, van der Goot, Plank. *Deep Learning-based Computational Job Market Analysis: A Survey on Skill Extraction and Classification from Job Postings*. 2024. <https://arxiv.org/abs/2402.05617> (PR; accessed 2026-11-20). Supports: Catalogue of skill-extraction datasets (workshop paper).
+- <a id="cite-resumebench"></a>**resumebench**: Ling et al.. *Beyond Human Labels: A Multi-Linguistic Auto-Generated Benchmark for Evaluating Large Language Models on Resume Parsing*. 2025-11. <https://aclanthology.org/2025.emnlp-main.1626> (PR; accessed 2026-11-20). Supports: Resume parsing benchmark (EMNLP 2025, synthetic).
+- <a id="cite-layout-resume"></a>**layout-resume**: Zhu et al.. *Layout-Aware Parsing Meets Efficient LLMs: A Unified, Scalable Framework for Resume Information Extraction and Evaluation*. 2025-10. <https://arxiv.org/abs/2510.09722> (AX; accessed 2026-11-20). Supports: Normalize layout before extracting resume fields.
+- <a id="cite-pdf-tools"></a>**pdf-tools**: Adhikari, Agarwal. *A Comparative Study of PDF Parsing Tools Across Diverse Document Categories*. 2024. <https://arxiv.org/abs/2410.09871> (AX; accessed 2026-11-20). Supports: Rule-based extractor choice (PyMuPDF and pdfium strongest).
+- <a id="cite-tk-columns"></a>**tk-columns**: Textkernel. *Improving extraction from column resumes*. n.d.. <https://textkernel.com/learn-support/blog/improving-extraction-from-column-resumes> (VD; accessed 2026-11-20). Supports: At least 15% of CVs use columns; naive stream order interleaves them.
+- <a id="cite-faire"></a>**faire**: Wen et al.. *FAIRE: Assessing Racial and Gender Bias in AI-Driven Resume Evaluations*. 2025-04. <https://arxiv.org/abs/2504.01420> (AX; accessed 2026-11-20). Supports: Name-based bias in LLM screeners varies by model.
+- <a id="cite-iso-bias"></a>**iso-bias**: Iso et al.. *Evaluating Bias in LLMs for Job-Resume Matching: Gender, Race, and Education*. 2025-03. <https://arxiv.org/abs/2503.19182> (PR; accessed 2026-11-20). Supports: Education bias persists (NAACL 2025 Industry).
+- <a id="cite-karvonen"></a>**karvonen**: Karvonen, Marks. *Robustly Improving LLM Fairness in Realistic Settings via Interpretability*. 2025-06. <https://arxiv.org/abs/2506.10922> (AX; accessed 2026-11-20). Supports: College names act as a demographic proxy despite anti-bias prompts.
+- <a id="cite-fairness-not-enough"></a>**fairness-not-enough**: Webster. *Fairness Is Not Enough: Auditing Competence and Intersectional Bias in AI-powered Resume Screening*. 2025-07. <https://arxiv.org/abs/2507.11548> (AX; accessed 2026-11-20). Supports: Audit competence as well as bias.
+- <a id="cite-popresume"></a>**popresume**: Yu, Park, Moon. *PopResume: Causal Fairness Evaluation of LLM/VLM Resume Screeners with Population-Representative Dataset*. 2026-03. <https://arxiv.org/abs/2603.22714> (AX; accessed 2026-11-20). Supports: Causal fairness audit dataset.
+- <a id="cite-llm-hire-fairly"></a>**llm-hire-fairly**: Gao, Jiang, Yan. *Can LLMs Hire Fairly? Racial Bias in Resume Screening*. 2026-06. <https://arxiv.org/abs/2606.28978> (AX; accessed 2026-11-20). Supports: Bias direction flips across model generations.
+- <a id="cite-bias-tails"></a>**bias-tails**: Nghiem et al.. *Bias in the Tails: How Name-conditioned Evaluative Framing in Resume Summaries Destabilizes LLM-based Hiring*. 2026-04. <https://arxiv.org/abs/2604.19984> (AX; accessed 2026-11-20). Supports: Name-driven variation hides in score-distribution tails.
+- <a id="cite-audit-verdict"></a>**audit-verdict**: Vohra, Ravikiran. *The Audit Decides the Verdict: Instrument Effects Rival Demographic Bias in LLM Decision Audits*. 2026-09. <https://arxiv.org/abs/2609.09048> (AX; accessed 2026-11-20). Supports: Audit construction changes the finding (workshop paper).
+- <a id="cite-task-audit"></a>**task-audit**: Braun et al.. *Hiring Discrimination and the Task Content of Jobs: Evidence from a Large-Scale Resume Audit*. 2026-04. <https://arxiv.org/abs/2604.01933> (AX; accessed 2026-11-20). Supports: Discretion widens gaps; objective rules narrow them.
+- <a id="cite-inj-measure"></a>**inj-measure**: Zhang et al.. *Measuring Real-World Prompt Injection Attacks in LLM-based Resume Screening*. 2026-05. <https://arxiv.org/abs/2605.28999> (AX; accessed 2026-11-20). Supports: About 1% of real resumes carry hidden injections (USENIX Security 2026 listed).
+- <a id="cite-resumeshield"></a>**resumeshield**: Barach. *ResumeShield: Channel Separation and an Open Benchmark for Indirect Prompt Injection in AI Resume Screening*. 2026-07. <https://arxiv.org/abs/2609.20188> (AX; accessed 2026-11-20). Supports: Concealment is itself a detectable signal (precision 1.0, recall 0.944).
+- <a id="cite-inj-multi"></a>**inj-multi**: Baxi et al.. *Prompt Injection in Automated Résumé Screening with Large Language Models: Single and Multi-Injection Settings*. 2026-06. <https://arxiv.org/abs/2606.27287> (AX; accessed 2026-11-20). Supports: Manipulation dynamics across screeners (ACL Findings listed).
+- <a id="cite-ai-sec-resume"></a>**ai-sec-resume**: Mu et al.. *AI Security Beyond Core Domains: Resume Screening as a Case Study of Adversarial Vulnerabilities in Specialized LLM Applications*. 2025-12. <https://arxiv.org/abs/2512.20164> (AX; accessed 2026-11-20). Supports: Invisible-keyword attacks.
+- <a id="cite-hidden-workers"></a>**hidden-workers**: Fuller, Raman, Sage-Gavin, Hines; Harvard Business School and Accenture. *Hidden Workers: Untapped Talent (Executive Summary)*. 2021-09. <https://pubwww.hbs.edu/managing-the-future-of-work/Documents/research/Hidden%20Workers%20Executive%20Summary.pdf> (IB; accessed 2026-11-20). Supports: Recruiting systems exclude candidates for a gap in employment; ATSGate never penalizes gaps.
+- <a id="cite-kristal-gaps"></a>**kristal-gaps**: Kristal, Nicks, Gloor, Hauser. *Reducing discrimination against job seekers with and without employment gaps*. 2022-12. <https://europepmc.org/article/PMC/PMC7614241> (PR; accessed 2026-11-20). Supports: Listing years worked instead of dates raised callbacks about 8% (vs no gap) and 15% (vs gap); Nature Human Behaviour 7(2):211-218.
+- <a id="cite-gh-tm-faq"></a>**gh-tm-faq**: Greenhouse. *Talent Matching Data Processing FAQ*. n.d.. <https://support.greenhouse.io/hc/en-us/articles/41131616864283> (VD; accessed 2026-11-20). Supports: No auto-reject; names and contact details excluded.
+- <a id="cite-gh-import"></a>**gh-import**: Greenhouse. *Why didn't the resume import correctly?*. n.d.. <https://support.greenhouse.io/hc/en-us/articles/200721684> (VD; accessed 2026-11-20). Supports: Unrecognized characters break parsing.
+- <a id="cite-gh-types"></a>**gh-types**: Greenhouse. *Supported file types*. n.d.. <https://support.greenhouse.io/hc/en-us/articles/360052218132> (VD; accessed 2026-11-20). Supports: Accepted input formats.
+- <a id="cite-wd-parse"></a>**wd-parse**: Workday. *Set Up Prospects and Candidates*. n.d.. <https://doc.workday.com/admin-guide/en-us/human-capital-management/recruiting/candidates/set-up-prospects-and-candidates/hdc1552497830785.html> (VD; accessed 2026-11-20). Supports: Parse results vary with format and word order; avoid image resumes.
+- <a id="cite-taleo-attach"></a>**taleo-attach**: Oracle. *Attachments*. 22D. <https://docs.oracle.com/en/cloud/saas/taleo-enterprise/22d/otrcg/c-attachment.html> (VD; accessed 2026-11-20). Supports: Accepted attachment formats.
+- <a id="cite-icims-blog"></a>**icims-blog**: iCIMS. *What is CV/Resume parsing?*. 2020-09. <https://www.icims.com/blog/what-is-cv-resume-parsing/> (VD; accessed 2026-11-20). Supports: Context only (vendor blog).
+- <a id="cite-sap-kba"></a>**sap-kba**: SAP. *KBA 2951470*. n.d.. <https://userapps.support.sap.com/sap/support/knowledge/en/2951470> (VD; accessed 2026-11-20). Supports: Resume field-mapping limits.
+- <a id="cite-onet-lic"></a>**onet-lic**: U.S. Department of Labor, Employment and Training Administration. *O*NET Database License*. 31.0. <https://www.onetcenter.org/license_db.html> (LG; accessed 2026-11-20). Supports: Embedding O*NET data is allowed under CC BY 4.0 with attribution.
+- <a id="cite-esco-dl"></a>**esco-dl**: European Commission. *Download ESCO*. n.d.. <https://esco.ec.europa.eu/en/use-esco/download> (LG; accessed 2026-11-20). Supports: Free download; the exact licence text is not stated on the page.
+- <a id="cite-lightcast-faq"></a>**lightcast-faq**: Lightcast. *Lightcast Skill Taxonomy FAQs*. n.d.. <https://lightcast.io/our-data/taxonomies/open-skills/faqs> (VD; accessed 2026-11-20). Supports: Use is set by the licence type requested; terms are not stated openly, so ATSGate does not embed it.
+- <a id="cite-schema-jp"></a>**schema-jp**: schema.org. *JobPosting*. current. <https://schema.org/JobPosting> (LG; accessed 2026-11-20). Supports: Blueprint field alignment.
+- <a id="cite-jsonresume"></a>**jsonresume**: JSON Resume. *resume-schema*. archived. <https://github.com/jsonresume/resume-schema> (CR; accessed 2026-11-20). Supports: Career SSOT base format (MIT).
+- <a id="cite-ll144"></a>**ll144**: NYC Department of Consumer and Worker Protection. *Automated Employment Decision Tools: Frequently Asked Questions*. 2023. <https://www.nyc.gov/site/dca/businesses/faq-automated-employment-decision-tools.page> (LG; accessed 2026-11-20). Supports: Bias audits compute selection or scoring rates and impact ratios across sex, race/ethnicity and intersectional categories.
+- <a id="cite-eu-aia-a3"></a>**eu-aia-a3**: artificialintelligenceact.eu. *AI Act Annex III: High-Risk AI Systems*. 2024. <https://artificialintelligenceact.eu/annex/3/> (LG; accessed 2026-11-20). Supports: Recruitment AI is high-risk (Annex III 4(a)).
+<!-- citations:end -->
+
+## License
+
+Code: dual-licensed under [MIT](LICENSE-MIT) or [Apache-2.0](LICENSE-APACHE), at your option.
+Data: see [DATA-LICENSES.md](DATA-LICENSES.md) for the O*NET and ESCO terms that taxonomy data
+will ship under.

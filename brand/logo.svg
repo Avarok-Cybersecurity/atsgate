@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="128" height="128" role="img" aria-labelledby="t">
+  <title id="t">ATSGate</title>
+  <!-- Gate mark: two pillars, a lintel, and a check passing through the opening.
+       Contrast (WCAG 2.x): light #0B3D91 on #FFFFFF 10.0:1, accent #C2410C 5.2:1;
+       dark #9CC3FF on #0D1117 10.5:1, accent #FDBA74 11.2:1. AA needs 3:1 for graphics. -->
+  <style>
+    .g { fill: #0B3D91 } .a { stroke: #C2410C }
+    @media (prefers-color-scheme: dark) { .g { fill: #9CC3FF } .a { stroke: #FDBA74 } }
+  </style>
+  <rect class="g" x="6" y="8" width="52" height="8" rx="2"/>
+  <rect class="g" x="10" y="16" width="9" height="42" rx="1.5"/>
+  <rect class="g" x="45" y="16" width="9" height="42" rx="1.5"/>
+  <path class="a" d="M24 38 l7 7 l11 -15" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

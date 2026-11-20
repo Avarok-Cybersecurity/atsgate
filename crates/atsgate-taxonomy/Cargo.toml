@@ -1,0 +1,13 @@
+[package]
+name = "atsgate-taxonomy"
+description = "Canonical skills and job titles with alias tables built from O*NET and ESCO."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+
+[lints]
+workspace = true
