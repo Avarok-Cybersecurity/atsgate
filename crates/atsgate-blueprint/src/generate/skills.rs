@@ -9,6 +9,32 @@ use std::collections::BTreeMap;
 /// Every generated skill carries the same weight; a reviewer adjusts it.
 pub const GENERATED_WEIGHT: f64 = 1.0;
 
+/// O*NET software categories so common to office work that a mention outside the requirements
+/// says nothing about the role: office suites, word processing, presentations, spreadsheets,
+/// e-mail, calendars, and CAD/CAM.
+pub const GENERIC_SOFTWARE_CATEGORIES: [&str; 9] = [
+    "onet:2.E.1.k",
+    "onet:2.E.4.d",
+    "onet:2.E.4.f",
+    "onet:2.E.4.i",
+    "onet:2.E.16.a",
+    "onet:2.E.4.h",
+    "onet:2.E.9.c",
+    "onet:2.E.9.k",
+    "onet:2.E.9.m",
+];
+
+/// Generic tools filed under a category too broad to exclude whole (RSS sits beside React and
+/// Next.js under "Web platform development software").
+pub const GENERIC_SOFTWARE: [&str; 1] = ["onet-tech:RSS"];
+
+/// Generic software is never a domain keyword; named in the requirements it is still a skill.
+pub fn is_generic_software(c: &ConceptView<'_>) -> bool {
+    GENERIC_SOFTWARE.contains(&c.taxonomy_ref())
+        || c.broader()
+            .any(|b| GENERIC_SOFTWARE_CATEGORIES.contains(&b.taxonomy_ref()))
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 enum Bucket {
     Required,
@@ -92,6 +118,7 @@ pub fn collect(lines: &[Line<'_>], gazetteer: &Gazetteer<'_>) -> Found {
                 found.preferred.push(skill(&c));
                 found.preferred_ids.push(id);
             }
+            Bucket::Domain if is_generic_software(&c) => {}
             Bucket::Domain => found.domain_keywords.push(c.canonical().to_owned()),
         }
     }

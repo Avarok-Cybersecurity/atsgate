@@ -52,6 +52,26 @@ fn tbraun96_general_round_trips() {
 }
 
 #[test]
+fn tbraun96_prints_basics_name_and_the_chosen_title_variant() {
+    let (career, tailoring) = tbraun96();
+    let yaml = fixture("tailoring/tbraun96-general.yaml");
+    assert_eq!(tailoring.title, atsgate_career::Phrasing::Basics);
+    let picked = yaml.replacen("title: basics", "title: { variant: rust-systems }", 1);
+    let tailoring = Tailoring::from_yaml(&picked).expect("tailoring");
+    let doc = document(
+        &tailoring.check(&career).expect("tailored"),
+        &ContactProfile::Public,
+    )
+    .expect("document");
+    assert_eq!(doc.name, "Thomas Braun");
+    assert_eq!(
+        doc.title,
+        "Senior Rust Systems Engineer | LLM Inference, GPU Kernels, Post-Quantum Peer-to-Peer"
+    );
+    build(&career, &tailoring, &ContactProfile::Public).expect("round-trips");
+}
+
+#[test]
 fn builds_are_byte_for_byte_reproducible() {
     let (career, tailoring) = synthetic();
     let first = build(&career, &tailoring, &ContactProfile::Public).expect("first");

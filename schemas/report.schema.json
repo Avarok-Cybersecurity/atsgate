@@ -1,0 +1,742 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ATSGate score report",
+  "description": "A simulated parse and keyword risk report: dimensions with evidence, vendor results and the gate verdict.",
+  "type": "object",
+  "properties": {
+    "atsgate_version": {
+      "type": "string"
+    },
+    "blueprint_spec": {
+      "description": "The `--blueprint` argument as given (`builtin:<id>`, a path, a URL or `generate:<...>`).",
+      "type": "string"
+    },
+    "report": {
+      "$ref": "#/$defs/Report"
+    },
+    "resume": {
+      "$ref": "#/$defs/ResumeInfo"
+    },
+    "verdict": {
+      "$ref": "#/$defs/Verdict"
+    }
+  },
+  "required": [
+    "atsgate_version",
+    "resume",
+    "blueprint_spec",
+    "report",
+    "verdict"
+  ],
+  "$defs": {
+    "BlueprintInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "reviewed": {
+          "type": "boolean"
+        },
+        "source": {
+          "$ref": "#/$defs/ProvenanceSource"
+        },
+        "title": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "title",
+        "source",
+        "reviewed"
+      ]
+    },
+    "Citation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "url"
+      ]
+    },
+    "Context": {
+      "description": "Where a piece of text sits, which decides the context factor `c` of a skill found in it.",
+      "oneOf": [
+        {
+          "description": "A role's title, bullets or notes.",
+          "type": "string",
+          "const": "experience"
+        },
+        {
+          "description": "A project's title, bullets or notes.",
+          "type": "string",
+          "const": "project"
+        },
+        {
+          "description": "One item of the skills section.",
+          "type": "string",
+          "const": "skills_list"
+        },
+        {
+          "description": "Summary, certifications, languages, awards, publications.",
+          "type": "string",
+          "const": "other"
+        }
+      ]
+    },
+    "Dimension": {
+      "type": "object",
+      "properties": {
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "score": {
+          "description": "0-1; `null` when the blueprint asks nothing of this dimension (it then carries no weight).",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        }
+      },
+      "required": [
+        "evidence"
+      ]
+    },
+    "Dimensions": {
+      "type": "object",
+      "properties": {
+        "education": {
+          "description": "D: education level and field (institutions never weighted).",
+          "$ref": "#/$defs/Dimension"
+        },
+        "experience": {
+          "description": "E: years of relevant experience (gaps never penalized).",
+          "$ref": "#/$defs/Dimension"
+        },
+        "preferred_skills": {
+          "description": "P: preferred skills.",
+          "$ref": "#/$defs/Dimension"
+        },
+        "required_skills": {
+          "description": "R: required skills.",
+          "$ref": "#/$defs/Dimension"
+        },
+        "title": {
+          "description": "T: title and seniority.",
+          "$ref": "#/$defs/Dimension"
+        }
+      },
+      "required": [
+        "required_skills",
+        "preferred_skills",
+        "title",
+        "experience",
+        "education"
+      ]
+    },
+    "Evidence": {
+      "type": "object",
+      "properties": {
+        "bbox": {
+          "description": "Present for PDF input; flow formats carry no geometry.",
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "type": "number",
+            "format": "float"
+          },
+          "maxItems": 4,
+          "minItems": 4
+        },
+        "page": {
+          "description": "1-based page; `null` for text that belongs to no page (document metadata).",
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint32",
+          "minimum": 0
+        },
+        "rule": {
+          "description": "Stable rule id, e.g. `skill.required` or `layout.multi_column`.",
+          "type": "string"
+        },
+        "spans": {
+          "description": "Indexes into the extracted document's spans.",
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint32",
+            "minimum": 0
+          }
+        },
+        "text": {
+          "description": "The text the rule read.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule",
+        "spans",
+        "text"
+      ]
+    },
+    "Gap": {
+      "type": "object",
+      "properties": {
+        "canonical": {
+          "type": "string"
+        },
+        "requirement": {
+          "$ref": "#/$defs/Requirement"
+        },
+        "weight": {
+          "type": "number",
+          "format": "double"
+        },
+        "would_match": {
+          "description": "Spellings the scorer would have matched: the canonical name first, then aliases.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "canonical",
+        "requirement",
+        "weight",
+        "would_match"
+      ]
+    },
+    "IntegrityFlag": {
+      "type": "object",
+      "properties": {
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "rule": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule",
+        "evidence"
+      ]
+    },
+    "KnockoutResult": {
+      "type": "object",
+      "properties": {
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "outcome": {
+          "$ref": "#/$defs/Outcome"
+        },
+        "status": {
+          "$ref": "#/$defs/Status"
+        },
+        "type": {
+          "$ref": "#/$defs/KnockoutType"
+        },
+        "unknown_policy": {
+          "$ref": "#/$defs/UnknownPolicy"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "value",
+        "status",
+        "unknown_policy",
+        "outcome",
+        "evidence"
+      ]
+    },
+    "KnockoutType": {
+      "type": "string",
+      "enum": [
+        "degree",
+        "certification",
+        "min_years",
+        "clearance",
+        "authorization",
+        "language"
+      ]
+    },
+    "Outcome": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "review"
+      ]
+    },
+    "Penalty": {
+      "type": "object",
+      "properties": {
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          }
+        },
+        "points": {
+          "description": "Points at σ = 1; each vendor charges points·σ.",
+          "type": "number",
+          "format": "double"
+        },
+        "rule": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule",
+        "points",
+        "evidence"
+      ]
+    },
+    "ProvenanceSource": {
+      "type": "string",
+      "enum": [
+        "builtin",
+        "file",
+        "url",
+        "generated"
+      ]
+    },
+    "Quantification": {
+      "type": "object",
+      "properties": {
+        "bullets": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0
+        },
+        "label": {
+          "description": "Always \"heuristic, no outcome evidence\": no study links this ratio to hiring outcomes.",
+          "type": "string"
+        },
+        "quantified": {
+          "type": "integer",
+          "format": "uint",
+          "minimum": 0
+        },
+        "score": {
+          "description": "Share of experience and project bullets that contain a number; `null` with no bullets.",
+          "type": [
+            "number",
+            "null"
+          ],
+          "format": "double"
+        }
+      },
+      "required": [
+        "label",
+        "quantified",
+        "bullets"
+      ]
+    },
+    "Report": {
+      "type": "object",
+      "properties": {
+        "as_of": {
+          "description": "The month \"Present\" is counted through (`YYYY-MM`).",
+          "type": "string"
+        },
+        "blueprint": {
+          "$ref": "#/$defs/BlueprintInfo"
+        },
+        "dimensions": {
+          "$ref": "#/$defs/Dimensions"
+        },
+        "gaps": {
+          "description": "Blueprint skills the resume never names, heaviest first.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Gap"
+          }
+        },
+        "integrity_flags": {
+          "description": "Hidden or metadata-only text: reported, never scored up; fails the gate by default.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IntegrityFlag"
+          }
+        },
+        "knockouts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/KnockoutResult"
+          }
+        },
+        "label": {
+          "description": "Always \"simulated parse and keyword risk\".",
+          "type": "string"
+        },
+        "parse_penalties": {
+          "description": "Points at σ = 1 that each vendor charges against F.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Penalty"
+          }
+        },
+        "quantification": {
+          "description": "Advisory only, never weighted.",
+          "$ref": "#/$defs/Quantification"
+        },
+        "relevant_years": {
+          "type": "number",
+          "format": "double"
+        },
+        "skills": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SkillResult"
+          }
+        },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VendorResult"
+          }
+        }
+      },
+      "required": [
+        "label",
+        "as_of",
+        "blueprint",
+        "dimensions",
+        "relevant_years",
+        "skills",
+        "gaps",
+        "knockouts",
+        "parse_penalties",
+        "integrity_flags",
+        "quantification",
+        "vendors"
+      ]
+    },
+    "Requirement": {
+      "type": "string",
+      "enum": [
+        "required",
+        "preferred"
+      ]
+    },
+    "ResumeInfo": {
+      "type": "object",
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "description": "SHA-256 of the exact bytes scored: with `atsgate gate`, the PDF that ships.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "format",
+        "sha256"
+      ]
+    },
+    "SkillMatch": {
+      "type": "string",
+      "enum": [
+        "canonical",
+        "alias",
+        "broader",
+        "narrower"
+      ]
+    },
+    "SkillResult": {
+      "type": "object",
+      "properties": {
+        "c": {
+          "type": "number",
+          "format": "double"
+        },
+        "canonical": {
+          "type": "string"
+        },
+        "context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Context"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "credit": {
+          "description": "m·c: the share of the weight this skill earns.",
+          "type": "number",
+          "format": "double"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Evidence"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "m": {
+          "type": "number",
+          "format": "double"
+        },
+        "matched": {
+          "description": "`null` when the resume never names the skill (then it is also listed under `gaps`).",
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SkillMatch"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirement": {
+          "$ref": "#/$defs/Requirement"
+        },
+        "weight": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "canonical",
+        "requirement",
+        "weight",
+        "m",
+        "c",
+        "credit"
+      ]
+    },
+    "Status": {
+      "type": "string",
+      "enum": [
+        "met",
+        "unmet",
+        "unknown"
+      ]
+    },
+    "UnknownPolicy": {
+      "description": "What a knockout resolves to when the resume neither meets nor misses it.",
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "review"
+      ]
+    },
+    "Vendor": {
+      "type": "string",
+      "enum": [
+        "workday",
+        "taleo",
+        "icims",
+        "greenhouse",
+        "lever",
+        "success_factors"
+      ]
+    },
+    "VendorResult": {
+      "type": "object",
+      "properties": {
+        "citation": {
+          "$ref": "#/$defs/Citation"
+        },
+        "label": {
+          "description": "Always \"simulated parse and keyword risk\".",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "note": {
+          "description": "\"no documented auto-scoring\" for Greenhouse and Lever.",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parse_score": {
+          "description": "F for this vendor's σ, 0-100.",
+          "type": "number",
+          "format": "double"
+        },
+        "score": {
+          "description": "0-100, rounded to one decimal; a simulation, not the vendor's score.",
+          "type": "number",
+          "format": "double"
+        },
+        "sigma": {
+          "type": "number",
+          "format": "double"
+        },
+        "vendor": {
+          "$ref": "#/$defs/Vendor"
+        },
+        "weights": {
+          "$ref": "#/$defs/Weights"
+        }
+      },
+      "required": [
+        "vendor",
+        "name",
+        "score",
+        "label",
+        "parse_score",
+        "sigma",
+        "weights",
+        "citation"
+      ]
+    },
+    "VendorVerdict": {
+      "type": "object",
+      "properties": {
+        "floor": {
+          "type": "integer",
+          "format": "uint8",
+          "maximum": 255,
+          "minimum": 0
+        },
+        "name": {
+          "type": "string"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "score": {
+          "type": "number",
+          "format": "double"
+        },
+        "vendor": {
+          "$ref": "#/$defs/Vendor"
+        }
+      },
+      "required": [
+        "vendor",
+        "name",
+        "score",
+        "floor",
+        "passed"
+      ]
+    },
+    "Verdict": {
+      "type": "object",
+      "properties": {
+        "fail_on_integrity_flags": {
+          "type": "boolean"
+        },
+        "min_vendor_score": {
+          "type": "number",
+          "format": "double"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "reasons": {
+          "description": "Why the gate failed, one line per cause; empty when it passed.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "review": {
+          "description": "Knockouts left for a person to decide (`unknown_policy: review`); they do not fail it.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "vendors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/VendorVerdict"
+          }
+        }
+      },
+      "required": [
+        "passed",
+        "min_vendor_score",
+        "vendors",
+        "fail_on_integrity_flags",
+        "reasons",
+        "review"
+      ]
+    },
+    "Weights": {
+      "description": "ATSGate's weights, summing to 1.",
+      "type": "object",
+      "properties": {
+        "d": {
+          "type": "number",
+          "format": "double"
+        },
+        "e": {
+          "type": "number",
+          "format": "double"
+        },
+        "f": {
+          "type": "number",
+          "format": "double"
+        },
+        "p": {
+          "type": "number",
+          "format": "double"
+        },
+        "r": {
+          "type": "number",
+          "format": "double"
+        },
+        "t": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "f",
+        "r",
+        "p",
+        "t",
+        "e",
+        "d"
+      ]
+    }
+  }
+}

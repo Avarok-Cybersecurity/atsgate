@@ -16,6 +16,7 @@ zip = { version = "=9.4.0", default-features = false, features = ["deflate-flate
 flate2 = { version = "1.1.5", default-features = false, features = ["rust_backend"] }
 atsgate-career.workspace = true
 atsgate-blueprint.workspace = true
+atsgate-score.workspace = true
 atsgate-taxonomy.workspace = true
 csv = "1.4.0"
 ruzstd = { version = "0.9.1", default-features = false, features = ["std"] }

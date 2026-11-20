@@ -1,0 +1,102 @@
+name: ATSGate
+description: >-
+  Build an ATS-safe resume from a career file, score it against a job blueprint with six
+  simulated vendor parsers, and fail the job when a vendor falls below its floor, a knockout
+  fails, or the document carries hidden text. Scores are a simulated parse and keyword risk,
+  not a vendor's own result.
+author: Avarok Cybersecurity
+branding:
+  icon: check-square
+  color: blue
+
+inputs:
+  mode:
+    description: "build (render only), score (score an existing resume) or gate (build, then score the PDF it rendered)."
+    required: true
+  resume:
+    description: "score: the PDF or DOCX to score."
+    required: false
+  career:
+    description: "build, gate: the career JSON file."
+    required: false
+  tailoring:
+    description: "build, gate: the tailoring YAML file."
+    required: false
+  contact:
+    description: "build, gate: public, or a private contact JSON file."
+    required: false
+  out:
+    description: "build, gate: the directory the resume, partials and manifest are written to."
+    required: false
+  allow-private-contact:
+    description: "build, gate: true to allow a private contact file in CI, where it would otherwise be refused."
+    required: false
+    default: "false"
+  blueprint:
+    description: "score, gate: builtin:ID, a blueprint file, an https:// URL, or generate:FILE-OR-URL (a job posting)."
+    required: false
+  floors:
+    description: "score, gate: floor overrides such as \"taleo=80, lever=0\". Empty keeps the documented default floors."
+    required: false
+  fail-on-integrity-flags:
+    description: "score, gate: true or false. Whether hidden or metadata-only text fails the gate."
+    required: false
+  report:
+    description: "score, gate: the JSON report path (must end in .json); the markdown summary is written beside it as .md."
+    required: false
+
+outputs:
+  score-json:
+    description: "The verdict as compact JSON: passed, reasons, and each vendor's score and floor."
+    value: ${{ steps.atsgate.outputs.score-json }}
+  min-vendor-score:
+    description: "The lowest of the six vendor scores."
+    value: ${{ steps.atsgate.outputs.min-vendor-score }}
+  passed:
+    description: "true or false."
+    value: ${{ steps.atsgate.outputs.passed }}
+  resume-pdf:
+    description: "build, gate: the rendered PDF."
+    value: ${{ steps.atsgate.outputs.resume-pdf }}
+  resume-docx:
+    description: "build, gate: the rendered DOCX."
+    value: ${{ steps.atsgate.outputs.resume-docx }}
+  partials-dir:
+    description: "build, gate: the directory of HTML partials."
+    value: ${{ steps.atsgate.outputs.partials-dir }}
+  report-json:
+    description: "score, gate: the JSON report path."
+    value: ${{ steps.atsgate.outputs.report-json }}
+  resume-sha256:
+    description: "score, gate: the sha256 of the exact file that was scored."
+    value: ${{ steps.atsgate.outputs.resume-sha256 }}
+
+runs:
+  using: composite
+  steps:
+    - name: Install atsgate
+      id: install
+      shell: bash
+      env:
+        # Empty for `uses: ./`: the action is this checkout, so it is built from source.
+        ACTION_REPOSITORY: ${{ github.action_repository }}
+        RUNNER_OS_NAME: ${{ runner.os }}
+        RUNNER_ARCH_NAME: ${{ runner.arch }}
+      run: bash "$GITHUB_ACTION_PATH/action/install.sh"
+    - name: Run atsgate
+      id: atsgate
+      shell: bash
+      env:
+        ATSGATE_BIN: ${{ steps.install.outputs.bin }}
+        INPUT_MODE: ${{ inputs.mode }}
+        INPUT_RESUME: ${{ inputs.resume }}
+        INPUT_CAREER: ${{ inputs.career }}
+        INPUT_TAILORING: ${{ inputs.tailoring }}
+        INPUT_CONTACT: ${{ inputs.contact }}
+        INPUT_OUT: ${{ inputs.out }}
+        INPUT_ALLOW_PRIVATE_CONTACT: ${{ inputs.allow-private-contact }}
+        INPUT_BLUEPRINT: ${{ inputs.blueprint }}
+        INPUT_FLOORS: ${{ inputs.floors }}
+        INPUT_FAIL_ON_INTEGRITY_FLAGS: ${{ inputs.fail-on-integrity-flags }}
+        INPUT_REPORT: ${{ inputs.report }}
+      run: bash "$GITHUB_ACTION_PATH/action/run.sh"

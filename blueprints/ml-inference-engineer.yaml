@@ -9,6 +9,10 @@ title_aliases:
   - "Machine Learning Engineer"
   - "ML Systems Engineer"
   - "AI Engineer"
+# 15-1221.00 Computer and Information Research Scientists, not 15-1252.00 Software Developers:
+# O*NET files machine-learning model work (PyTorch, CUDA, TensorRT) under research scientists,
+# and this role optimizes models rather than shipping general application software. Reviewed
+# 2026-11-20 and kept; a test pins it so a change is deliberate.
 occupationalCategory: "15-1221.00"
 esco_occupation: "http://data.europa.eu/esco/occupation/35553663-deab-4d9a-bf22-15c1625d28e8"
 seniority: senior

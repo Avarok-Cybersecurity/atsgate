@@ -30,8 +30,9 @@ pub struct SiteCareer {
 pub struct Person {
     pub name: String,
     pub full_name: String,
-    pub short_name: String,
     pub headline: String,
+    /// Alternative headlines keyed by id; a tailoring file picks one, it never writes its own.
+    pub title_variants: BTreeMap<String, String>,
     pub email: String,
     pub website: String,
     pub profiles: Vec<SiteProfile>,

@@ -21,7 +21,9 @@ fn scratch(name: &str) -> PathBuf {
 /// Runs the binary with `GITHUB_ACTIONS` set as given, never inherited from the test runner.
 fn atsgate<A: AsRef<OsStr>>(args: &[A], github_actions: Option<&str>) -> Output {
     let mut cmd = Command::new(env!("CARGO_BIN_EXE_atsgate"));
-    cmd.args(args).env_remove("GITHUB_ACTIONS");
+    cmd.args(args)
+        .env_remove("GITHUB_ACTIONS")
+        .env_remove("GITHUB_OUTPUT");
     if let Some(value) = github_actions {
         cmd.env("GITHUB_ACTIONS", value);
     }

@@ -27,3 +27,4 @@ atsgate-blueprint = { path = "crates/atsgate-blueprint", version = "0.0.1" }
 atsgate-career = { path = "crates/atsgate-career", version = "0.0.1" }
 atsgate-taxonomy = { path = "crates/atsgate-taxonomy", version = "0.0.1" }
 atsgate-render = { path = "crates/atsgate-render", version = "0.0.1" }
+atsgate-score = { path = "crates/atsgate-score", version = "0.0.1" }

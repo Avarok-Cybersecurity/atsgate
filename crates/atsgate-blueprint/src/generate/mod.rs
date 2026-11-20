@@ -9,7 +9,7 @@
 //! | Required cue ("Requirements", "Qualifications", "Stack:") | `required_skills` |
 //! | Preferred cue ("Nice to have", "Preferred", "... is a plus") | `preferred_skills` |
 //! | Responsibilities | `preferred_skills` if a required cue exists, else `required_skills` |
-//! | Body (before any cue) | `domain_keywords` if a required cue exists, else `required_skills` |
+//! | Body (before any cue) | `domain_keywords` if a required cue exists (never generic office or CAD software), else `required_skills` |
 //! | Benefits, compensation, about us | nothing |
 //!
 //! The output is always `provenance {source: generated, reviewed: false}`.
@@ -20,9 +20,11 @@ mod sections;
 mod skills;
 mod title;
 
-pub use occupation::MIN_SHARED_SKILLS;
+pub use occupation::{MIN_SHARED_SKILLS, breadth_weighted};
+pub use requirements::DEGREES;
 pub use sections::{HEADING_CUES, INLINE_PREFERRED, Section};
-pub use title::{SENIORITY_WORDS, TITLE_HEADS};
+pub use skills::{GENERIC_SOFTWARE, GENERIC_SOFTWARE_CATEGORIES, is_generic_software};
+pub use title::{SENIORITY_WORDS, TITLE_HEADS, seniority_of, strip_seniority};
 
 use crate::{
     Blueprint, BlueprintError, EducationLevel, EducationRequirement, ExperienceRequirement,

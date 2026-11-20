@@ -54,3 +54,85 @@ jobs:
       - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
         with:
           command: check advisories bans licenses sources
+
+  action:
+    # The composite action, run the way a consumer runs it, built from this checkout.
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      CARGO_TERM_COLOR: always
+      ZERO_FLOORS: "workday=0, taleo=0, icims=0, greenhouse=0, lever=0, successfactors=0"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+      - name: score mode
+        id: score
+        uses: ./
+        with:
+          mode: score
+          resume: fixtures/pdf/one-column.pdf
+          blueprint: builtin:software-engineer-backend
+          floors: ${{ env.ZERO_FLOORS }}
+          fail-on-integrity-flags: "true"
+          report: ${{ runner.temp }}/score/report.json
+      - name: score mode reported a pass for exactly the fixture
+        env:
+          PASSED: ${{ steps.score.outputs.passed }}
+          SHA: ${{ steps.score.outputs.resume-sha256 }}
+          REPORT: ${{ steps.score.outputs.report-json }}
+          MIN: ${{ steps.score.outputs.min-vendor-score }}
+        run: |
+          test "$PASSED" = true
+          test "$SHA" = "$(sha256sum fixtures/pdf/one-column.pdf | cut -d' ' -f1)"
+          test "$(jq -r .report.label "$REPORT")" = "simulated parse and keyword risk"
+          test "$(jq '.report.vendors | length' "$REPORT")" = 6
+          test "$(jq -r .verdict.min_vendor_score "$REPORT")" = "$MIN"
+          test -s "${REPORT%.json}.md"
+      - name: gate mode
+        id: gate
+        uses: ./
+        with:
+          mode: gate
+          career: fixtures/career/synthetic.career.json
+          tailoring: fixtures/tailoring/synthetic.yaml
+          contact: public
+          out: ${{ runner.temp }}/gate/dist
+          blueprint: builtin:software-engineer-backend
+          floors: ${{ env.ZERO_FLOORS }}
+          fail-on-integrity-flags: "true"
+          report: ${{ runner.temp }}/gate/report.json
+      - name: gate mode scored the PDF it shipped
+        env:
+          PASSED: ${{ steps.gate.outputs.passed }}
+          SHA: ${{ steps.gate.outputs.resume-sha256 }}
+          PDF: ${{ steps.gate.outputs.resume-pdf }}
+          DOCX: ${{ steps.gate.outputs.resume-docx }}
+          PARTIALS: ${{ steps.gate.outputs.partials-dir }}
+        run: |
+          test "$PASSED" = true
+          test "$SHA" = "$(sha256sum "$PDF" | cut -d' ' -f1)"
+          test -s "$DOCX"
+          test -d "$PARTIALS"
+      - name: hidden text fails the gate (expected to fail)
+        id: hidden
+        continue-on-error: true
+        uses: ./
+        with:
+          mode: score
+          resume: fixtures/docx/hidden-white.docx
+          blueprint: builtin:software-engineer-backend
+          floors: ${{ env.ZERO_FLOORS }}
+          fail-on-integrity-flags: "true"
+          report: ${{ runner.temp }}/hidden/report.json
+      - name: the hidden-text step failed, and for the integrity flag
+        env:
+          OUTCOME: ${{ steps.hidden.outcome }}
+          PASSED: ${{ steps.hidden.outputs.passed }}
+          REPORT: ${{ runner.temp }}/hidden/report.json
+        run: |
+          test "$OUTCOME" = failure
+          test "$PASSED" = false
+          test "$(jq -r .verdict.passed "$REPORT")" = false
+          test "$(jq -r '.verdict.reasons[0]' "$REPORT")" = "integrity flag: integrity.hidden.white"

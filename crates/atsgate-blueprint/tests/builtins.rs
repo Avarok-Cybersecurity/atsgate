@@ -103,3 +103,13 @@ fn an_unknown_builtin_is_an_error() {
         Err(BlueprintError::UnknownBuiltin(id)) if id == "astronaut"
     ));
 }
+
+#[test]
+fn ml_inference_engineer_stays_a_research_scientist_occupation() {
+    // Reviewed and kept on 15-1221.00; the rationale is in the blueprint's comment.
+    let b = builtin("ml-inference-engineer").expect("builtin");
+    assert_eq!(b.occupational_category, "15-1221.00");
+    let taxonomy = Taxonomy::builtin().expect("taxonomy");
+    let occupation = taxonomy.by_ref("onet-soc:15-1221.00").expect("in O*NET");
+    assert_eq!(occupation.kind(), ConceptKind::Occupation);
+}

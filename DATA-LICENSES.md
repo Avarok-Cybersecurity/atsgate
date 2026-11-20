@@ -77,6 +77,18 @@ offline regression tests, each under its own license:
 | `techwolf-sample.csv` (every 100th row) | TechWolf, Synthetic-ESCO-skill-sentences, <https://huggingface.co/datasets/TechWolf/Synthetic-ESCO-skill-sentences> at `09fc487` | CC BY 4.0 | Unmodified rows; subset selected by ATSGate |
 | `talentclef-taskA-en-validation/` | TalentCLEF 2025 corpus, Task A, English validation, <https://zenodo.org/records/15292308> (v0.5.0) | CC BY 4.0 | Unmodified files |
 
+## Vendor profile weights
+
+The six vendor profiles in `crates/atsgate-score/src/vendor.rs` (dimension weights, parser
+strictness σ and default floors) are adapted from ATS Screener by Sunny Patel,
+<https://github.com/sunnypatell/ats-screener> at `4fd3009869b8e4ffa9c949932469100c968b5453`,
+under the MIT License (Copyright (c) 2026 Sunny Patel). Its formatting and section-completeness
+weights become ATSGate's parse integrity F, keyword weight splits 3:1 into required and preferred
+skills, experience relevance splits evenly into title and years, its quantification weight is
+dropped (ATSGate reports quantification but never scores it) and the rest renormalized. Default
+floors are its `thresholds.md` values. The numbers are facts about that project's model, not
+about any vendor's: every result is labelled a simulated parse and keyword risk.
+
 ## Not used
 
 - **Lightcast Open Skills**: its terms depend on the licence requested and are not stated openly

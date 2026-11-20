@@ -71,7 +71,13 @@ The floors guard against regressions. They are not quality targets.
   logic is covered by unit tests and by the ArtCraft posting
   (`tests/fixtures/jd/artcraft-hn-2026-11-02.txt`), whose generated required set matches the
   stack the posting lists.
-- **Occupation inference from skills.** For a short stack (Rust, TypeScript, React, PostgreSQL)
-  under a vague title ("Senior Engineer"), inference picks O*NET Blockchain Engineers
-  (15-1299.07), not Software Developers, because raw overlap counts favour occupations whose
-  technology lists happen to contain all four. The generated blueprint is `reviewed: false` for this reason.
+- **Occupation inference from skills.** There is no labelled set to measure it on; the unit
+  tests hold two cases. Raw overlap picked O*NET Blockchain Engineers (15-1299.07) for Rust,
+  TypeScript, React and PostgreSQL under a vague title ("Senior Engineer"). The cause is not a
+  long list that happens to contain the stack: Blockchain Engineers lists 50 technologies and
+  names all four, while O*NET 31.0 lists Rust for only two occupations, and not for Software
+  Developers (430 technologies, three of the four). Dividing overlap by list length
+  (`shared / sqrt(len)` or Jaccard) therefore makes the choice worse, since it favours short
+  lists. Inference now scores `shared × ln(len)`, treating a long list as O*NET's record of an
+  occupation seen across many postings, and picks Software Developers (15-1252.00) here. Every
+  generated blueprint stays `reviewed: false` because this is a prior, not a measurement.
