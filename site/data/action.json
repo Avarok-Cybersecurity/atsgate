@@ -21,6 +21,12 @@
     },
     {
       "default": null,
+      "description": "build, gate: atsgate (an ATSGate career file), json-resume, or tbraun96. Any format but atsgate is imported first with `atsgate import`.",
+      "name": "career-format",
+      "required": false
+    },
+    {
+      "default": null,
       "description": "build, gate: the tailoring YAML file.",
       "name": "tailoring",
       "required": false

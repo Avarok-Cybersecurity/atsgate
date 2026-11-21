@@ -98,6 +98,7 @@ jobs:
         with:
           mode: gate
           career: fixtures/career/synthetic.career.json
+          career-format: atsgate
           tailoring: fixtures/tailoring/synthetic.yaml
           contact: public
           out: ${{ runner.temp }}/gate/dist
@@ -117,6 +118,26 @@ jobs:
           test "$SHA" = "$(sha256sum "$PDF" | cut -d' ' -f1)"
           test -s "$DOCX"
           test -d "$PARTIALS"
+      - name: gate mode imports a tbraun96 career file first
+        id: imported
+        uses: ./
+        with:
+          mode: gate
+          career: fixtures/import/tbraun96-career.json
+          career-format: tbraun96
+          tailoring: fixtures/tailoring/tbraun96-general.yaml
+          contact: public
+          out: ${{ runner.temp }}/imported/dist
+          blueprint: builtin:software-engineer-systems-rust
+          fail-on-integrity-flags: "true"
+          report: ${{ runner.temp }}/imported/report.json
+      - name: the imported career rendered and passed the default floors
+        env:
+          PASSED: ${{ steps.imported.outputs.passed }}
+          PDF: ${{ steps.imported.outputs.resume-pdf }}
+        run: |
+          test "$PASSED" = true
+          test -s "$PDF"
       - name: hidden text fails the gate (expected to fail)
         id: hidden
         continue-on-error: true

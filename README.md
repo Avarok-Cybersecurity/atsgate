@@ -64,6 +64,7 @@ any simulated vendor falls below its floor:
   with:
     mode: gate
     career: career.json
+    career-format: atsgate
     tailoring: tailoring/general.yaml
     contact: public
     out: dist
@@ -99,6 +100,7 @@ error, 2 on a usage error.
 | `mode` | all | yes, no default | `build` (render only), `score` (score an existing resume) or `gate` (build, then score the PDF it rendered) |
 | `resume` | score | yes | The PDF or DOCX to score |
 | `career`, `tailoring` | build, gate | yes | The career JSON and the tailoring YAML |
+| `career-format` | build, gate | yes, no default | `atsgate`, `json-resume` or `tbraun96`; any but `atsgate` is converted with `atsgate import` before rendering |
 | `contact` | build, gate | yes | `public`, or a private contact JSON file |
 | `out` | build, gate | yes | Output directory |
 | `allow-private-contact` | build, gate | no (`false`) | A private contact file is refused in CI unless this is `true` |

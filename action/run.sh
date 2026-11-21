@@ -19,7 +19,17 @@ add_build() {
   need tailoring "$INPUT_TAILORING"
   need contact "$INPUT_CONTACT"
   need out "$INPUT_OUT"
-  build_args+=(--career "$INPUT_CAREER" --tailoring "$INPUT_TAILORING"
+  need career-format "$INPUT_CAREER_FORMAT"
+  local career="$INPUT_CAREER"
+  case "$INPUT_CAREER_FORMAT" in
+    atsgate) ;;
+    json-resume | tbraun96)
+      career="$RUNNER_TEMP/atsgate-imported-career.json"
+      "$ATSGATE_BIN" import --from "$INPUT_CAREER_FORMAT" --input "$INPUT_CAREER" --out "$career"
+      ;;
+    *) fail "career-format must be atsgate, json-resume or tbraun96, not '$INPUT_CAREER_FORMAT'" ;;
+  esac
+  build_args+=(--career "$career" --tailoring "$INPUT_TAILORING"
     --contact "$INPUT_CONTACT" --out "$INPUT_OUT")
   case "$INPUT_ALLOW_PRIVATE_CONTACT" in
     true) build_args+=(--allow-private-contact) ;;
