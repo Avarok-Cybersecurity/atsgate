@@ -2,3 +2,7 @@
 #   <version> <asset> <sha256>
 # Written after a release is published, from the .sha256 files attached to it. A revision with
 # no pins refuses to run outside this repository instead of downloading an unverified binary.
+v0.1.0 atsgate-x86_64-unknown-linux-gnu 4752e70d0032be07c5d886501381de348a4a3b0c66cc3f73090b50b43f55aaa6
+v0.1.0 atsgate-aarch64-unknown-linux-gnu c580e384cbea05b89f9f81f56f7384c7157d0e8531666df775823f740418e3cb
+v0.1.0 atsgate-aarch64-apple-darwin 566be153567ac17fb0c5856b18b6ea1a4d2b76d92bb77105d270c0cf5c617286
+v0.1.0 atsgate-x86_64-pc-windows-msvc.exe fcac6f85b5fd3b45d3666fa4704ce55ee45da08b0852b77075a5f44f0104b61d
