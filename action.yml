@@ -19,6 +19,9 @@ inputs:
   career:
     description: "build, gate: the career JSON file."
     required: false
+  career-format:
+    description: "build, gate: atsgate (an ATSGate career file), json-resume, or tbraun96. Any format but atsgate is imported first with `atsgate import`."
+    required: false
   tailoring:
     description: "build, gate: the tailoring YAML file."
     required: false
@@ -91,6 +94,7 @@ runs:
         INPUT_MODE: ${{ inputs.mode }}
         INPUT_RESUME: ${{ inputs.resume }}
         INPUT_CAREER: ${{ inputs.career }}
+        INPUT_CAREER_FORMAT: ${{ inputs.career-format }}
         INPUT_TAILORING: ${{ inputs.tailoring }}
         INPUT_CONTACT: ${{ inputs.contact }}
         INPUT_OUT: ${{ inputs.out }}

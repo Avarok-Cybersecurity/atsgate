@@ -13,6 +13,7 @@ jobs:
         with:
           mode: gate
           career: career.json
+          career-format: atsgate
           tailoring: tailoring/general.yaml
           contact: public
           out: dist
