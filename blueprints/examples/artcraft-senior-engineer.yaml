@@ -94,7 +94,7 @@ domain_keywords:
 languages: []
 provenance:
   source: generated
-  generator_version: atsgate-blueprint/0.0.1
+  generator_version: atsgate-blueprint/0.1.0
   taxonomy_versions:
     atsgate-curated: "2026-11-20"
     esco: v1.2.1

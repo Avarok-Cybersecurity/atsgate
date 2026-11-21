@@ -196,7 +196,7 @@ dependencies = [
 
 [[package]]
 name = "atsgate-blueprint"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "atsgate-extract",
  "atsgate-taxonomy",
@@ -210,7 +210,7 @@ dependencies = [
 
 [[package]]
 name = "atsgate-career"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "jsonschema",
  "schemars",
@@ -222,7 +222,7 @@ dependencies = [
 
 [[package]]
 name = "atsgate-cli"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "atsgate-blueprint",
  "atsgate-career",
@@ -236,7 +236,7 @@ dependencies = [
 
 [[package]]
 name = "atsgate-extract"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "lopdf",
  "pdf_oxide",
@@ -249,7 +249,7 @@ dependencies = [
 
 [[package]]
 name = "atsgate-render"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "atsgate-career",
  "atsgate-extract",
@@ -267,14 +267,14 @@ dependencies = [
 
 [[package]]
 name = "atsgate-resume"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "atsgate-extract",
 ]
 
 [[package]]
 name = "atsgate-score"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "atsgate-blueprint",
  "atsgate-extract",
@@ -289,7 +289,7 @@ dependencies = [
 
 [[package]]
 name = "atsgate-taxonomy"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "ruzstd",
  "serde",
@@ -4754,7 +4754,7 @@ checksum = "9440ea3e5aeabb0ac63af70daf835274065238cdd0cec83418f417eae38bacee"
 
 [[package]]
 name = "xtask"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "atsgate-blueprint",
  "atsgate-career",
